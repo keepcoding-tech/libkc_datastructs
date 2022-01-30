@@ -26,7 +26,7 @@ void insert_node() {
 
   // insert ten new nodes
   for (int i = 0; i < 10; ++i) {
-    list.insert(i, &i, &list, sizeof(i));
+    list.insert(&list, i, &i, sizeof(i));
     // check the length of the list
     if (list.length != i + 1) {
       failed_ll("insert_node", 32);
@@ -57,11 +57,11 @@ void remove_node() {
   // insert ten new nodes (if the test reached here then the "insert_node"
   // function was successfully tested, so we can freely use it)
   for (int i = 0; i < 10; ++i) {
-    list.insert(i, &i, &list, sizeof(i));
+    list.insert(&list, i, &i, sizeof(i));
   }
 
   // check if the node was correctly removed
-  list.remove(5, &list);
+  list.remove(&list, 5);
   struct Node *cursor = list.head;
   for (int i = 0; i < 5; ++i) {
     cursor = cursor->next;
@@ -72,7 +72,7 @@ void remove_node() {
 
 
   // check if the head of the list was correctly removed
-  list.remove(0, &list);
+  list.remove(&list, 0);
   cursor = list.head;
   if (*(int *)cursor->data == 0 || list.length == 9) {
     failed_ll("remove_node", 78);
@@ -89,29 +89,29 @@ void retrieve_node() {
   // insert ten new nodes (if the test reached here, then the "insert_node"
   // function was successfully tested, so we can freely use it)
   for (int i = 0; i < 10; ++i) {
-    list.insert(i, &i, &list, sizeof(i));
+    list.insert(&list, i, &i, sizeof(i));
   }
 
   // check if the node was correctly retrieved
-  struct Node *node = list.retrieve(5, &list);
+  struct Node *node = list.retrieve(&list, 5);
   if (*(int *)node->data != 5) {
     failed_ll("retrieve_node", 98);
   }
 
   // check if the head of the list was correctly retrieved
-  node = list.retrieve(0, &list);
+  node = list.retrieve(&list, 0);
   if (*(int *)node->data != 0) {
     failed_ll("retrieve_node", 104);
   }
 
   // check if the tail of the list was correctly retrieved
-  node = list.retrieve(list.length - 1, &list);
+  node = list.retrieve(&list, list.length - 1);
   if (*(int *)node->data != 9) {
     failed_ll("retrieve_node", 110);
   }
 
   // expected NULL because the index is out of bounds
-  node = list.retrieve(100, &list);
+  node = list.retrieve(&list, 100);
   if (node != NULL) {
     failed_ll("retrieve_node", 116);
   }
