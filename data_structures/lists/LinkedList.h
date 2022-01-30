@@ -41,12 +41,12 @@ struct LinkedList {
   int length;
 
   // adds new items to the chain at a specified location
-  void (*insert)(int index, void *data,
-    struct LinkedList *linked_list, unsigned long size);
+  void (*insert)(struct LinkedList *linked_list,
+    int index, void *data, unsigned long size);
   // deletes an item from the chain and handles the deallocation of memory
-  void (*remove)(int index, struct LinkedList *linked_list);
+  void (*remove)(struct LinkedList *linked_list, int index);
   // allows data in the chain to be accessed
-  struct Node * (*retrieve)(int index, struct LinkedList *linked_list);
+  struct Node * (*retrieve)(struct LinkedList *linked_list, int index);
 };
 
 // MARK: CONSTRUCTORS
