@@ -7,8 +7,8 @@
 # MARK: COMPILE
 ###############################################################################
 
-output: tests/main.c tests/data_structures/node.c data_structures/utils/Node.c
-	gcc -o tests/main tests/main.c tests/data_structures/node.c data_structures/utils/Node.c
+output: tests/main.c tests/data_structures/node.c data_structures/utils/Node.c tests/data_structures/linked_list.c data_structures/lists/LinkedList.c
+	gcc -o tests/main tests/main.c tests/data_structures/node.c data_structures/utils/Node.c tests/data_structures/linked_list.c data_structures/lists/LinkedList.c
 
 ###############################################################################
 # MARK: CLEAN
