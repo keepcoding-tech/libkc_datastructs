@@ -1,7 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-
-#include "../../data_structures/utils/Node.h"
+#include "node.h"
 
 void node_tests();
 
