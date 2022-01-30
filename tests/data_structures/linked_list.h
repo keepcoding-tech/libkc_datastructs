@@ -1,6 +1,6 @@
 /*
-This is a file for testing the LinkedList data structure public members. The
-private members are used by the public ones, so testing is not required.
+  This is a file for testing the LinkedList data structure public members. The
+  private members are used by the public ones, so testing is not required.
 */
 
 #ifndef linked_list_test_h

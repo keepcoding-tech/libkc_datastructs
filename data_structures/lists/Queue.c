@@ -30,7 +30,7 @@ void queue_destructor(struct Queue *queue) {
 // The "peek" function returns the data from the first item in the chain.
 void * peek(struct Queue *queue) {
   // utilize the retrieve function from LinkedList with enforced parameters
-  struct Node *node_data = queue->list.retrieve(0, &queue->list);
+  struct Node *node_data = queue->list.retrieve(&queue->list, 0);
 
   return node_data->data;
 }
@@ -38,11 +38,11 @@ void * peek(struct Queue *queue) {
 // The "pop" function removes the first item in the chain.
 void pop(struct Queue *queue) {
   // utilize the remove function from LinkedList with enforced parameters
-  queue->list.remove(0, &queue->list);
+  queue->list.remove(&queue->list, 0);
 }
 
 // The "push" function adds an item to the end of the list.
 void push(struct Queue *queue, void *data, unsigned long size) {
   // utilize insert from LinkedList with enforced parameters
-  queue->list.insert(queue->list.length, data, &queue->list, size);
+  queue->list.insert(&queue->list, queue->list.length, data, size);
 }

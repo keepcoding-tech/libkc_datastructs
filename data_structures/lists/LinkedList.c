@@ -1,24 +1,24 @@
+/*
+ Note: due to the fact that several data structures (in this project) will have
+ functions for "insertion", "retrieving", "removing", etc; the name of the
+ functions in the implementation of the library will have the notation of "ll"
+ at the end, representing -> "linked list".
+*/
+
 #include "LinkedList.h"
 
-/*
- Note: due to the fact that several data structures will have functions for
- "insertion", "retrieving", "removing", etc; the name of the functions in the
- implementation of the library will have the notation of "ll" at the end,
- representing -> "linked list".
-*/
+// MARK: PUBLIC MEMBER METHODS
+
+void insert_node_ll(struct LinkedList *linked_list,
+  int index, void *data, unsigned long size);
+void remove_node_ll(struct LinkedList *linked_list, int index);
+struct Node * retrieve_node_ll(struct LinkedList *linked_list, int index);
 
 // MARK: PRIVATE MEMBER METHODS
 
 struct Node * create_node_ll(void *data, unsigned long size);
 void destroy_node_ll(struct Node *node_to_destroy);
 struct Node * iterate_ll(int index, struct LinkedList *linked_list);
-
-// MARK: PUBLIC MEMBER METHODS
-
-void insert_node_ll(int index, void *data,
-  struct LinkedList *linked_list, unsigned long size);
-void remove_node_ll(int index, struct LinkedList *linked_list);
-struct Node * retrieve_node_ll(int index, struct LinkedList *linked_list);
 
 // The constructor is used to create new instances of linked list.
 struct LinkedList linked_list_constructor() {
@@ -42,49 +42,13 @@ void linked_list_destructor(struct LinkedList *linked_list) {
   // access the linked list length only once
   int list_length = linked_list->length;
   for (int i = 0; i < list_length; ++i) {
-    linked_list->remove(0, linked_list);
+    linked_list->remove(linked_list, 0);
   }
-}
-
-// The "create_node_ll" function creates a new node to add to the chain by
-// allocating space on the heap and calling the node constructor.
-struct Node * create_node_ll(void *data, unsigned long size) {
-  // allocate space
-  struct Node *new_node = malloc(sizeof *new_node);
-  // call the constructor.
-  *new_node = node_constructor(data, size);
-
-  return new_node;
-}
-
-// The "destroy_node" function removes a node by deallocating it's memory
-// address, this simply renames the node destructor function.
-void destroy_node_ll(struct Node *node) {
-  node_destructor(node);
-}
-
-// The "iterate_ll" function traverses the list from beginning to end.
-struct Node * iterate_ll(int index, struct LinkedList *linked_list) {
-  // confirm the user has specified a valid index
-  if (index < 0 || index >= linked_list->length) {
-    // TODO: return error insted of printing it
-    printf("Index out of bound...\n");
-    return NULL;
-  }
-
-  // create a cursor node for iteration
-  struct Node *cursor = linked_list->head;
-  // step through the list until the desired index is reached
-  for (int i = 0; i < index; ++i) {
-    cursor = cursor->next;
-  }
-
-  return cursor;
 }
 
 // The "insert_node_ll" function puts a new node in the chain.
-void insert_node_ll(int index, void *data,
-  struct LinkedList *linked_list, unsigned long size) {
+void insert_node_ll(struct LinkedList *linked_list,
+  int index, void *data, unsigned long size) {
 
   // create a new node to be inserted
   struct Node *new_node = create_node_ll(data, size);
@@ -110,7 +74,7 @@ void insert_node_ll(int index, void *data,
 }
 
 // The "remove_node_ll" function removes a node from the linked list.
-void remove_node_ll(int index, struct LinkedList *linked_list) {
+void remove_node_ll(struct LinkedList *linked_list, int index) {
   // check if the item being removed is the head
   if (index == 0) {
     // collect the node to be removed
@@ -128,6 +92,8 @@ void remove_node_ll(int index, struct LinkedList *linked_list) {
     struct Node *node_to_remove = cursor->next;
     // update the cursor's "next" to skip the node to be removed
     cursor->next = node_to_remove->next;
+    // the "prev" of the third node must point to the current node
+    node_to_remove->next->prev = node_to_remove->prev;
     // remove the node
     destroy_node_ll(node_to_remove);
   }
@@ -136,8 +102,8 @@ void remove_node_ll(int index, struct LinkedList *linked_list) {
   --linked_list->length;
 }
 
-// The "retrieve_data" function is used to access data in the list.
-struct Node * retrieve_node_ll(int index, struct LinkedList *linked_list) {
+// The "retrieve_node_ll" function is used to access data in the list.
+struct Node * retrieve_node_ll(struct LinkedList *linked_list, int index) {
   // find the desired node and return its data
   struct Node *node = iterate_ll(index, linked_list);
 
@@ -145,4 +111,40 @@ struct Node * retrieve_node_ll(int index, struct LinkedList *linked_list) {
     return node;
   }
   return NULL;
+}
+
+// The "create_node_ll" function creates a new node to add to the chain by
+// allocating space on the heap and calling the node constructor.
+struct Node * create_node_ll(void *data, unsigned long size) {
+  // allocate space
+  struct Node *new_node = malloc(sizeof *new_node);
+  // call the constructor
+  *new_node = node_constructor(data, size);
+
+  return new_node;
+}
+
+// The "destroy_node_ll" function removes a node by deallocating it's memory
+// address, this simply renames the node destructor function.
+void destroy_node_ll(struct Node *node) {
+  node_destructor(node);
+}
+
+// The "iterate_ll" function traverses the list from beginning to end.
+struct Node * iterate_ll(int index, struct LinkedList *linked_list) {
+  // confirm the user has specified a valid index
+  if (index < 0 || index >= linked_list->length) {
+    // TODO: return error insted of printing it
+    printf("Index out of bound...\n");
+    return NULL;
+  }
+
+  // create a cursor node for iteration
+  struct Node *cursor = linked_list->head;
+  // step through the list until the desired index is reached
+  for (int i = 0; i < index; ++i) {
+    cursor = cursor->next;
+  }
+
+  return cursor;
 }
