@@ -93,7 +93,9 @@ void remove_node_ll(struct LinkedList *linked_list, int index) {
     // update the cursor's "next" to skip the node to be removed
     cursor->next = node_to_remove->next;
     // the "prev" of the third node must point to the current node
-    node_to_remove->next->prev = node_to_remove->prev;    // remove the node
+    node_to_remove->next->prev = node_to_remove->prev;
+    // remove the node
+
     destroy_node_ll(node_to_remove);
   }
 
@@ -101,7 +103,7 @@ void remove_node_ll(struct LinkedList *linked_list, int index) {
   --linked_list->length;
 }
 
-// The "retrieve_data" function is used to access data in the list.
+// The "retrieve_node_ll" function is used to access data in the list.
 struct Node * retrieve_node_ll(struct LinkedList *linked_list, int index) {
   // find the desired node and return its data
   struct Node *node = iterate_ll(index, linked_list);
@@ -117,13 +119,13 @@ struct Node * retrieve_node_ll(struct LinkedList *linked_list, int index) {
 struct Node * create_node_ll(void *data, unsigned long size) {
   // allocate space
   struct Node *new_node = malloc(sizeof *new_node);
-  // call the constructor.
+  // call the constructor
   *new_node = node_constructor(data, size);
 
   return new_node;
 }
 
-// The "destroy_node" function removes a node by deallocating it's memory
+// The "destroy_node_ll" function removes a node by deallocating it's memory
 // address, this simply renames the node destructor function.
 void destroy_node_ll(struct Node *node) {
   node_destructor(node);
