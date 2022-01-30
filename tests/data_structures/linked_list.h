@@ -1,14 +1,14 @@
+/*
+This is a file for testing the LinkedList data structure public members. The
+private members are used by the public ones, so testing is not required.
+*/
+
 #ifndef linked_list_test_h
 #define linked_list_test_h
 
 #include <stdio.h>
 
 #include "../../data_structures/lists/LinkedList.h"
-
-/*
- This is a file for testing the LinkedList data structure public methods. The
- private methods are used by the public ones, so testing is not required.
-*/
 
 // Run all the tests in the file.
 void linked_list_tests();
