@@ -95,6 +95,7 @@ void remove_node_ll(struct LinkedList *linked_list, int index) {
     // the "prev" of the third node must point to the current node
     node_to_remove->next->prev = node_to_remove->prev;
     // remove the node
+
     destroy_node_ll(node_to_remove);
   }
 
