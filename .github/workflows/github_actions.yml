@@ -25,5 +25,7 @@ jobs:
       - uses: actions/checkout@v2
 
       # Runs all the tests inside the "tests" directory
-      - name: Tests
+      - name: Compile Tests
         run: make
+      - name: Run Tests
+        run: cd tests && ./main
