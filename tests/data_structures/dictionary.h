@@ -11,7 +11,7 @@
 
 #include "../../data_structures/sets/Dictionary.h"
 
-// run all the tests in the file.
+// Run all the tests in the file.
 void dictionary_tests();
 
 #endif /* dictionary_test_h */
