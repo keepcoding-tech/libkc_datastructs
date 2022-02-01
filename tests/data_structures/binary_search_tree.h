@@ -14,7 +14,4 @@
 // Run all the tests in the file.
 void binary_search_tree_tests();
 
-// Test the "insert_bst" and the "search_bst" functions.
-void insert_and_search_bst();
-
 #endif /* binary_search_tree_test_h */

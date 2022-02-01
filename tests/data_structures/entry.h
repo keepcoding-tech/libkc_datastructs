@@ -11,7 +11,7 @@
 
 #include "../../data_structures/utils/Entry.h"
 
-// run all the tests in the file.
+// Run all the tests in the file.
 void entry_tests();
 
 #endif /* entry_test_h */
