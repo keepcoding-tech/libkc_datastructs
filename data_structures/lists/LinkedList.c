@@ -13,6 +13,8 @@ void insert_node_ll(struct LinkedList *linked_list,
   int index, void *data, unsigned long size);
 void remove_node_ll(struct LinkedList *linked_list, int index);
 struct Node * retrieve_node_ll(struct LinkedList *linked_list, int index);
+bool search_node_ll(struct LinkedList *linked_list,
+  void *query, bool (*compare)(void *data_one, void *data_two));
 
 // MARK: PRIVATE MEMBER METHODS
 
@@ -33,6 +35,7 @@ struct LinkedList linked_list_constructor() {
   new_list.insert = insert_node_ll;
   new_list.remove = remove_node_ll;
   new_list.retrieve = retrieve_node_ll;
+  new_list.search = search_node_ll;
 
   return new_list;
 }
@@ -112,6 +115,23 @@ struct Node * retrieve_node_ll(struct LinkedList *linked_list, int index) {
     return node;
   }
   return NULL;
+}
+
+// The "search_node_ll" function searchs for a specific node by data
+bool search_node_ll(struct LinkedList *linked_list,
+  void *query, bool (*compare)(void *data_one, void *data_two)) {
+  // create a new node instance
+  struct Node *node = linked_list->head;
+
+  // search the node by value
+  while (node) {
+    if (compare(node->data, query)) {
+      return true;
+    }
+    node = node->next;
+  }
+
+  return false;
 }
 
 // The "create_node_ll" function creates a new node to add to the chain by

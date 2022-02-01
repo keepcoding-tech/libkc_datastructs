@@ -6,6 +6,7 @@
 #ifndef linked_list_test_h
 #define linked_list_test_h
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 

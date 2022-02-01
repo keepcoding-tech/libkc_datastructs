@@ -28,8 +28,9 @@
 #ifndef LinkedList_h
 #define LinkedList_h
 
-#include <stdlib.h>
+#include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "../utils/Node.h"
 
@@ -47,6 +48,9 @@ struct LinkedList {
   void (*remove)(struct LinkedList *linked_list, int index);
   // allows data in the chain to be accessed
   struct Node * (*retrieve)(struct LinkedList *linked_list, int index);
+  // search a specified node by value
+  bool (*search)(struct LinkedList *linked_list,
+    void *query, bool (*compare)(void *data_one, void *data_two));
 };
 
 // MARK: CONSTRUCTORS
