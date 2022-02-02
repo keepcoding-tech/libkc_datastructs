@@ -42,17 +42,17 @@ struct LinkedList {
   int length;
 
   // adds new items to the chain at a specified location
-  void (*add)(struct LinkedList *linked_list,
+  void (*add)(struct LinkedList *self,
     int index, void *data, unsigned long size);
   // allows data in the chain to be accessed
-  struct Node * (*get)(struct LinkedList *linked_list, int index);
+  struct Node * (*get)(struct LinkedList *self, int index);
   // return either if the list is empty or not
-  bool (*is_empty)(struct LinkedList *linked_list);
+  bool (*is_empty)(struct LinkedList *self);
   // deletes an item from the chain and handles the deallocation of memory
-  void (*remove)(struct LinkedList *linked_list, int index);
+  void (*remove)(struct LinkedList *self, int index);
   // search a specified node by value
-  bool (*search)(struct LinkedList *linked_list,
-    void *query, bool (*compare)(void *data_one, void *data_two));
+  bool (*search)(struct LinkedList *self, void *query, 
+    bool (*compare)(void *data_one, void *data_two));
 };
 
 // MARK: CONSTRUCTORS

@@ -34,11 +34,9 @@ struct BinarySearchTree {
   int (*compare)(void *data_one, void *data_two);
   // adds a new node to the tree.  Since memory allocation is handled by the
   // node constructor, the size of this node's data must be specified
-  void (*insert)(struct BinarySearchTree *binary_search_tree,
-    void *data, unsigned long size);
+  void (*insert)(struct BinarySearchTree *self, void *data, unsigned long size);
   // finds a node in the tree, returning its data or NULL if not found
-  struct Node * (*search)(struct BinarySearchTree *binary_search_tree,
-    void *data);
+  struct Node * (*search)(struct BinarySearchTree *self, void *data);
 };
 
 // MARK: CONSTRUCTORS
