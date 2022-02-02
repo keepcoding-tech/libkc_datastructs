@@ -72,6 +72,8 @@ void add_node_ll(struct LinkedList *self,
     new_node->prev = cursor;
     // set the cursor's "next" to the new node
     cursor->next = new_node;
+    // the "prev" of the third node must point to the new node
+    cursor->next->prev = new_node;
   }
 
   // increment the list length
@@ -96,27 +98,32 @@ bool list_is_empty(struct LinkedList *self) {
 
 // The "remove_node_ll" function removes a node from the linked list.
 void remove_node_ll(struct LinkedList *self, int index) {
-  // check if the item being removed is the head
+  // confirm the user has specified a valid index
+  if (index < 0 || index >= self->length) {
+    // TODO: return error insted of printing it
+    printf("Index out of bound...\n");
+    return;
+  }
+
+  // get the "head" of the list
+  struct Node *current = self->head;
+
+  // check if the item being removed is the "head"
   if (index == 0) {
-    // collect the node to be removed
-    struct Node *node_to_remove = self->head;
     // define the new "head" of the list
-    if (node_to_remove) {
-      self->head = node_to_remove->next;
-      // remove the desired node
-      destroy_node_ll(node_to_remove);
-    }
+    self->head = current->next;
+    destroy_node_ll(current);
   } else {
     // find the node in the list before the one that is going to be removed
-    struct Node *cursor = iterate_ll(self, index - 1);
-    // use the cursor to define the node to be removed
-    struct Node *node_to_remove = cursor->next;
-    // update the cursor's "next" to skip the node to be removed
-    cursor->next = node_to_remove->next;
+    current = iterate_ll(self, index - 1);
+    // use the node returned to define the node to be removed
+    struct Node *node_to_remove = current->next;
+    // update the current node "next" to skip the node to be removed
+    current->next = node_to_remove->next;
     // the "prev" of the third node must point to the current node
-    node_to_remove->next->prev = node_to_remove->prev;
-    // remove the node
+    current->next->prev = current;
 
+    // remove the node
     destroy_node_ll(node_to_remove);
   }
 
