@@ -2,16 +2,16 @@
 
 void linked_list_tests();
 
-void insert_node();
+void add_node();
 void remove_node();
-void retrieve_node();
+void get_node();
 void search_node();
 void is_empty();
 
 void linked_list_tests() {
-  insert_node();
+  add_node();
   remove_node();
-  retrieve_node();
+  get_node();
   search_node();
   is_empty();
   printf("linked_list.t .............. OK\n");
@@ -23,17 +23,17 @@ void failed_ll(char *test, int line) {
   exit(1);
 }
 
-// Test the "insert_node_ll" function.
-void insert_node() {
+// Test the "add_node_ll" function.
+void add_node() {
   // create a new instance of a LinkedList
   struct LinkedList list = linked_list_constructor();
 
-  // insert ten new nodes
+  // add ten new nodes
   for (int i = 0; i < 10; ++i) {
-    list.insert(&list, i, &i, sizeof(i));
+    list.add(&list, i, &i, sizeof(i));
     // check the length of the list
     if (list.length != i + 1) {
-      failed_ll("insert_node", 34);
+      failed_ll("add_node", 34);
     }
   }
 
@@ -45,7 +45,7 @@ void insert_node() {
 
     // check if the nodes have been inserted correctly
     if (*(int *)cursor->data != i) {
-      failed_ll("insert_node", 46);
+      failed_ll("add_node", 46);
     }
   }
 
@@ -58,10 +58,10 @@ void remove_node() {
   // create a new instance of a LinkedList
   struct LinkedList list = linked_list_constructor();
 
-  // insert ten new nodes (if the test reached here then the "insert_node"
+  // insert ten new nodes (if the test reached here then the "add_node"
   // function was successfully tested, so we can freely use it)
   for (int i = 0; i < 10; ++i) {
-    list.insert(&list, i, &i, sizeof(i));
+    list.add(&list, i, &i, sizeof(i));
   }
 
   // check if the node was correctly removed
@@ -85,39 +85,39 @@ void remove_node() {
   linked_list_destructor(&list);
 }
 
-// Test the "retrieve_node_ll" function.
-void retrieve_node() {
+// Test the "get_node_ll" function.
+void get_node() {
   // create a new instance of a LinkedList
   struct LinkedList list = linked_list_constructor();
 
-  // insert ten new nodes (if the test reached here, then the "insert_node"
+  // insert ten new nodes (if the test reached here, then the "add_node"
   // function was successfully tested, so we can freely use it)
   for (int i = 0; i < 10; ++i) {
-    list.insert(&list, i, &i, sizeof(i));
+    list.add(&list, i, &i, sizeof(i));
   }
 
   // check if the node was correctly retrieved
-  struct Node *node = list.retrieve(&list, 5);
+  struct Node *node = list.get(&list, 5);
   if (*(int *)node->data != 5) {
-    failed_ll("retrieve_node", 100);
+    failed_ll("get_node", 100);
   }
 
   // check if the head of the list was correctly retrieved
-  node = list.retrieve(&list, 0);
+  node = list.get(&list, 0);
   if (*(int *)node->data != 0) {
-    failed_ll("retrieve_node", 106);
+    failed_ll("get_node", 106);
   }
 
   // check if the tail of the list was correctly retrieved
-  node = list.retrieve(&list, list.length - 1);
+  node = list.get(&list, list.length - 1);
   if (*(int *)node->data != 9) {
-    failed_ll("retrieve_node", 112);
+    failed_ll("get_node", 112);
   }
 
   // expected NULL because the index is out of bounds
-  // node = list.retrieve(&list, 116);
+  // node = list.get(&list, 116);
   // if (node != NULL) {
-  //   failed_ll("retrieve_node", 118);
+  //   failed_ll("get_node", 118);
   // }
 
   linked_list_destructor(&list);
@@ -136,10 +136,10 @@ void search_node() {
   // create a new instance of a LinkedList
   struct LinkedList list = linked_list_constructor();
 
-  // insert ten new nodes (if the test reached here then the "insert_node"
+  // insert ten new nodes (if the test reached here then the "add_node"
   // function was successfully tested, so we can freely use it)
   for (int i = 0; i < 10; ++i) {
-    list.insert(&list, i, &i, sizeof(i));
+    list.add(&list, i, &i, sizeof(i));
   }
 
   // check if the values are in the list
@@ -169,10 +169,10 @@ void is_empty() {
     failed_ll("is_empty", 169);
   }
 
-  // insert ten new nodes (if the test reached here then the "insert_node"
+  // insert ten new nodes (if the test reached here then the "add_node"
   // function was successfully tested, so we can freely use it)
   for (int i = 0; i < 10; ++i) {
-    list.insert(&list, i, &i, sizeof(i));
+    list.add(&list, i, &i, sizeof(i));
   }
 
   // the list should not be empty

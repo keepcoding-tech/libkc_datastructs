@@ -9,11 +9,11 @@
 
 // MARK: PUBLIC MEMBER METHODS
 
-void insert_node_ll(struct LinkedList *linked_list,
+void add_node_ll(struct LinkedList *linked_list,
   int index, void *data, unsigned long size);
+struct Node * get_node_ll(struct LinkedList *linked_list, int index);
 bool list_is_empty(struct LinkedList *linked_list);
 void remove_node_ll(struct LinkedList *linked_list, int index);
-struct Node * retrieve_node_ll(struct LinkedList *linked_list, int index);
 bool search_node_ll(struct LinkedList *linked_list,
   void *query, bool (*compare)(void *data_one, void *data_two));
 
@@ -33,10 +33,10 @@ struct LinkedList linked_list_constructor() {
   new_list.length = 0;
 
   // assigns the public member methods
-  new_list.insert = insert_node_ll;
+  new_list.add = add_node_ll;
+  new_list.get = get_node_ll;
   new_list.is_empty = list_is_empty;
   new_list.remove = remove_node_ll;
-  new_list.retrieve = retrieve_node_ll;
   new_list.search = search_node_ll;
 
   return new_list;
@@ -51,8 +51,8 @@ void linked_list_destructor(struct LinkedList *linked_list) {
   }
 }
 
-// The "insert_node_ll" function puts a new node in the chain.
-void insert_node_ll(struct LinkedList *linked_list,
+// The "add_node_ll" function puts a new node in the chain.
+void add_node_ll(struct LinkedList *linked_list,
   int index, void *data, unsigned long size) {
 
   // create a new node to be inserted
@@ -78,6 +78,16 @@ void insert_node_ll(struct LinkedList *linked_list,
   ++linked_list->length;
 }
 
+// The "get_node_ll" function is used to access data in the list.
+struct Node * get_node_ll(struct LinkedList *linked_list, int index) {
+  // find the desired node and return its data
+  struct Node *node = iterate_ll(index, linked_list);
+
+  if (node) {
+    return node;
+  }
+  return NULL;
+}
 
 // The "list_is_empty" will return either if the list is empty or not
 bool list_is_empty(struct LinkedList *linked_list) {
@@ -112,17 +122,6 @@ void remove_node_ll(struct LinkedList *linked_list, int index) {
 
   // decrement the list length
   --linked_list->length;
-}
-
-// The "retrieve_node_ll" function is used to access data in the list.
-struct Node * retrieve_node_ll(struct LinkedList *linked_list, int index) {
-  // find the desired node and return its data
-  struct Node *node = iterate_ll(index, linked_list);
-
-  if (node) {
-    return node;
-  }
-  return NULL;
 }
 
 // The "search_node_ll" function searchs for a specific node by data
