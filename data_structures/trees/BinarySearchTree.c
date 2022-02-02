@@ -32,7 +32,7 @@ struct BinarySearchTree binary_search_tree_constructor(
   struct BinarySearchTree binary_search_tree;
 
   // initialize the structure members fields
-  binary_search_tree.head = NULL;
+  binary_search_tree.root = NULL;
 
   // assigns the public member methods
   binary_search_tree.compare = compare;
@@ -47,20 +47,20 @@ struct BinarySearchTree binary_search_tree_constructor(
 // the memory of all nodes.
 void binary_search_tree_destructor(
   struct BinarySearchTree *binary_search_tree) {
-  recursive_binary_search_tree_destructor(binary_search_tree->head);
+  recursive_binary_search_tree_destructor(binary_search_tree->root);
 }
 
 // The "insert_bst" function adds new nodes to the binary_search_tree by
 // finding their proper position.
 void insert_bst(struct BinarySearchTree *self, void *data, unsigned long size) {
   // check if this is the first node in the tree
-  if (!self->head) {
-    self->head = create_node_bst(data, size);
+  if (!self->root) {
+    self->root = create_node_bst(data, size);
   } else {
     // set the direction int pointer
     int direction = 0;
     // find the desired position
-    struct Node *cursor = iterate_bst(self, self->head, data, &direction);
+    struct Node *cursor = iterate_bst(self, self->root, data, &direction);
 
     // check if the new node should be inserted to the left or right
     if (direction == 1) {
@@ -79,7 +79,7 @@ struct Node * search_bst(struct BinarySearchTree *self, void *data) {
   // set the direction int pointer
   int direction = 0;
   // utilize iterate to find the desired position
-  struct Node *cursor = iterate_bst(self, self->head, data, &direction);
+  struct Node *cursor = iterate_bst(self, self->root, data, &direction);
 
   // test if the found node is the desired node, or an adjacent one
   if (direction == 0) {
