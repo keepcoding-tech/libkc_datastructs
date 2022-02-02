@@ -32,12 +32,11 @@ struct Dictionary {
 
   // insert adds new items to the dictionary - the user need only specify the
   // key, value, and their respective sizes
-  void (*insert)(struct Dictionary *dictionary, void *key,
+  void (*insert)(struct Dictionary *self, void *key,
     unsigned long key_size, void *value, unsigned long value_size);
   // search looks for a given key in the dictionary and returns its
   // value if found or NULL if not
-  void * (*search)(struct Dictionary *dictionary,
-    void *key, unsigned long key_size);
+  void * (*search)(struct Dictionary *self, void *key, unsigned long key_size);
 };
 
 // MARK: CONSTRUCTORS

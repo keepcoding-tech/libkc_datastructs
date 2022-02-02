@@ -13,10 +13,8 @@
 
 // MARK: PUBLIC MEMBER METHODS
 
-void insert_bst(struct BinarySearchTree *binary_search_tree,
-  void *data, unsigned long size);
-struct Node * search_bst(struct BinarySearchTree *binary_search_tree,
-  void *data);
+void insert_bst(struct BinarySearchTree *self, void *data, unsigned long size);
+struct Node * search_bst(struct BinarySearchTree *self, void *data);
 
 // MARK: PRIVATE MEMBER METHODS
 
@@ -54,17 +52,15 @@ void binary_search_tree_destructor(
 
 // The "insert_bst" function adds new nodes to the binary_search_tree by
 // finding their proper position.
-void insert_bst(struct BinarySearchTree *binary_search_tree,
-  void *data, unsigned long size) {
+void insert_bst(struct BinarySearchTree *self, void *data, unsigned long size) {
   // check if this is the first node in the tree
-  if (!binary_search_tree->head) {
-    binary_search_tree->head = create_node_bst(data, size);
+  if (!self->head) {
+    self->head = create_node_bst(data, size);
   } else {
     // set the direction int pointer
     int direction = 0;
     // find the desired position
-    struct Node *cursor = iterate_bst(binary_search_tree,
-      binary_search_tree->head, data, &direction);
+    struct Node *cursor = iterate_bst(self, self->head, data, &direction);
 
     // check if the new node should be inserted to the left or right
     if (direction == 1) {
@@ -79,13 +75,11 @@ void insert_bst(struct BinarySearchTree *binary_search_tree,
 // The "search_bst" function utilizes the iterate function to test if a given
 // node exists in the tree. If the node is found, its data is returned.
 // Otherwise, NULL is returned.
-struct Node * search_bst(struct BinarySearchTree *binary_search_tree,
-  void *data) {
+struct Node * search_bst(struct BinarySearchTree *self, void *data) {
   // set the direction int pointer
   int direction = 0;
   // utilize iterate to find the desired position
-  struct Node *cursor = iterate_bst(binary_search_tree,
-    binary_search_tree->head, data, &direction);
+  struct Node *cursor = iterate_bst(self, self->head, data, &direction);
 
   // test if the found node is the desired node, or an adjacent one
   if (direction == 0) {

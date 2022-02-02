@@ -13,10 +13,9 @@
 
 // MARK: PUBLIC MEMBER FUNCTIONS
 
-void insert_dict(struct Dictionary *dictionary, void *key,
+void insert_dict(struct Dictionary *self, void *key,
   unsigned long key_size, void *value, unsigned long value_size);
-void * search_dict(struct Dictionary *dictionary,
-  void *key, unsigned long key_size);
+void * search_dict(struct Dictionary *self, void *key, unsigned long key_size);
 
 // MARK: PRIVATE MEMBER FUNCTIONS
 
@@ -48,27 +47,26 @@ void dictionary_destructor(struct Dictionary *dictionary) {
 
 // The "insert_dict" function adds items to the dictionary - the user does not
 // need to implement elements themselves.
-void insert_dict(struct Dictionary *dictionary, void *key,
+void insert_dict(struct Dictionary *self, void *key,
   unsigned long key_size, void *value, unsigned long value_size) {
   // create a new Entry
   struct Entry entry = entry_constructor(key, key_size, value, value_size);
 
   // insert that entry into the tree
-  dictionary->binary_search_tree.insert(
-    &dictionary->binary_search_tree, &entry, sizeof(entry));
+  self->binary_search_tree.insert(
+    &self->binary_search_tree, &entry, sizeof(entry));
 }
 
 // The "search_dict" function finds the value for a given key in the Dictionary.
-void * search_dict(struct Dictionary *dictionary,
-  void *key, unsigned long key_size) {
+void * search_dict(struct Dictionary *self, void *key, unsigned long key_size) {
   // create a new entry
   int dummy_value = 0;
   struct Entry searchable = entry_constructor(key, key_size,
     &dummy_value, sizeof(dummy_value));
 
   // use the iterate function of the BinarySearchTree to find the desired node
-  struct Node *result_node = dictionary->binary_search_tree
-    .search(&dictionary->binary_search_tree, &searchable);
+  struct Node *result_node = self->binary_search_tree
+    .search(&self->binary_search_tree, &searchable);
   // get the entry from the node
   struct Entry *result_entry = result_node->data;
 

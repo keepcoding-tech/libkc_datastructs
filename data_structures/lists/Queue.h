@@ -24,11 +24,11 @@ struct Queue {
   struct LinkedList list;
 
   // retrieves the data from the front of the list
-  void * (*peek)(struct Queue *queue);
+  void * (*peek)(struct Queue *self);
   // removes the first item in the list
-  void (*pop)(struct Queue *queue);
+  void (*pop)(struct Queue *self);
   // adds a node to the end of the chain
-  void (*push)(struct Queue *queue, void *data, unsigned long size);
+  void (*push)(struct Queue *self, void *data, unsigned long size);
 };
 
 // MARK: CONSTRUCTORS

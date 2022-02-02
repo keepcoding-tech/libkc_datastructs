@@ -9,13 +9,13 @@
 
 // MARK: PUBLIC MEMBER METHODS
 
-void add_node_ll(struct LinkedList *linked_list,
+void add_node_ll(struct LinkedList *self,
   int index, void *data, unsigned long size);
-struct Node * get_node_ll(struct LinkedList *linked_list, int index);
-bool list_is_empty(struct LinkedList *linked_list);
-void remove_node_ll(struct LinkedList *linked_list, int index);
-bool search_node_ll(struct LinkedList *linked_list,
-  void *query, bool (*compare)(void *data_one, void *data_two));
+struct Node * get_node_ll(struct LinkedList *self, int index);
+bool list_is_empty(struct LinkedList *self);
+void remove_node_ll(struct LinkedList *self, int index);
+bool search_node_ll(struct LinkedList *self, void *query,
+  bool (*compare)(void *data_one, void *data_two));
 
 // MARK: PRIVATE MEMBER METHODS
 
@@ -52,7 +52,7 @@ void linked_list_destructor(struct LinkedList *linked_list) {
 }
 
 // The "add_node_ll" function puts a new node in the chain.
-void add_node_ll(struct LinkedList *linked_list,
+void add_node_ll(struct LinkedList *self,
   int index, void *data, unsigned long size) {
 
   // create a new node to be inserted
@@ -61,12 +61,12 @@ void add_node_ll(struct LinkedList *linked_list,
   // check if this node will be the new head of the list
   if (index == 0) {
     // define the node's "next"
-    new_node->next = linked_list->head;
+    new_node->next = self->head;
     // re-define the list's "head"
-    linked_list->head = new_node;
+    self->head = new_node;
   } else {
     // find the item in the list immediately before the desired index
-    struct Node *cursor = iterate_ll(index - 1, linked_list);
+    struct Node *cursor = iterate_ll(index - 1, self);
     // set the node's "next" and "prev" to the corresponding nodes
     new_node->next = cursor->next;
     new_node->prev = cursor;
@@ -75,13 +75,13 @@ void add_node_ll(struct LinkedList *linked_list,
   }
 
   // increment the list length
-  ++linked_list->length;
+  ++self->length;
 }
 
 // The "get_node_ll" function is used to access data in the list.
-struct Node * get_node_ll(struct LinkedList *linked_list, int index) {
+struct Node * get_node_ll(struct LinkedList *self, int index) {
   // find the desired node and return its data
-  struct Node *node = iterate_ll(index, linked_list);
+  struct Node *node = iterate_ll(index, self);
 
   if (node) {
     return node;
@@ -90,25 +90,25 @@ struct Node * get_node_ll(struct LinkedList *linked_list, int index) {
 }
 
 // The "list_is_empty" will return either if the list is empty or not
-bool list_is_empty(struct LinkedList *linked_list) {
-  return linked_list->length == 0 && !linked_list->head;
+bool list_is_empty(struct LinkedList *self) {
+  return self->length == 0 && !self->head;
 }
 
 // The "remove_node_ll" function removes a node from the linked list.
-void remove_node_ll(struct LinkedList *linked_list, int index) {
+void remove_node_ll(struct LinkedList *self, int index) {
   // check if the item being removed is the head
   if (index == 0) {
     // collect the node to be removed
-    struct Node *node_to_remove = linked_list->head;
+    struct Node *node_to_remove = self->head;
     // define the new "head" of the list
     if (node_to_remove) {
-      linked_list->head = node_to_remove->next;
+      self->head = node_to_remove->next;
       // remove the desired node
       destroy_node_ll(node_to_remove);
     }
   } else {
     // find the node in the list before the one that is going to be removed
-    struct Node *cursor = iterate_ll(index - 1, linked_list);
+    struct Node *cursor = iterate_ll(index - 1, self);
     // use the cursor to define the node to be removed
     struct Node *node_to_remove = cursor->next;
     // update the cursor's "next" to skip the node to be removed
@@ -121,14 +121,14 @@ void remove_node_ll(struct LinkedList *linked_list, int index) {
   }
 
   // decrement the list length
-  --linked_list->length;
+  --self->length;
 }
 
 // The "search_node_ll" function searchs for a specific node by data
-bool search_node_ll(struct LinkedList *linked_list,
-  void *query, bool (*compare)(void *data_one, void *data_two)) {
+bool search_node_ll(struct LinkedList *self, void *query,
+  bool (*compare)(void *data_one, void *data_two)) {
   // create a new node instance
-  struct Node *node = linked_list->head;
+  struct Node *node = self->head;
 
   // search the node by value
   while (node) {
