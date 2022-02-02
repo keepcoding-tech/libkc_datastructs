@@ -42,7 +42,7 @@ struct Dictionary dictionary_constructor(
 // Destroy the linked list and the binary search tree to free the memory.
 void dictionary_destructor(struct Dictionary *dictionary) {
   linked_list_destructor(&dictionary->keys);
-  recursive_dictionary_destroy(dictionary->binary_search_tree.head);
+  recursive_dictionary_destroy(dictionary->binary_search_tree.root);
 }
 
 // The "insert_dict" function adds items to the dictionary - the user does not
