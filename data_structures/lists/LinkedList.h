@@ -44,6 +44,8 @@ struct LinkedList {
   // adds new items to the chain at a specified location
   void (*insert)(struct LinkedList *linked_list,
     int index, void *data, unsigned long size);
+  // return either if the list is empty or not
+  bool (*is_empty)(struct LinkedList *linked_list);
   // deletes an item from the chain and handles the deallocation of memory
   void (*remove)(struct LinkedList *linked_list, int index);
   // allows data in the chain to be accessed
