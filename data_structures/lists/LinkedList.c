@@ -21,7 +21,7 @@ bool search_node_ll(struct LinkedList *self, void *query,
 
 struct Node * create_node_ll(void *data, unsigned long size);
 void destroy_node_ll(struct Node *node_to_destroy);
-struct Node * iterate_ll(int index, struct LinkedList *linked_list);
+struct Node * iterate_ll(struct LinkedList *linked_list, int index);
 
 // The constructor is used to create new instances of linked list.
 struct LinkedList linked_list_constructor() {
@@ -66,7 +66,7 @@ void add_node_ll(struct LinkedList *self,
     self->head = new_node;
   } else {
     // find the item in the list immediately before the desired index
-    struct Node *cursor = iterate_ll(index - 1, self);
+    struct Node *cursor = iterate_ll(self, index - 1);
     // set the node's "next" and "prev" to the corresponding nodes
     new_node->next = cursor->next;
     new_node->prev = cursor;
@@ -81,7 +81,7 @@ void add_node_ll(struct LinkedList *self,
 // The "get_node_ll" function is used to access data in the list.
 struct Node * get_node_ll(struct LinkedList *self, int index) {
   // find the desired node and return its data
-  struct Node *node = iterate_ll(index, self);
+  struct Node *node = iterate_ll(self, index);
 
   if (node) {
     return node;
@@ -108,7 +108,7 @@ void remove_node_ll(struct LinkedList *self, int index) {
     }
   } else {
     // find the node in the list before the one that is going to be removed
-    struct Node *cursor = iterate_ll(index - 1, self);
+    struct Node *cursor = iterate_ll(self, index - 1);
     // use the cursor to define the node to be removed
     struct Node *node_to_remove = cursor->next;
     // update the cursor's "next" to skip the node to be removed
@@ -154,12 +154,12 @@ struct Node * create_node_ll(void *data, unsigned long size) {
 
 // The "destroy_node_ll" function removes a node by deallocating it's memory
 // address, this simply renames the node destructor function.
-void destroy_node_ll(struct Node *node) {
-  node_destructor(node);
+void destroy_node_ll(struct Node *node_to_destroy) {
+  node_destructor(node_to_destroy);
 }
 
 // The "iterate_ll" function traverses the list from beginning to end.
-struct Node * iterate_ll(int index, struct LinkedList *linked_list) {
+struct Node * iterate_ll(struct LinkedList *linked_list, int index) {
   // confirm the user has specified a valid index
   if (index < 0 || index >= linked_list->length) {
     // TODO: return error insted of printing it
