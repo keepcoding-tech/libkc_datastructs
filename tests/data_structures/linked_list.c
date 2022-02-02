@@ -6,12 +6,14 @@ void insert_node();
 void remove_node();
 void retrieve_node();
 void search_node();
+void is_empty();
 
 void linked_list_tests() {
   insert_node();
   remove_node();
   retrieve_node();
   search_node();
+  is_empty();
   printf("linked_list.t .............. OK\n");
 }
 
@@ -152,6 +154,41 @@ void search_node() {
     if (list.search(&list, &i, compare)) {
       failed_ll("search_node", 149);
     }
+  }
+
+  linked_list_destructor(&list);
+}
+
+// Test the "list_is_empty" function.
+void is_empty() {
+  // create a new instance of a LinkedList
+  struct LinkedList list = linked_list_constructor();
+
+  // the list should be empty
+  if (!list.is_empty(&list)) {
+    failed_ll("is_empty", 169);
+  }
+
+  // insert ten new nodes (if the test reached here then the "insert_node"
+  // function was successfully tested, so we can freely use it)
+  for (int i = 0; i < 10; ++i) {
+    list.insert(&list, i, &i, sizeof(i));
+  }
+
+  // the list should not be empty
+  if (list.is_empty(&list)) {
+    failed_ll("is_empty", 180);
+  }
+
+  // remove all nodes (if the test reached here then the "remove_node"
+  // function was successfully tested, so we can freely use it)
+  for (int i = 0; i < 10; ++i) {
+    list.remove(&list, 0);
+  }
+
+  // the list should be empty again
+  if (!list.is_empty(&list)) {
+    failed_ll("is_empty", 191);
   }
 
   linked_list_destructor(&list);

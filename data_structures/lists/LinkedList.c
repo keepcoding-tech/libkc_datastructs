@@ -11,6 +11,7 @@
 
 void insert_node_ll(struct LinkedList *linked_list,
   int index, void *data, unsigned long size);
+bool list_is_empty(struct LinkedList *linked_list);
 void remove_node_ll(struct LinkedList *linked_list, int index);
 struct Node * retrieve_node_ll(struct LinkedList *linked_list, int index);
 bool search_node_ll(struct LinkedList *linked_list,
@@ -33,6 +34,7 @@ struct LinkedList linked_list_constructor() {
 
   // assigns the public member methods
   new_list.insert = insert_node_ll;
+  new_list.is_empty = list_is_empty;
   new_list.remove = remove_node_ll;
   new_list.retrieve = retrieve_node_ll;
   new_list.search = search_node_ll;
@@ -74,6 +76,12 @@ void insert_node_ll(struct LinkedList *linked_list,
 
   // increment the list length
   ++linked_list->length;
+}
+
+
+// The "list_is_empty" will return either if the list is empty or not
+bool list_is_empty(struct LinkedList *linked_list) {
+  return linked_list->length == 0 && !linked_list->head;
 }
 
 // The "remove_node_ll" function removes a node from the linked list.
