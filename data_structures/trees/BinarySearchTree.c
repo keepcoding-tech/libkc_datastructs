@@ -19,9 +19,7 @@ struct Node * search_bst(struct BinarySearchTree *self, void *data);
 // MARK: PRIVATE MEMBER METHODS
 
 struct Node * create_node_bst(void *data, unsigned long size);
-void destroy_node_bst(struct Node *node);
-struct Node * iterate_bst(struct BinarySearchTree *binary_search_tree,
-  struct Node *cursor, void *data, int *direction);
+void destroy_node_bst(struct Node *node_to_destroy);
 void recursive_binary_search_tree_destructor(struct Node *node);
 
 // The constructor takes a "compare" function pointer as its only argument and
@@ -50,41 +48,49 @@ void binary_search_tree_destructor(
   recursive_binary_search_tree_destructor(binary_search_tree->root);
 }
 
-// The "insert_bst" function adds new nodes to the binary_search_tree by
-// finding their proper position.
-void insert_bst(struct BinarySearchTree *self, void *data, unsigned long size) {
+// To insert a new node into the tree, we need to mantain the order property.
+struct Node * insert_node_bst(struct BinarySearchTree *tree,
+  struct Node *node, void *data, unsigned long size) {
   // check if this is the first node in the tree
-  if (!self->root) {
-    self->root = create_node_bst(data, size);
-  } else {
-    // set the direction int pointer
-    int direction = 0;
-    // find the desired position
-    struct Node *cursor = iterate_bst(self, self->root, data, &direction);
-
-    // check if the new node should be inserted to the left or right
-    if (direction == 1) {
-      cursor->next = create_node_bst(data, size);
-    } else if (direction == -1) {
-      cursor->prev = create_node_bst(data, size);
-    }
-    // duplicate nodes will not be added
+  if (!node) {
+    node = create_node_bst(data, size);
+    // check if the current node's data is smaller (move to left)
+  } else if (tree->compare(data, node->data) == -1) {
+    node->prev = insert_node_bst(tree, node->prev, data, size);
+    // check if the current node's data is greater (move to right)
+  } else if (tree->compare(data, node->data) == 1) {
+    node->next = insert_node_bst(tree, node->next, data, size);
   }
+
+  return node;
+}
+
+// The "insert_bst" function adds new nodes to the tree
+void insert_bst(struct BinarySearchTree *self, void *data, unsigned long size) {
+  self->root = insert_node_bst(self, self->root, data, size);
 }
 
 // The "search_bst" function utilizes the iterate function to test if a given
 // node exists in the tree. If the node is found, its data is returned.
 // Otherwise, NULL is returned.
 struct Node * search_bst(struct BinarySearchTree *self, void *data) {
-  // set the direction int pointer
-  int direction = 0;
-  // utilize iterate to find the desired position
-  struct Node *cursor = iterate_bst(self, self->root, data, &direction);
+  // start searching from the root of the tree
+  struct Node *current = self->root;
 
-  // test if the found node is the desired node, or an adjacent one
-  if (direction == 0) {
-    return cursor;
+  while (current) {
+    // check if the desired node was found and return it
+    if (self->compare(current->data, data) == 0) {
+      return current;
+      // check if the current node's data is smaller (move to right)
+    } else if (self->compare(current->data, data) == -1) {
+      current = current->next;
+      // check if the current node's data is greater (move to left)
+    } else {
+      current = current->prev;
+    }
   }
+
+  // if the node was not found, return NULL
   return NULL;
 }
 
@@ -101,53 +107,8 @@ struct Node * create_node_bst(void *data, unsigned long size) {
 
 // The "destroy_node_bst" function removes a node by deallocating it's memory
 // address, this simply renames the node destructor function.
-void destroy_node_bst(struct Node *node) {
-  node_destructor(node);
-}
-
-// The "iterate_bst" function is a recursive algorithm that traverses the
-// branches of a tree. It utilizes the compare function to determine if it
-// should move left or right, and returns the cursor once there is nowhere left
-// for the iterator to move. The user must take care to insrue this function
-// returns the node they are actually looking for. The function takes a
-// reference to the BinarySearchTree, the current position, desired data, and
-// an int pointer as arguments. The int pointer becomes 1 if the desired data
-// is greater than the returned node, -1 if it is less than, and 0 if they are
-// equal.
-struct Node * iterate_bst(struct BinarySearchTree *binary_search_tree,
-  struct Node *cursor, void *data, int *direction) {
-  // compare the cursor's data to the desired data
-  if (binary_search_tree->compare(cursor->data, data) == 1) {
-    // check if there is another node in the chain to be tested
-    if (cursor->next) {
-      // recursively test the next (right) node
-      return iterate_bst(binary_search_tree, cursor->next, data, direction);
-    } else {
-      // set the direction pointer to reflect the next position is
-      // desired (moving right)
-      *direction = 1;
-      // return the cursor
-      return cursor;
-    }
-    // alternative outcome of the compare
-  } else if (binary_search_tree->compare(cursor->data, data) == -1) {
-    // check if there is another node in the chain to be tested
-    if (cursor->prev) {
-      // recursively test the previous (left) node
-      return iterate_bst(binary_search_tree, cursor->prev, data, direction);
-    } else {
-      // set the direction pointer to reflect the previous position
-      // is desired (moving left)
-      *direction = -1;
-      return cursor;
-    }
-    // the two data values are equal
-  } else {
-    // set direction
-    *direction = 0;
-    // return the node
-    return cursor;
-  }
+void destroy_node_bst(struct Node *node_to_destroy) {
+  node_destructor(node_to_destroy);
 }
 
 // The "recursive_binary_search_tree_destructor" function will use
