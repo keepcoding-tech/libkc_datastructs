@@ -73,7 +73,9 @@ void add_node_ll(struct LinkedList *self,
     // set the cursor's "next" to the new node
     cursor->next = new_node;
     // the "prev" of the third node must point to the new node
-    cursor->next->prev = new_node;
+    if (new_node->next) {
+      new_node->next->prev = new_node;
+    }
   }
 
   // increment the list length
