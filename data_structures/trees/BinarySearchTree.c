@@ -126,11 +126,27 @@ void recursive_binary_search_tree_destructor(struct Node *node) {
   destroy_node_bst(node);
 }
 
-// Compare two strings and return if the first one is bigger, smaller or equal.
-int binary_search_tree_str_compare(void *data_one, void *data_two) {
+// MARK: PUBLIC HELPER FUNCTIONS
+
+// Compare two integers and return if the first one is bigger, smaller or equal.
+int compare_int(void *data_one, void *data_two) {
+  // the first integer is bigger
+  if (*(int *)data_one > *(int *)data_two) {
+    return 1;
+  }
+  // the first integer is smaller
+  if (*(int *)data_one < *(int *)data_two) {
+    return -1;
+  }
+  // the integers are equal
+  return 0;
+}
+
+// Compare two strings and return if the first one is greater, smaller or equal.
+int compare_str(void *data_one, void *data_two) {
   int comparison = strcmp(data_one, data_two);
 
-  // the first string is bigger
+  // the first string is greater
   if (comparison > 0) {
     return 1;
   }

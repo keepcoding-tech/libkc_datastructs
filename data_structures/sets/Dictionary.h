@@ -49,7 +49,9 @@ void dictionary_destructor(struct Dictionary *dictionary);
 
 // MARK: PUBLIC HELPER FUNCTIONS
 
+// Compare two integers casting them into Entry.
+int compare_int_keys(void *entry_one, void *entry_two);
 // Compare two string casting them into Entry.
-int compare_string_keys(void *entry_one, void *entry_two);
+int compare_str_keys(void *entry_one, void *entry_two);
 
 #endif /* Dictionary_h */

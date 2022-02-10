@@ -20,8 +20,7 @@ void failed_bst(char *test, int line) {
 // Test the "insert_bst" and the "search_bst" functions.
 void insert_and_search_bst() {
   // create a new instance of a LinkedList
-  struct BinarySearchTree tree =
-    binary_search_tree_constructor(binary_search_tree_str_compare);
+  struct BinarySearchTree tree = binary_search_tree_constructor(compare_int);
 
   // insert ten new nodes
   for (int i = 0; i < 10; ++i) {
@@ -55,8 +54,7 @@ void print_inorder(struct Node *node) {
 // test will not be required.
 void tests_cases_bst() {
   // create a new instance of a LinkedList
-  struct BinarySearchTree tree =
-    binary_search_tree_constructor(binary_search_tree_str_compare);
+  struct BinarySearchTree tree = binary_search_tree_constructor(compare_int);
 
   int data = 51;
   tree.insert(&tree, &data, sizeof(data));

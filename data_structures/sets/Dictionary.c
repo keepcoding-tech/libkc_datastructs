@@ -97,8 +97,26 @@ void recursive_dictionary_destroy(struct Node *node) {
   free(node);
 }
 
+// MARK: PUBLIC HELPER FUNCTIONS
+
+// Compare two integers casting them into Entry.
+int compare_int_keys(void *entry_one, void *entry_two) {
+  // the first entry is bigger
+  if (*(int *)(((struct Entry *)entry_one)->key) >
+    *(int *)(((struct Entry *)entry_two)->key)) {
+    return 1;
+  }
+  // the first entry is smaller
+  if (*(int *)(((struct Entry *)entry_one)->key) <
+    *(int *)(((struct Entry *)entry_two)->key)) {
+    return -1;
+  }
+  // the entries are equal
+  return 0;
+}
+
 // Compare two string casting them into Entry.
-int compare_string_keys(void *entry_one, void *entry_two) {
+int compare_str_keys(void *entry_one, void *entry_two) {
   int comparison = strcmp((char *)(((struct Entry *)entry_one)->key),
     (char *)(((struct Entry *)entry_two)->key));
 
