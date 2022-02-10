@@ -18,7 +18,7 @@ void failed_dict(char *test, int line) {
 // Test the "insert_dict" and the "search_dict" functions.
 void insert_and_search_dict() {
   // create a new instance of a Dictionary
-  struct Dictionary dictionary = dictionary_constructor(compare_string_keys);
+  struct Dictionary dictionary = dictionary_constructor(compare_int_keys);
 
   // insert ten new entries
   for (int i = 0; i < 10; ++i) {

@@ -49,7 +49,9 @@ void binary_search_tree_destructor(struct BinarySearchTree *binary_search_tree);
 
 // MARK: PUBLIC HELPER FUNCTIONS
 
-// Compare two strings and return if the first one is bigger or smaller.
-int binary_search_tree_str_compare(void *data_one, void *data_two);
+// Compare two integers and return if the first one is bigger, smaller or equal.
+int compare_int(void *data_one, void *data_two);
+// Compare two strings and return if the first one is greater, smaller or equal.
+int compare_str(void *data_one, void *data_two);
 
 #endif /* BinarySearchTree_h */
