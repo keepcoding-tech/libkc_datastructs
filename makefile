@@ -7,8 +7,8 @@
 # MARK: COMPILE
 ###############################################################################
 
-output: tests/main.c tests/data_structures/node.c data_structures/utils/Node.c tests/data_structures/linked_list.c data_structures/lists/LinkedList.c tests/data_structures/queue.c data_structures/lists/Queue.c tests/data_structures/binary_search_tree.c data_structures/trees/BinarySearchTree.c tests/data_structures/entry.c data_structures/utils/Entry.c tests/data_structures/dictionary.c data_structures/sets/Dictionary.c
-	gcc -o tests/main tests/main.c tests/data_structures/node.c data_structures/utils/Node.c tests/data_structures/linked_list.c data_structures/lists/LinkedList.c tests/data_structures/queue.c data_structures/lists/Queue.c tests/data_structures/binary_search_tree.c data_structures/trees/BinarySearchTree.c tests/data_structures/entry.c data_structures/utils/Entry.c tests/data_structures/dictionary.c data_structures/sets/Dictionary.c
+output: tests/run_tests.c tests/data_structures/node.c data_structures/utils/Node.c tests/data_structures/linked_list.c data_structures/lists/LinkedList.c tests/data_structures/queue.c data_structures/lists/Queue.c tests/data_structures/binary_search_tree.c data_structures/trees/BinarySearchTree.c tests/data_structures/entry.c data_structures/utils/Entry.c tests/data_structures/dictionary.c data_structures/sets/Dictionary.c
+	gcc -o tests/run_tests tests/run_tests.c tests/data_structures/node.c data_structures/utils/Node.c tests/data_structures/linked_list.c data_structures/lists/LinkedList.c tests/data_structures/queue.c data_structures/lists/Queue.c tests/data_structures/binary_search_tree.c data_structures/trees/BinarySearchTree.c tests/data_structures/entry.c data_structures/utils/Entry.c tests/data_structures/dictionary.c data_structures/sets/Dictionary.c
 
 ###############################################################################
 # MARK: CLEAN
@@ -16,4 +16,4 @@ output: tests/main.c tests/data_structures/node.c data_structures/utils/Node.c t
 
 # Remove the main file
 clean:
-	rm tests/main
+	rm tests/run_tests
