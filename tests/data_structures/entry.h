@@ -6,6 +6,7 @@
 #ifndef entry_test_h
 #define entry_test_h
 
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 

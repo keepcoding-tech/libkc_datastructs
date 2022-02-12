@@ -1,7 +1,6 @@
 #include "linked_list.h"
 
 void linked_list_tests();
-
 void add_node();
 void remove_node();
 void get_node();
@@ -19,12 +18,6 @@ void linked_list_tests() {
   printf("linked_list.t .............. OK\n");
 }
 
-// Display where the test failed.
-void failed_ll(char *test, int line) {
-  printf("FAIELD -> %s | subtest: %d\n", test, line);
-  exit(1);
-}
-
 // Test the "add_node_ll" function.
 void add_node() {
   // create a new instance of a LinkedList
@@ -34,9 +27,7 @@ void add_node() {
   for (int i = 0; i < 10; ++i) {
     list.add(&list, i, &i, sizeof(i));
     // check the length of the list
-    if (list.length != i + 1) {
-      failed_ll("add_node", 1);
-    }
+    assert(list.length == i + 1);
   }
 
   for (int i = 0; i < 10; ++i) {
@@ -46,9 +37,7 @@ void add_node() {
     }
 
     // check if the nodes have been inserted correctly
-    if (*(int *)cursor->data != i) {
-      failed_ll("add_node", 2);
-    }
+    assert(*(int *)cursor->data == i);
   }
 
   linked_list_destructor(&list);
@@ -72,17 +61,13 @@ void remove_node() {
   for (int i = 0; i < 5; ++i) {
     cursor = cursor->next;
   }
-  if (*(int *)cursor->data == 4 || list.length == 10) {
-    failed_ll("remove_node", 1);
-  }
+  assert(*(int *)cursor->data != 4 || list.length != 10);
 
 
   // check if the head of the list was correctly removed
   list.remove(&list, 0);
   cursor = list.head;
-  if (*(int *)cursor->data == 0 || list.length == 9) {
-    failed_ll("remove_node", 2);
-  }
+  assert(*(int *)cursor->data != 0 || list.length != 9);
 
   linked_list_destructor(&list);
 }
@@ -100,21 +85,15 @@ void get_node() {
 
   // check if the node was correctly retrieved
   struct Node *node = list.get(&list, 5);
-  if (*(int *)node->data != 5) {
-    failed_ll("get_node", 1);
-  }
+  assert(*(int *)node->data == 5);
 
   // check if the head of the list was correctly retrieved
   node = list.get(&list, 0);
-  if (*(int *)node->data != 0) {
-    failed_ll("get_node", 2);
-  }
+  assert(*(int *)node->data == 0);
 
   // check if the tail of the list was correctly retrieved
   node = list.get(&list, list.length - 1);
-  if (*(int *)node->data != 9) {
-    failed_ll("get_node", 3);
-  }
+  assert(*(int *)node->data == 9);
 
   // expected NULL because the index is out of bounds
   // node = list.get(&list, 116);
@@ -146,16 +125,12 @@ void search_node() {
 
   // check if the values are in the list
   for (int i = 9; i > 0; --i) {
-    if (!list.search(&list, &i, compare)) {
-      failed_ll("search_node", 1);
-    }
+    assert(list.search(&list, &i, compare));
   }
 
   // check if the values are not in the list
   for (int i = 30; i > 20; --i) {
-    if (list.search(&list, &i, compare)) {
-      failed_ll("search_node", 2);
-    }
+    assert(!list.search(&list, &i, compare));
   }
 
   linked_list_destructor(&list);
@@ -167,9 +142,7 @@ void is_empty() {
   struct LinkedList list = linked_list_constructor();
 
   // the list should be empty
-  if (!list.is_empty(&list)) {
-    failed_ll("is_empty", 1);
-  }
+  assert(list.is_empty(&list));
 
   // insert ten new nodes (if the test reached here then the "add_node"
   // function was successfully tested, so we can freely use it)
@@ -178,9 +151,7 @@ void is_empty() {
   }
 
   // the list should not be empty
-  if (list.is_empty(&list)) {
-    failed_ll("is_empty", 2);
-  }
+  assert(!list.is_empty(&list));
 
   // remove all nodes (if the test reached here then the "remove_node"
   // function was successfully tested, so we can freely use it)
@@ -189,9 +160,7 @@ void is_empty() {
   }
 
   // the list should be empty again
-  if (!list.is_empty(&list)) {
-    failed_ll("is_empty", 3);
-  }
+  assert(list.is_empty(&list));
 
   linked_list_destructor(&list);
 }

@@ -1,7 +1,6 @@
 #include "binary_search_tree.h"
 
 void binary_search_tree_tests();
-
 void insert_and_search_bst();
 void tests_cases_bst();
 
@@ -9,12 +8,6 @@ void binary_search_tree_tests() {
   insert_and_search_bst();
   tests_cases_bst();
   printf("binary_search_tree.t ....... OK\n");
-}
-
-// Display where the test failed.
-void failed_bst(char *test, int line) {
-  printf("FAIELD -> %s at line %d\n", test, line);
-  exit(1);
 }
 
 // Test the "insert_bst" and the "search_bst" functions.
@@ -31,9 +24,7 @@ void insert_and_search_bst() {
     // check if the nodes of the tree have been inserted
     // and retrieved corectly
     struct Node *node = tree.search(&tree, &i);
-    if (*(int *)node->data != i) {
-      failed_bst("insert_and_search_bst", 34);
-    }
+    assert(*(int *)node->data == i);
   }
 
   binary_search_tree_destructor(&tree);
@@ -81,4 +72,6 @@ void tests_cases_bst() {
 
   // print_inorder(tree.root);
   // printf("\n=====================\n");
+
+  binary_search_tree_destructor(&tree);
 }

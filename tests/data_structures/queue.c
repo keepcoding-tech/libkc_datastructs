@@ -1,7 +1,6 @@
 #include "queue.h"
 
 void queue_tests();
-
 void peek_test();
 void pop_test();
 void push_test();
@@ -13,12 +12,6 @@ void queue_tests() {
   printf("queue.t .................... OK\n");
 }
 
-// Display where the test failed.
-void failed_q(char *test, int line) {
-  printf("FAIELD -> %s at line %d\n", test, line);
-  exit(1);
-}
-
 // Test the "push" function.
 void push_test() {
   // create a new instance of a Queue
@@ -28,9 +21,7 @@ void push_test() {
   for (int i = 0; i < 10; ++i) {
     queue.push(&queue, &i, sizeof(i));
     // check the length of the list
-    if (queue.list.length != i + 1) {
-      failed_q("push_test", 32);
-    }
+    assert(queue.list.length == i + 1);
   }
 
   for (int i = 0; i < 10; ++i) {
@@ -40,9 +31,7 @@ void push_test() {
     }
 
     // check if the nodes have been pushed correctly
-    if (*(int *)cursor->data != i) {
-      failed_q("push_test", 32);
-    }
+    assert(*(int *)cursor->data == i);
   }
 
   queue_destructor(&queue);
@@ -62,9 +51,7 @@ void pop_test() {
   for (int i = 1; i < 10; ++i) {
     queue.pop(&queue);
     // check if the nodes have been removed correctly
-    if (queue.list.length != 10 - i) {
-      failed_q("pop_test", 85);
-    }
+    assert(queue.list.length == 10 - i);
   }
 
   queue_destructor(&queue);
@@ -83,9 +70,7 @@ void peek_test() {
 
   for (int i = 0; i < 10; ++i) {
     // check if the nodes have been peeked correctly
-    if (*(int *)queue.peek(&queue) != i) {
-      failed_q("peek_test", 86);
-    }
+    assert(*(int *)queue.peek(&queue) == i);
 
     // destroy the first node (if the test reached here then the "pop"
     // function was successfully tested, so we can freely use it)

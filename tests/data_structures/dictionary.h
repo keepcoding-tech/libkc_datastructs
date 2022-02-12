@@ -6,6 +6,7 @@
 #ifndef dictionary_test_h
 #define dictionary_test_h
 
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 
