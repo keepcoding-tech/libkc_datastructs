@@ -1,18 +1,11 @@
 #include "dictionary.h"
 
 void dictionary_tests();
-
 void insert_and_search_dict();
 
 void dictionary_tests() {
   insert_and_search_dict();
   printf("dictionary.t ............... OK\n");
-}
-
-// Display where the test failed.
-void failed_dict(char *test, int line) {
-  printf("FAIELD -> %s at line %d\n", test, line);
-  exit(1);
 }
 
 // Test the "insert_dict" and the "search_dict" functions.
@@ -31,9 +24,7 @@ void insert_and_search_dict() {
     // check if the entries of the dictionary have been
     // inserted and retrieved corectly
     int searchable = *(int *)dictionary.search(&dictionary, &i, sizeof(i));
-    if (searchable != i * 100) {
-      failed_dict("insert_and_search_dict", 33);
-    }
+    assert(searchable == i * 100);
   }
 
   dictionary_destructor(&dictionary);

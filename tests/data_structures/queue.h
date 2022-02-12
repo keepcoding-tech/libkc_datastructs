@@ -6,6 +6,7 @@
 #ifndef queue_test_h
 #define queue_test_h
 
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 

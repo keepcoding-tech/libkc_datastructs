@@ -6,6 +6,7 @@
 #ifndef node_test_h
 #define node_test_h
 
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 

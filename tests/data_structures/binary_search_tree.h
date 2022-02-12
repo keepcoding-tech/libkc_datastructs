@@ -6,6 +6,7 @@
 #ifndef binary_search_tree_test_h
 #define binary_search_tree_test_h
 
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 
