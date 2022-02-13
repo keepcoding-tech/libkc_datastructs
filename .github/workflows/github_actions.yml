@@ -30,6 +30,6 @@ jobs:
 
       # Runs all the tests inside the "tests" directory.
       - name: Compile Tests
-        run: make
+        run: cd tests && make
       - name: Run Tests
         run: cd tests && ./run_tests
