@@ -14,6 +14,14 @@
 #ifndef keepcoding_h
 #define keepcoding_h
 
-#include "data_structures.h"
+#include "include/data_structures/LinkedList.h"
+#include "include/data_structures/Queue.h"
+
+#include "include/data_structures/Dictionary.h"
+
+#include "include/data_structures/BinarySearchTree.h"
+
+#include "include/data_structures/Node.h"
+#include "include/data_structures/Entry.h"
 
 #endif /* keepcoding_h */

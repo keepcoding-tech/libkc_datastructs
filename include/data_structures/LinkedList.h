@@ -32,7 +32,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../utils/Node.h"
+#include "Node.h"
 
 // Linked lists are used to move between and manipulate related nodes.
 struct LinkedList {
@@ -51,7 +51,7 @@ struct LinkedList {
   // deletes an item from the chain and handles the deallocation of memory
   void (*remove)(struct LinkedList *self, int index);
   // search a specified node by value
-  bool (*search)(struct LinkedList *self, void *query, 
+  bool (*search)(struct LinkedList *self, void *query,
     bool (*compare)(void *data_one, void *data_two));
 };
 

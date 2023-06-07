@@ -19,9 +19,9 @@
 #ifndef Dictionary_h
 #define Dictionary_h
 
-#include "../lists/LinkedList.h"
-#include "../trees/BinarySearchTree.h"
-#include "../utils/Entry.h"
+#include "LinkedList.h"
+#include "BinarySearchTree.h"
+#include "Entry.h"
 
 // The dictionary is a collection of entries stored in a BinarySearchTree.
 struct Dictionary {
