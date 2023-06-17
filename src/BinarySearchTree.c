@@ -5,7 +5,7 @@
  at the end, representing -> "binary search tree".
 */
 
-#include "BinarySearchTree.h"
+#include "../include/BinarySearchTree.h"
 
 #include <stdlib.h>
 #include <string.h>

@@ -1,16 +1,14 @@
-#include "node.h"
+#include "../include/Node.h"
+
+#include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 void node_tests();
 void int_data_type();
 void char_data_type();
 void struct_data_type();
-
-void node_tests() {
-  int_data_type();
-  char_data_type();
-  struct_data_type();
-  printf("node.t ..................... OK\n");
-}
 
 // Test the integer data type.
 void int_data_type() {
@@ -68,7 +66,15 @@ void struct_data_type() {
   assert(new_test->value == 200);
 
   // test character member
-  assert(new_test->key == "test");
+  assert(strcmp(new_test->key, "test") == 0);
 
   node_destructor(node);
+}
+
+int main() {
+  int_data_type();
+  char_data_type();
+  struct_data_type();
+  printf("node.t ..................... OK\n");
+  return 0;
 }

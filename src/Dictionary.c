@@ -5,7 +5,7 @@
  at the end, representing -> "dictionary".
 */
 
-#include "Dictionary.h"
+#include "../include/Dictionary.h"
 
 #include <stdlib.h>
 #include <string.h>

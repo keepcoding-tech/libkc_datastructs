@@ -1,12 +1,8 @@
-#include "entry.h"
+#include "../include/Entry.h"
 
-void entry_tests();
-void members_fields();
-
-void entry_tests() {
-  members_fields();
-  printf("entry.t .................... OK\n");
-}
+#include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 // Test the members of the Entry structure.
 void members_fields() {
@@ -24,4 +20,10 @@ void members_fields() {
 
   // destroy the entry
   entry_destructor(&entry);
+}
+
+int main() {
+  members_fields();
+  printf("entry.t .................... OK\n");
+  return 0;
 }

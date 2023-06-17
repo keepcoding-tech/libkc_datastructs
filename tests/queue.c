@@ -1,16 +1,8 @@
-#include "queue.h"
+#include "../include/Queue.h"
 
-void queue_tests();
-void peek_test();
-void pop_test();
-void push_test();
-
-void queue_tests() {
-  push_test();
-  pop_test();
-  peek_test();
-  printf("queue.t .................... OK\n");
-}
+#include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 // Test the "push" function.
 void push_test() {
@@ -78,4 +70,12 @@ void peek_test() {
   }
 
   queue_destructor(&queue);
+}
+
+int main() {
+  peek_test();
+  pop_test();
+  push_test();
+  printf("queue.t .................... OK\n");
+  return 0;
 }

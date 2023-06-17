@@ -1,22 +1,8 @@
-#include "linked_list.h"
+#include "../include/LinkedList.h"
 
-void linked_list_tests();
-void add_node();
-void remove_node();
-void get_node();
-void search_node();
-void is_empty();
-void tests_cases_ll();
-
-void linked_list_tests() {
-  add_node();
-  remove_node();
-  get_node();
-  search_node();
-  is_empty();
-  tests_cases_ll();
-  printf("linked_list.t .............. OK\n");
-}
+#include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 // Test the "add_node_ll" function.
 void add_node() {
@@ -210,4 +196,15 @@ void tests_cases_ll() {
     struct Node *node = aux.get(&aux, i);
     list.add(&list, i, node->data, sizeof(node));
   }
+}
+
+int main() {
+  add_node();
+  remove_node();
+  get_node();
+  search_node();
+  is_empty();
+  tests_cases_ll();
+  printf("linked_list.t .............. OK\n");
+  return 0;
 }

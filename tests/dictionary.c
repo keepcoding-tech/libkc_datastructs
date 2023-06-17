@@ -1,12 +1,8 @@
-#include "dictionary.h"
+#include "../include/Dictionary.h"
 
-void dictionary_tests();
-void insert_and_search_dict();
-
-void dictionary_tests() {
-  insert_and_search_dict();
-  printf("dictionary.t ............... OK\n");
-}
+#include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 // Test the "insert_dict" and the "search_dict" functions.
 void insert_and_search_dict() {
@@ -28,4 +24,10 @@ void insert_and_search_dict() {
   }
 
   dictionary_destructor(&dictionary);
+}
+
+int main() {
+  insert_and_search_dict();
+  printf("dictionary.t ............... OK\n");
+  return 0;
 }

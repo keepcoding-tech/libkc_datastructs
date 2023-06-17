@@ -1,14 +1,8 @@
-#include "binary_search_tree.h"
+#include "../include/BinarySearchTree.h"
 
-void binary_search_tree_tests();
-void insert_and_search_bst();
-void tests_cases_bst();
-
-void binary_search_tree_tests() {
-  insert_and_search_bst();
-  tests_cases_bst();
-  printf("binary_search_tree.t ....... OK\n");
-}
+#include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 // Test the "insert_bst" and the "search_bst" functions.
 void insert_and_search_bst() {
@@ -74,4 +68,11 @@ void tests_cases_bst() {
   // printf("\n=====================\n");
 
   binary_search_tree_destructor(&tree);
+}
+
+int main() {
+  insert_and_search_bst();
+  tests_cases_bst();
+  printf("binary_search_tree.t ....... OK\n");
+  return 0;
 }

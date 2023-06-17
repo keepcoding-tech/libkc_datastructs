@@ -5,7 +5,7 @@
  at the end, representing -> "linked list".
 */
 
-#include "LinkedList.h"
+#include "../include/LinkedList.h"
 
 // MARK: PUBLIC MEMBER METHODS
 
