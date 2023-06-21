@@ -12,7 +12,7 @@ struct Queue queue_constructor() {
   struct Queue queue;
 
   // instantiate the queue's LinkedList via the constructor
-  queue.list = linked_list_constructor();
+  queue.list = new_linked_list();
 
   // assigns the public member methods
   queue.push = push;
@@ -24,7 +24,7 @@ struct Queue queue_constructor() {
 
 // The destructor removes all the nodes by calling the linked list destructor.
 void queue_destructor(struct Queue *queue) {
-  linked_list_destructor(&queue->list);
+  destroy_linked_list(&queue->list);
 }
 
 // The "peek" function returns the data from the first item in the chain.

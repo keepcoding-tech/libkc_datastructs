@@ -96,11 +96,11 @@ struct Node * search_bst(struct BinarySearchTree *self, void *data) {
 
 // The "create_node_bst" allocates space on the heap for a node and uses the
 // Node constructor to instantiate it.
-struct Node * create_node_bst(void *data, unsigned long size) {
+struct Node* create_node_bst(void *data, unsigned long size) {
   // allocate space
-  struct Node *new_node = malloc(sizeof *new_node);
+  struct Node* new_node = malloc(sizeof *new_node);
   // call the constructor
-  *new_node = node_constructor(data, size);
+  new_node = node_constructor(data, size);
 
   return new_node;
 }

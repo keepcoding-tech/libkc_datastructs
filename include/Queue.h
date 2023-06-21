@@ -16,7 +16,7 @@
 #ifndef Queue_h
 #define Queue_h
 
-#include "LinkedList.h"
+#include "linked_list.h"
 
 // Queues are used to access a linked list in a controlled manner.
 struct Queue {

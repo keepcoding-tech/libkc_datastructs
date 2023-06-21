@@ -19,7 +19,7 @@
 #ifndef Dictionary_h
 #define Dictionary_h
 
-#include "LinkedList.h"
+#include "linked_list.h"
 #include "BinarySearchTree.h"
 #include "Entry.h"
 

@@ -1,17 +1,28 @@
-#include "../include/LinkedList.h"
+#include "../include/linked_list.h"
 
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <string.h>
 
-// Test the "add_node_ll" function.
-void add_node() {
+// Test the creation and destruction of a linked list.
+void test_creation_and_destruction() {
+  struct LinkedList list = new_linked_list();
+  assert(list.head == NULL);
+  destroy_linked_list(&list);
+}
+
+// Test case for the add() method.
+void test_add() {
   // create a new instance of a LinkedList
-  struct LinkedList list = linked_list_constructor();
+  struct LinkedList list = new_linked_list();
 
   // add ten new nodes
   for (int i = 0; i < 10; ++i) {
     list.add(&list, i, &i, sizeof(i));
+
     // check the length of the list
     assert(list.length == i + 1);
   }
@@ -26,14 +37,13 @@ void add_node() {
     assert(*(int *)cursor->data == i);
   }
 
-  linked_list_destructor(&list);
+  destroy_linked_list(&list);
 }
 
-
-// Test the "remove_node_ll" function.
-void remove_node() {
+// Test case for the remove() method.
+void test_remove() {
   // create a new instance of a LinkedList
-  struct LinkedList list = linked_list_constructor();
+  struct LinkedList list = new_linked_list();
 
   // insert ten new nodes (if the test reached here then the "add_node"
   // function was successfully tested, so we can freely use it)
@@ -41,27 +51,31 @@ void remove_node() {
     list.add(&list, i, &i, sizeof(i));
   }
 
-  // check if the node was correctly removed
+  // remove the node from position 5
   list.remove(&list, 5);
+
+  // check if the node was correctly removed
   struct Node *cursor = list.head;
   for (int i = 0; i < 5; ++i) {
     cursor = cursor->next;
   }
+
   assert(*(int *)cursor->data != 4 || list.length != 10);
 
+  // remove the head of the list
+  list.remove(&list, 0);
 
   // check if the head of the list was correctly removed
-  list.remove(&list, 0);
   cursor = list.head;
   assert(*(int *)cursor->data != 0 || list.length != 9);
 
-  linked_list_destructor(&list);
+  destroy_linked_list(&list);
 }
 
-// Test the "get_node_ll" function.
-void get_node() {
+// Test case for the get() method.
+void test_get() {
   // create a new instance of a LinkedList
-  struct LinkedList list = linked_list_constructor();
+  struct LinkedList list = new_linked_list();
 
   // insert ten new nodes (if the test reached here, then the "add_node"
   // function was successfully tested, so we can freely use it)
@@ -81,27 +95,23 @@ void get_node() {
   node = list.get(&list, list.length - 1);
   assert(*(int *)node->data == 9);
 
-  // expected NULL because the index is out of bounds
+  // Accessing a non-existing node, expected
+  // NULL because the index is out of bounds
+  // THIS WILL PASS
   // node = list.get(&list, 116);
-  // if (node != NULL) {
-  //   failed_ll("get_node", 4);
-  // }
+  // assert(node == NULL);
 
-  linked_list_destructor(&list);
+  destroy_linked_list(&list);
 }
 
-// create a generic "compare" function for testing
+// Test case for the search() method.
 bool compare(void *data_one, void *data_two) {
-  if (*(int *)data_one == *(int *)data_two) {
-    return true;
-  }
-  return false;
+  return (*(int *)data_one == *(int *)data_two);
 }
 
-// Test the "search_node_ll" function.
-void search_node() {
+void test_search() {
   // create a new instance of a LinkedList
-  struct LinkedList list = linked_list_constructor();
+  struct LinkedList list = new_linked_list();
 
   // insert ten new nodes (if the test reached here then the "add_node"
   // function was successfully tested, so we can freely use it)
@@ -119,13 +129,13 @@ void search_node() {
     assert(!list.search(&list, &i, compare));
   }
 
-  linked_list_destructor(&list);
+  destroy_linked_list(&list);
 }
 
-// Test the "list_is_empty" function.
-void is_empty() {
+// Test case for the is_empty() method.
+void test_is_empty() {
   // create a new instance of a LinkedList
-  struct LinkedList list = linked_list_constructor();
+  struct LinkedList list = new_linked_list();
 
   // the list should be empty
   assert(list.is_empty(&list));
@@ -148,16 +158,16 @@ void is_empty() {
   // the list should be empty again
   assert(list.is_empty(&list));
 
-  linked_list_destructor(&list);
+  destroy_linked_list(&list);
 }
 
 // This test will check the most important tests cases for a linked list in
 // order to make sure that the list is completely safe to use in production.
 // The purpose of this test is to make sure that the entire test will run
 // without any errors, so checking the test will not be required.
-void tests_cases_ll() {
+void tests_cases() {
   // create a new instance of a LinkedList
-  struct LinkedList list = linked_list_constructor();
+  struct LinkedList list = new_linked_list();
 
   // traversing the list
   //  edge cases:
@@ -184,7 +194,7 @@ void tests_cases_ll() {
 
   // inserting into the list:
   //  -> inserting a sub-list
-  struct LinkedList aux = linked_list_constructor();
+  struct LinkedList aux = new_linked_list();
 
   // add ten new nodes to the auxiliar list
   for (int i = 0; i < 10; ++i) {
@@ -199,12 +209,13 @@ void tests_cases_ll() {
 }
 
 int main() {
-  add_node();
-  remove_node();
-  get_node();
-  search_node();
-  is_empty();
-  tests_cases_ll();
+  test_creation_and_destruction();
+  test_add();
+  test_remove();
+  test_get();
+  test_search();
+  test_is_empty();
+  tests_cases();
   printf("linked_list.t .............. OK\n");
   return 0;
 }

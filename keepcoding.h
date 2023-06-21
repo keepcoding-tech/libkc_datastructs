@@ -7,18 +7,18 @@
 // 12/2/22
 
 /*
- This header file includes headers for each sub-module of keepcoding and can be
- used to import the entire library into a project.
-*/
+ * You can utilize this header file to import the complete keepcoding library
+ * into your project. It includes headers for every sub-module within keepcoding.
+ */
 
-#ifndef keepcoding_h
-#define keepcoding_h
+#ifndef KEEPCODING_H
+#define KEEPCODING_H
 
 #include "include/BinarySearchTree.h"
 #include "include/Dictionary.h"
 #include "include/Entry.h"
-#include "include/LinkedList.h"
-#include "include/Node.h"
+#include "include/linked_list.h"
+#include "include/node.h"
 #include "include/Queue.h"
 
-#endif /* keepcoding_h */
+#endif /* KEEPCODING_H */

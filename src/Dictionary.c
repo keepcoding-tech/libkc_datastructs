@@ -30,7 +30,7 @@ struct Dictionary dictionary_constructor(
 
   // initialize the structure members fields
   dictionary.binary_search_tree = binary_search_tree_constructor(compare);
-  dictionary.keys = linked_list_constructor();
+  dictionary.keys = new_linked_list();
 
   // assigns the public member methods
   dictionary.insert = insert_dict;
@@ -41,7 +41,7 @@ struct Dictionary dictionary_constructor(
 
 // Destroy the linked list and the binary search tree to free the memory.
 void dictionary_destructor(struct Dictionary *dictionary) {
-  linked_list_destructor(&dictionary->keys);
+  destroy_linked_list(&dictionary->keys);
   recursive_dictionary_destroy(dictionary->binary_search_tree.root);
 }
 

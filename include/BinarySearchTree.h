@@ -22,7 +22,7 @@
 #ifndef BinarySearchTree_h
 #define BinarySearchTree_h
 
-#include "Node.h"
+#include "node.h"
 
 struct BinarySearchTree {
   // head points to the top-most node in the tree
