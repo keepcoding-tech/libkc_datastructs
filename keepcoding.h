@@ -14,7 +14,7 @@
 #ifndef KEEPCODING_H
 #define KEEPCODING_H
 
-#include "include/BinarySearchTree.h"
+#include "include/binary_tree.h"
 #include "include/Dictionary.h"
 #include "include/Entry.h"
 #include "include/linked_list.h"

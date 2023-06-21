@@ -20,13 +20,13 @@
 #define Dictionary_h
 
 #include "linked_list.h"
-#include "BinarySearchTree.h"
+#include "binary_tree.h"
 #include "Entry.h"
 
-// The dictionary is a collection of entries stored in a BinarySearchTree.
+// The dictionary is a collection of entries stored in a BinaryTree.
 struct Dictionary {
-  // inheriting the BinarySearchTree object
-  struct BinarySearchTree binary_search_tree;
+  // inheriting the BinaryTree object
+  struct BinaryTree binary_tree;
   // a linked list to store the dictionary keys for easy iteration
   struct LinkedList keys;
 
