@@ -15,8 +15,8 @@
 #define KEEPCODING_H
 
 #include "include/binary_tree.h"
-#include "include/Dictionary.h"
-#include "include/Entry.h"
+#include "include/dictionary.h"
+#include "include/entry.h"
 #include "include/linked_list.h"
 #include "include/node.h"
 #include "include/Queue.h"

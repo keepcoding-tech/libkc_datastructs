@@ -113,9 +113,7 @@ void recursive_destroy_binary_tree(struct Node *node) {
   }
 
   // destroy the node
-  if (node != NULL) {
-    destroy_node_bst(node);
-  }
+  destroy_node_bst(node);
 }
 
 // Compare two integers and return if the first one is bigger, smaller or equal.

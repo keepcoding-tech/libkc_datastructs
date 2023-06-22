@@ -13,7 +13,7 @@
 
 # Specify the compiler and compiler flags
 CC := gcc
-CFLAGS := -Wall -Werror -g -Iinclude
+CFLAGS := -Wall -Werror -Wpedantic -g -Iinclude
 
 # Specify the source and the include directory
 HDR_DIR := include
