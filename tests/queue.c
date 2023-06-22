@@ -1,17 +1,24 @@
-#include "../include/Queue.h"
+#include "../include/queue.h"
 
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-// Test the "push" function.
-void push_test() {
+// Test the creation and destruction of a queue.
+void test_creation_and_destruction() {
+  struct Queue queue = new_queue();
+  assert(queue.list.head == NULL);
+  destroy_queue(&queue);
+}
+
+void test_push() {
   // create a new instance of a Queue
-  struct Queue queue = queue_constructor();
+  struct Queue queue = new_queue();
 
   // push ten new nodes
   for (int i = 0; i < 10; ++i) {
     queue.push(&queue, &i, sizeof(i));
+
     // check the length of the list
     assert(queue.list.length == i + 1);
   }
@@ -26,13 +33,12 @@ void push_test() {
     assert(*(int *)cursor->data == i);
   }
 
-  queue_destructor(&queue);
+  destroy_queue(&queue);
 }
 
-// Test the "pop" function.
-void pop_test() {
+void test_pop() {
   // create a new instance of a Queue
-  struct Queue queue = queue_constructor();
+  struct Queue queue = new_queue();
 
   // push ten new nodes (if the test reached here then the "push"
   // function was successfully tested, so we can freely use it)
@@ -42,17 +48,17 @@ void pop_test() {
 
   for (int i = 1; i < 10; ++i) {
     queue.pop(&queue);
+
     // check if the nodes have been removed correctly
     assert(queue.list.length == 10 - i);
   }
 
-  queue_destructor(&queue);
+  destroy_queue(&queue);
 }
 
-// Test the "peek" function.
-void peek_test() {
+void test_peek() {
   // create a new instance of a Queue
-  struct Queue queue = queue_constructor();
+  struct Queue queue = new_queue();
 
   // push ten new nodes (if the test reached here then the "push"
   // function was successfully tested, so we can freely use it)
@@ -69,13 +75,13 @@ void peek_test() {
     queue.pop(&queue);
   }
 
-  queue_destructor(&queue);
+  destroy_queue(&queue);
 }
 
 int main() {
-  peek_test();
-  pop_test();
-  push_test();
+  test_push();
+  test_pop();
+  test_peek();
   printf("queue.t .................... OK\n");
   return 0;
 }

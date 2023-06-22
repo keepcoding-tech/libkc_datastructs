@@ -19,6 +19,6 @@
 #include "include/entry.h"
 #include "include/linked_list.h"
 #include "include/node.h"
-#include "include/Queue.h"
+#include "include/queue.h"
 
 #endif /* KEEPCODING_H */

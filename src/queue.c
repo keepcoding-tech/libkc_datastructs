@@ -1,13 +1,11 @@
-#include "../include/Queue.h"
-
-// MARK: PUBLIC MEMBER METHODS
+#include "../include/queue.h"
 
 void * peek(struct Queue *self);
 void pop(struct Queue *self);
-void push(struct Queue *self, void *data, unsigned long size);
+void push(struct Queue *self, void *data, size_t size);
 
 // The constructor is used to create new instances of queue.
-struct Queue queue_constructor() {
+struct Queue new_queue() {
   // create a Queue instance to be returned
   struct Queue queue;
 
@@ -23,26 +21,26 @@ struct Queue queue_constructor() {
 }
 
 // The destructor removes all the nodes by calling the linked list destructor.
-void queue_destructor(struct Queue *queue) {
+void destroy_queue(struct Queue *queue) {
   destroy_linked_list(&queue->list);
 }
 
-// The "peek" function returns the data from the first item in the chain.
+// This function returns the data from the first item in the chain.
 void * peek(struct Queue *self) {
   // utilize the get function from LinkedList with enforced parameters
   struct Node *node_data = self->list.get(&self->list, 0);
-
   return node_data->data;
 }
 
-// The "pop" function removes the first item in the chain.
+// This function removes the first item in the chain.
 void pop(struct Queue *self) {
-  // utilize the remove function from LinkedList with enforced parameters
+  // utilize the remove function from
+  // LinkedList with enforced parameters
   self->list.remove(&self->list, 0);
 }
 
-// The "push" function adds an item to the end of the list.
-void push(struct Queue *self, void *data, unsigned long size) {
+// This function adds an item to the end of the list.
+void push(struct Queue *self, void *data, size_t size) {
   // utilize add from LinkedList with enforced parameters
   self->list.add(&self->list, self->list.length, data, size);
 }
