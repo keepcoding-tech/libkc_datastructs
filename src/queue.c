@@ -1,5 +1,6 @@
 #include "../include/queue.h"
 
+// MARK: PUBLIC MEMBER METHODS
 void * peek(struct Queue *self);
 void pop(struct Queue *self);
 void push(struct Queue *self, void *data, size_t size);

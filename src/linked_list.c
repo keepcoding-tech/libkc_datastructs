@@ -2,16 +2,16 @@
 
 // MARK: PUBLIC MEMBER METHODS
 void add_node_ll(struct LinkedList *self, int index, void *data, size_t size);
-struct Node * get_node_ll(struct LinkedList *self, int index);
+struct Node* get_node_ll(struct LinkedList *self, int index);
 bool list_is_empty(struct LinkedList *self);
 void remove_node_ll(struct LinkedList *self, int index);
 bool search_node_ll(struct LinkedList *self, void *query,
   bool (*compare)(void *data_one, void *data_two));
 
 // MARK: PRIVATE MEMBER METHODS
-struct Node * create_node_ll(void *data, unsigned long size);
+struct Node* create_node_ll(void *data, size_t size);
 void destroy_node_ll(struct Node *node_to_destroy);
-struct Node * iterate_ll(struct LinkedList *linked_list, int index);
+struct Node* iterate_ll(struct LinkedList *self, int index);
 
 // The constructor is used to create new instances of linked list.
 struct LinkedList new_linked_list() {
@@ -20,6 +20,7 @@ struct LinkedList new_linked_list() {
 
   // initialize the structure members fields
   new_list.head = NULL;
+  new_list.tail = NULL;
   new_list.length = 0;
 
   // assigns the public member methods
@@ -51,26 +52,35 @@ void add_node_ll(struct LinkedList *self, int index, void *data, size_t size) {
     return;
   }
 
-  // check if this node will be the new head of the list
+  // check if this node will be the new head
   if (index == 0) {
     // re-define the list's "head"
     new_node->next = self->head;
     self->head = new_node;
-  } else {
-    // find the item in the list immediately before the desired index
-    struct Node *cursor = iterate_ll(self, index - 1);
 
-    // set the node's "next" and "prev" to the corresponding nodes
-    new_node->next = cursor->next;
-    new_node->prev = cursor;
+    // increment the list length
+    ++self->length;
+    return;
+  }
 
-    // set the cursor's "next" to the new node
-    cursor->next = new_node;
+  // find the item in the list immediately before the desired index
+  struct Node *cursor = iterate_ll(self, index - 1);
 
-    // the "prev" of the third node must point to the new node
-    if (new_node->next) {
-      new_node->next->prev = new_node;
-    }
+  // set the node's "next" and "prev" to the corresponding nodes
+  new_node->next = cursor->next;
+  new_node->prev = cursor;
+
+  // set the cursor's "next" to the new node
+  cursor->next = new_node;
+
+  // the "prev" of the third node must point to the new node
+  if (new_node->next) {
+    new_node->next->prev = new_node;
+  }
+
+  // check if this node will be the new tail
+  if (index == self->length) {
+    self->tail = new_node;
   }
 
   // increment the list length
@@ -166,21 +176,33 @@ void destroy_node_ll(struct Node *node_to_destroy) {
 }
 
 // This function traverses the list from beginning to end.
-struct Node* iterate_ll(struct LinkedList *linked_list, int index) {
+struct Node* iterate_ll(struct LinkedList *self, int index) {
   // confirm the user has specified a valid index
-  if (index < 0 || index >= linked_list->length) {
+  if (index < 0 || index >= self->length) {
     printf("keepcoding/LinkedList ... \n");
     printf("Error at %s:%d in function %s. \n", __FILE__, __LINE__, __func__);
     printf("Error code: Index out of bound!\n");
     return NULL;
   }
 
-  // create a cursor node for iteration
-  struct Node *cursor = linked_list->head;
+  // check if the index is over the half of the list
+  bool over_half = index <= self->length / 2;
+
+  // create a cursor node for iteration, if the index is smaller then the
+  // half of the list, then start from 0, otherwise start from the tail
+  struct Node *cursor = over_half ? self->head : self->tail;
+
+  if (over_half) {
+    // step through the list until the desired index is reached
+    for (int i = 0; i < index; ++i) {
+      cursor = cursor->next;
+    }
+    return cursor;
+  }
 
   // step through the list until the desired index is reached
-  for (int i = 0; i < index; ++i) {
-    cursor = cursor->next;
+  for (int i = self->length - 1; i > index; --i) {
+    cursor = cursor->prev;
   }
 
   return cursor;

@@ -37,8 +37,9 @@
 #include <stdlib.h>
 
 struct LinkedList {
-  // head points to the first node in the chain
+  // head points to the first and last node in the chain
   struct Node *head;
+  struct Node *tail;
 
   // length refers to the number of nodes in the chain
   int length;

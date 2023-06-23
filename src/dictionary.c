@@ -1,9 +1,11 @@
 #include "../include/dictionary.h"
 
+// MARK: PUBLIC MEMBER METHODS
 void insert_dict(struct Dictionary *self, void *key,
   size_t key_size, void *value, size_t value_size);
 void * search_dict(struct Dictionary *self, void *key, size_t key_size);
 
+// MARK: PRIVATE MEMBER METHODS
 void recursive_dictionary_destroy(struct Node *node);
 
 // The constructor takes a "compare" function pointer as its only argument

@@ -11,6 +11,7 @@
 void test_creation_and_destruction() {
   struct LinkedList list = new_linked_list();
   assert(list.head == NULL);
+  assert(list.tail == NULL);
   destroy_linked_list(&list);
 }
 

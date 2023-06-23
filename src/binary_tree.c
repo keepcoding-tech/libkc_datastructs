@@ -1,8 +1,10 @@
 #include "../include/binary_tree.h"
 
+// MARK: PUBLIC MEMBER METHODS
 void insert_bst(struct BinaryTree *self, void *data, size_t size);
 struct Node* search_bst(struct BinaryTree *self, void *data);
 
+// MARK: PRIVATE MEMBER METHODS
 struct Node* create_node_bst(void *data, size_t size);
 void destroy_node_bst(struct Node *node_to_destroy);
 void recursive_destroy_binary_tree(struct Node *node);
