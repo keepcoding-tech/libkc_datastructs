@@ -2,8 +2,8 @@
 
 // MARK: PUBLIC MEMBER METHODS
 void * peek(struct Queue *self);
-void pop(struct Queue *self);
-void push(struct Queue *self, void *data, size_t size);
+void pop_q(struct Queue *self);
+void push_q(struct Queue *self, void *data, size_t size);
 
 // The constructor is used to create new instances of queue.
 struct Queue new_queue() {
@@ -14,9 +14,9 @@ struct Queue new_queue() {
   queue.list = new_linked_list();
 
   // assigns the public member methods
-  queue.push = push;
+  queue.push = push_q;
   queue.peek = peek;
-  queue.pop = pop;
+  queue.pop = pop_q;
 
   return queue;
 }
@@ -34,14 +34,14 @@ void * peek(struct Queue *self) {
 }
 
 // This function removes the first item in the chain.
-void pop(struct Queue *self) {
+void pop_q(struct Queue *self) {
   // utilize the remove function from
   // LinkedList with enforced parameters
   self->list.remove(&self->list, 0);
 }
 
 // This function adds an item to the end of the list.
-void push(struct Queue *self, void *data, size_t size) {
+void push_q(struct Queue *self, void *data, size_t size) {
   // utilize add from LinkedList with enforced parameters
   self->list.add(&self->list, self->list.length, data, size);
 }
