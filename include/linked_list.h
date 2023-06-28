@@ -37,32 +37,32 @@
 #include <stdlib.h>
 
 struct LinkedList {
-  // head points to the first and last node in the chain
-  struct Node *head;
-  struct Node *tail;
+  // points to the first and last node in the chain
+  struct Node* head;
+  struct Node* tail;
 
   // length refers to the number of nodes in the chain
   int length;
 
   // adds new items to the chain at a specified location
-  void (*add)(struct LinkedList *self, int index, void *data, size_t size);
+  void (*add)(struct LinkedList* self, int index, void* data, size_t size);
 
   // allows data in the chain to be accessed
-  struct Node * (*get)(struct LinkedList *self, int index);
+  struct Node* (*get)(struct LinkedList* self, int index);
 
   // return either if the list is empty or not
-  bool (*is_empty)(struct LinkedList *self);
+  bool (*is_empty)(struct LinkedList* self);
 
   // deletes an item from the chain and handles the deallocation of memory
-  void (*remove)(struct LinkedList *self, int index);
+  void (*remove)(struct LinkedList* self, int index);
 
   // search a specified node by value
-  bool (*search)(struct LinkedList *self, void *query,
-    bool (*compare)(void *data_one, void *data_two));
+  bool (*search)(struct LinkedList* self, void*  query,
+      bool (*compare)(void* data_one, void* data_two));
 };
 
 // the constructor should be used to create linked lists
-struct LinkedList new_linked_list();
+struct LinkedList* new_linked_list();
 
 // the destructor should be used to destroy linked lists
 void destroy_linked_list(struct LinkedList *linked_list);

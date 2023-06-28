@@ -20,5 +20,7 @@
 #include "include/linked_list.h"
 #include "include/node.h"
 #include "include/queue.h"
+#include "include/stack.h"
+#include "include/vector.h"
 
 #endif /* KEEPCODING_H */

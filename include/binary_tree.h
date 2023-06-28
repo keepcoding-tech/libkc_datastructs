@@ -31,30 +31,31 @@
 
 struct BinaryTree {
   // head points to the top-most node in the tree
-  struct Node *root;
+  struct Node* root;
 
   // the "compare" function is provided by the user and is responsible for
   // comparing the data of two nodes. This function must accept two void
   // pointers as arguments and return either 1, -1, or 0.
-  int (*compare)(void *data_one, void *data_two);
+  int (*compare)(void* data_one, void* data_two);
 
   // adds new items to the tree
-  void (*insert)(struct BinaryTree *self, void *data, size_t size);
+  void (*insert)(struct BinaryTree* self, void* data, size_t size);
 
   // finds a node in the tree, returning its data or NULL if not found
-  struct Node* (*search)(struct BinaryTree *self, void *data);
+  struct Node* (*search)(struct BinaryTree* self, void* data);
 };
 
 // the constructor should be used to create binary search trees
-struct BinaryTree new_binary_tree(int (*compare)(void *data_one, void *data_two));
+struct BinaryTree* new_binary_tree(
+    int (*compare)(void* data_one, void* data_two));
 
 // the destructor should be used to destroy binary search trees
-void destroy_binary_tree(struct BinaryTree *binary_tree);
+void destroy_binary_tree(struct BinaryTree* binary_tree);
 
 // compare two integers and return if the first one is bigger, smaller or equal
-int compare_int(void *data_one, void *data_two);
+int btree_compare_int(void* data_one, void* data_two);
 
 // compare two strings and return if the first one is greater, smaller or equal
-int compare_str(void *data_one, void *data_two);
+int btree_compare_str(void* data_one, void* data_two);
 
 #endif /* BINARY_TREE_H */

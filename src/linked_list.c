@@ -1,51 +1,53 @@
 #include "../include/linked_list.h"
 
 // MARK: PUBLIC MEMBER METHODS
-void add_node_ll(struct LinkedList *self, int index, void *data, size_t size);
-struct Node* get_node_ll(struct LinkedList *self, int index);
-bool list_is_empty(struct LinkedList *self);
-void remove_node_ll(struct LinkedList *self, int index);
-bool search_node_ll(struct LinkedList *self, void *query,
-  bool (*compare)(void *data_one, void *data_two));
+void add_node_ll(struct LinkedList* self, int index, void* data, size_t size);
+struct Node* get_node_ll(struct LinkedList* self, int index);
+bool is_empty_ll(struct LinkedList* self);
+void remove_node_ll(struct LinkedList* self, int index);
+bool search_node_ll(struct LinkedList* self, void* query,
+  bool (*compare)(void* data_one, void* data_two));
 
 // MARK: PRIVATE MEMBER METHODS
-struct Node* create_node_ll(void *data, size_t size);
-void destroy_node_ll(struct Node *node_to_destroy);
-struct Node* iterate_ll(struct LinkedList *self, int index);
+void destroy_node_ll(struct Node* node_to_destroy);
+struct Node* iterate_ll(struct LinkedList* self, int index);
 
 // The constructor is used to create new instances of linked list.
-struct LinkedList new_linked_list() {
+struct LinkedList* new_linked_list() {
   // create a LinkedList instance to be returned
-  struct LinkedList new_list;
+  struct LinkedList* new_list = malloc(sizeof(struct LinkedList));
 
   // initialize the structure members fields
-  new_list.head = NULL;
-  new_list.tail = NULL;
-  new_list.length = 0;
+  new_list->head = NULL;
+  new_list->tail = NULL;
+  new_list->length = 0;
 
   // assigns the public member methods
-  new_list.add = add_node_ll;
-  new_list.get = get_node_ll;
-  new_list.is_empty = list_is_empty;
-  new_list.remove = remove_node_ll;
-  new_list.search = search_node_ll;
+  new_list->add = add_node_ll;
+  new_list->get = get_node_ll;
+  new_list->is_empty = is_empty_ll;
+  new_list->remove = remove_node_ll;
+  new_list->search = search_node_ll;
 
   return new_list;
 }
 
 // The destructor removes all the nodes by freeing the nodes instances and data.
-void destroy_linked_list(struct LinkedList *linked_list) {
+void destroy_linked_list(struct LinkedList* linked_list) {
   // access the linked list length only once
   int list_length = linked_list->length;
   for (int i = 0; i < list_length; ++i) {
     linked_list->remove(linked_list, 0);
   }
+
+  // free the linked list too
+  free(linked_list);
 }
 
 // This function puts a new node in the chain.
-void add_node_ll(struct LinkedList *self, int index, void *data, size_t size) {
+void add_node_ll(struct LinkedList* self, int index, void* data, size_t size) {
   // create a new node to be inserted
-  struct Node *new_node = create_node_ll(data, size);
+  struct Node* new_node = node_constructor(data, size);
 
   // if the node is NULL, don't make the insertion
   if (new_node == NULL) {
@@ -64,7 +66,7 @@ void add_node_ll(struct LinkedList *self, int index, void *data, size_t size) {
   }
 
   // find the item in the list immediately before the desired index
-  struct Node *cursor = iterate_ll(self, index - 1);
+  struct Node* cursor = iterate_ll(self, index - 1);
 
   // set the node's "next" and "prev" to the corresponding nodes
   new_node->next = cursor->next;
@@ -88,9 +90,9 @@ void add_node_ll(struct LinkedList *self, int index, void *data, size_t size) {
 }
 
 // This function is used to access data in the list.
-struct Node * get_node_ll(struct LinkedList *self, int index) {
+struct Node* get_node_ll(struct LinkedList* self, int index) {
   // find the desired node and return its data
-  struct Node *node = iterate_ll(self, index);
+  struct Node* node = iterate_ll(self, index);
 
   if (node) {
     return node;
@@ -101,12 +103,12 @@ struct Node * get_node_ll(struct LinkedList *self, int index) {
 }
 
 // This function will return either if the list is empty or not
-bool list_is_empty(struct LinkedList *self) {
+bool is_empty_ll(struct LinkedList* self) {
   return self->length == 0 && !self->head;
 }
 
 // This function removes a node from the linked list.
-void remove_node_ll(struct LinkedList *self, int index) {
+void remove_node_ll(struct LinkedList* self, int index) {
   // confirm the user has specified a valid index
   if (index < 0 || index >= self->length) {
     printf("keepcoding/LinkedList ... \n");
@@ -116,7 +118,7 @@ void remove_node_ll(struct LinkedList *self, int index) {
   }
 
   // get the "head" of the list
-  struct Node *current = self->head;
+  struct Node* current = self->head;
 
   // check if the item being removed is the "head"
   if (index == 0) {
@@ -141,10 +143,10 @@ void remove_node_ll(struct LinkedList *self, int index) {
 }
 
 // This function searchs for a specific node by data.
-bool search_node_ll(struct LinkedList *self, void *query,
-  bool (*compare)(void *data_one, void *data_two)) {
+bool search_node_ll(struct LinkedList* self, void* query,
+  bool (*compare)(void* data_one, void* data_two)) {
   // create a new node instance
-  struct Node *node = self->head;
+  struct Node* node = self->head;
 
   // search the node by value
   while (node) {
@@ -157,26 +159,14 @@ bool search_node_ll(struct LinkedList *self, void *query,
   return false;
 }
 
-// The "create_node_ll" function creates a new node to add to the chain by
-// allocating space on the heap and calling the node constructor.
-struct Node* create_node_ll(void *data, size_t size) {
-  // allocate space
-  struct Node* new_node = malloc(sizeof *new_node);
-
-  // call the constructor
-  new_node = node_constructor(data, size);
-
-  return new_node;
-}
-
 // This function removes a node by deallocating it's memory
 // address, this simply renames the node destructor function.
-void destroy_node_ll(struct Node *node_to_destroy) {
+void destroy_node_ll(struct Node* node_to_destroy) {
   node_destructor(node_to_destroy);
 }
 
 // This function traverses the list from beginning to end.
-struct Node* iterate_ll(struct LinkedList *self, int index) {
+struct Node* iterate_ll(struct LinkedList* self, int index) {
   // confirm the user has specified a valid index
   if (index < 0 || index >= self->length) {
     printf("keepcoding/LinkedList ... \n");
@@ -190,7 +180,7 @@ struct Node* iterate_ll(struct LinkedList *self, int index) {
 
   // create a cursor node for iteration, if the index is smaller then the
   // half of the list, then start from 0, otherwise start from the tail
-  struct Node *cursor = over_half ? self->head : self->tail;
+  struct Node* cursor = over_half ? self->head : self->tail;
 
   if (over_half) {
     // step through the list until the desired index is reached

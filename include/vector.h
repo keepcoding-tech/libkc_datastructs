@@ -36,23 +36,20 @@ struct Vector {
   // current size of the vector
   size_t size;
 
-  // first and last elements of the vector
-  int front, back;
-
   // add new items to the vector
-  void (*push)(struct Vector *self, const void *value, size_t size);
+  void (*push)(struct Vector* self, const void* value, size_t size);
 
   // return the maximum capacity of the vector
-  size_t (*max_size)(struct Vector *self);
+  size_t (*max_size)(struct Vector* self);
 
   // remove a specific item from the vector
-  void (*erase)(struct Vector *self, int index);
+  void (*erase)(struct Vector* self, int index);
 };
 
 // the constructor should be used to create vectors
 struct Vector* new_vector();
 
 // the destructor should be used to destroy vectors
-void destroy_vector(struct Vector *vector);
+void destroy_vector(struct Vector* vector);
 
 #endif /* VECTOR_H */
