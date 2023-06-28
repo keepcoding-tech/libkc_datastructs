@@ -4,82 +4,93 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+void test_integer_to_integer() {
+  int key = 1, value = 100;
+  struct Entry* entry = entry_constructor(&key, sizeof(int),
+      &value, sizeof(int));
+
+  // Access the key and value
+  assert(*(int*)entry->key == key);
+  assert(*(int*)entry->value == value);
+}
+
+void test_integer_to_character() {
+  int key = 2;
+  char* value = "example";
+  struct Entry* entry = entry_constructor(&key, sizeof(int),
+      value, strlen(value));
+
+  // Access the key and value
+  assert(*(int*)entry->key == key);
+  assert(strcmp((char*)entry->value, value) == 0);
+}
+
+void test_character_to_character() {
+  char* key = "key";
+  char* value = "example";
+  struct Entry* entry = entry_constructor(key, strlen(key),
+      value, strlen(value));
+
+  // Access the key and value
+  assert(strcmp((char*)entry->key, key) == 0);
+  assert(strcmp((char*)entry->value, value) == 0);
+}
+
+void test_character_to_integer() {
+  char* key = "key";
+  int value = 400;
+  struct Entry* entry = entry_constructor(key, strlen(key),
+      &value, sizeof(int));
+
+  // Access the key and value
+  assert(strcmp((char*)entry->key, key) == 0);
+  assert(*(int*)entry->value == value);
+}
+
 // Test the integer (int) data type.
-void test_primitive_int() {
-  // make a global key to be used for each test of this function
-  int key = 10;
-
-  // test the integer (int) data type
-  int data_int = 10;
-
-  struct Entry* entry_int = entry_constructor(&key, sizeof(key),
-      &data_int, sizeof(data_int));
-
-  // verify with a pointer
-  int *ptr_int = (int*)entry_int->value;
-  assert(*ptr_int == data_int);
-
-  // verify by direct access memory
-  assert(*(int*)entry_int->value == 10);
-
-  entry_destructor(entry_int);
+void test_primitive_int_array() {
+  int key = 1;
 
   // test the array of integer (int[]) data type
-  int data_int_array[] = {1, 2, 3, 4, 5};
-  size_t size_int = sizeof(data_int_array) / sizeof(data_int_array[0]);
+  int nums[] = {1, 2, 3, 4, 5};
+  size_t size_int = sizeof(nums) / sizeof(nums[0]);
 
-  struct Entry* entry_int_array = entry_constructor(&key, sizeof(key),
-      &data_int_array, sizeof(int) * size_int);
+  struct Entry* entry = entry_constructor(&key, sizeof(int),
+      &nums, sizeof(int) * size_int);
 
-  int *ptr_int_array = (int*)entry_int_array->value;
+  int *ptr_array = (int*)entry->value;
   for (size_t i = 0; i < size_int; i++) {
     // verify with a pointer
-    assert(ptr_int_array[i] == data_int_array[i]);
+    assert(ptr_array[i] == nums[i]);
 
     // verify by direct access memory
-    assert(((int*)entry_int_array->value)[i] == data_int_array[i]);
+    assert(((int*)entry->value)[i] == nums[i]);
   }
 
-  entry_destructor(entry_int_array);
+  entry_destructor(entry);
 }
 
 // Test the character (char) data type.
-void test_primitive_char() {
-  // make a global key to be used for each test of this function
-  int key = 10;
-
-  // test the character (char) data type
-  char data_char = 'A';
-
-  struct Entry* entry_char = entry_constructor(&key, sizeof(key),
-      &data_char, sizeof(data_char));
-
-  // verify with a pointer
-  char *ptr_char = (char*)entry_char->value;
-  assert(*ptr_char == data_char);
-
-  // verify by direct access memory
-  assert(*(char*)entry_char->value == 'A');
-
-  entry_destructor(entry_char);
+void test_primitive_char_array() {
+  char* key = "key";
 
   // test the array of character (char[]) data type
-  char data_char_array[] = {'H', 'e', 'l', 'l', 'o'};
-  size_t size_char = sizeof(data_char_array) / sizeof(data_char_array[0]);
+  char letters[] = {'H', 'e', 'l', 'l', 'o'};
+  size_t size_char = sizeof(letters) / sizeof(letters[0]);
 
-  struct Entry* entry_char_array = entry_constructor(&key, sizeof(key),
-      &data_char_array, sizeof(int) * size_char);
+  struct Entry* entry = entry_constructor(key, strlen(key),
+      &letters, sizeof(int) * size_char);
 
-  char *ptr_char_array = (char*)entry_char_array->value;
+  char *ptr_array = (char*)entry->value;
   for (size_t i = 0; i < size_char; i++) {
     // verify with a pointer
-    assert(ptr_char_array[i] == data_char_array[i]);
+    assert(ptr_array[i] == letters[i]);
 
     // verify by direct access memory
-    assert(((char*)entry_char_array->value)[i] == data_char_array[i]);
+    assert(((char*)entry->value)[i] == letters[i]);
   }
 
-  entry_destructor(entry_char_array);
+  entry_destructor(entry);
 }
 
 // Test the maximum limit of integer (unsigned long long) data type.
@@ -103,10 +114,41 @@ void test_primitive_long() {
   entry_destructor(entry_max);
 }
 
+void test_custom_data() {
+  // Declare the custom data type
+  struct Test {
+    int key;
+    char* value;
+  };
+
+  int key = 0;
+  struct Test test = { 100, "test" };
+
+  // initialize and access entry data
+  struct Entry* entry = entry_constructor(&key, sizeof(int),
+      &test, sizeof(struct Test));
+
+  // verify with a pointer
+  struct Test *ptr_customized = (struct Test*)entry->value;
+  assert(ptr_customized->key == test.key);
+  assert(strcmp(ptr_customized->value, test.value) == 0);
+
+  // verify by direct access memory
+  assert(((struct Test*)entry->value)->key == 100);
+  assert(strcmp(((struct Test*)entry->value)->value, "test") == 0);
+
+  entry_destructor(entry);
+}
+
 int main() {
-  test_primitive_int();
-  test_primitive_char();
+  test_integer_to_integer();
+  test_integer_to_character();
+  test_character_to_character();
+  test_character_to_integer();
+  test_primitive_int_array();
+  test_primitive_char_array();
   test_primitive_long();
+  test_custom_data();
   printf("entry.t .................... OK\n");
   return 0;
 }

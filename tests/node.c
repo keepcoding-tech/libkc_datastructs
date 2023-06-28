@@ -8,12 +8,12 @@
 // Test the integer (int) data type.
 void test_primitive_int() {
   // initialize the node
-  int data_int = 10;
-  struct Node* node_int = node_constructor(&data_int, sizeof(data_int));
+  int num = 10;
+  struct Node* node_int = node_constructor(&num, sizeof(int));
 
   // verify with a pointer
   int *ptr_int = (int*)node_int->data;
-  assert(*ptr_int == data_int);
+  assert(*ptr_int == num);
 
   // verify by direct access memory
   assert(*(int *)node_int->data == 10);
@@ -21,33 +21,31 @@ void test_primitive_int() {
   node_destructor(node_int);
 
   // test the array of integer (int[]) data type
-  int data_int_array[] = {1, 2, 3, 4, 5};
-  size_t size_int = sizeof(data_int_array) / sizeof(data_int_array[0]);
+  int nums[] = {1, 2, 3, 4, 5};
+  size_t size_int = sizeof(nums) / sizeof(nums[0]);
+  struct Node* node_array = node_constructor(nums, sizeof(int) * size_int);
 
-  struct Node* node_int_array = node_constructor(data_int_array,
-      sizeof(int) * size_int);
-
-  int *ptr_int_array = (int *)node_int_array->data;
+  int* ptr_array = (int*)node_array->data;
   for (size_t i = 0; i < size_int; i++) {
     // verify with a pointer
-    assert(ptr_int_array[i] == data_int_array[i]);
+    assert(ptr_array[i] == nums[i]);
 
     // verify by direct access memory
-    assert(((int *)node_int_array->data)[i] == data_int_array[i]);
+    assert(((int *)node_array->data)[i] == nums[i]);
   }
 
-  node_destructor(node_int_array);
+  node_destructor(node_array);
 }
 
 // Test the character (char) data type.
 void test_primitive_char() {
   // initialize the node
-  char data_char = 'A';
-  struct Node* node_char = node_constructor(&data_char, sizeof(data_char));
+  char letter = 'A';
+  struct Node* node_char = node_constructor(&letter, sizeof(char));
 
   // verify with a pointer
   char *ptr_char = (char*)node_char->data;
-  assert(*ptr_char == data_char);
+  assert(*ptr_char == letter);
 
   // verify by direct access memory
   assert(*(char *)node_char->data == 'A');
@@ -55,22 +53,21 @@ void test_primitive_char() {
   node_destructor(node_char);
 
   // test the array of character (char[]) data type
-  char data_char_array[] = {'H', 'e', 'l', 'l', 'o'};
-  size_t size_char = sizeof(data_char_array) / sizeof(data_char_array[0]);
+  char letters[] = {'H', 'e', 'l', 'l', 'o'};
+  size_t size_char = sizeof(letters) / sizeof(letters[0]);
 
-  struct Node* node_char_array = node_constructor(data_char_array,
-      sizeof(int) * size_char);
+  struct Node* node_array = node_constructor(letters, sizeof(int) * size_char);
 
-  char *ptr_char_array = (char *)node_char_array->data;
+  char *ptr_array = (char *)node_array->data;
   for (size_t i = 0; i < size_char; i++) {
     // verify with a pointer
-    assert(ptr_char_array[i] == data_char_array[i]);
+    assert(ptr_array[i] == letters[i]);
 
     // verify by direct access memory
-    assert(((char *)node_char_array->data)[i] == data_char_array[i]);
+    assert(((char *)node_array->data)[i] == letters[i]);
   }
 
-  node_destructor(node_char_array);
+  node_destructor(node_array);
 }
 
 // Test the maximum limit of integer (unsigned long long) data type.
@@ -89,23 +86,28 @@ void test_primitive_long() {
   node_destructor(node_max);
 }
 
-// Create a costumized test structure.
-struct Test {
-  int value;
-  char *key;
-};
 
 // Test the custom data type (struct).
 void test_customized_data_type() {
-  struct Test data_customized = { 200, "test" };
+  // Create a costumized test structure.
+  struct Test {
+    int key;
+    char* value;
+  };
 
-  struct Node* node = node_constructor(&data_customized,
-      sizeof(data_customized));
+  struct Test test = { 100, "test" };
+
+  // initialize and access node data
+  struct Node* node = node_constructor(&test, sizeof(struct Test));
 
   // verify with a pointer
-  struct Test *ptr_customized = (struct Test *)node->data;
-  assert(strcmp(ptr_customized->key, data_customized.key) == 0);
-  assert(ptr_customized->value == data_customized.value);
+  struct Test *ptr_customized = (struct Test*)node->data;
+  assert(ptr_customized->key == test.key);
+  assert(strcmp(ptr_customized->value, test.value) == 0);
+
+  // verify by direct access memory
+  assert(((struct Test*)node->data)->key == 100);
+  assert(strcmp(((struct Test*)node->data)->value, "test") == 0);
 
   node_destructor(node);
 }
