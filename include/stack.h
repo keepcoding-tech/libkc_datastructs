@@ -7,15 +7,15 @@
 // 26/06/2023
 
 /*
- * A stack is a fundamental data structure that follows the Last-In-First-Out 
+ * A stack is a fundamental data structure that follows the Last-In-First-Out
  * (LIFO) principle. It functions as a container where elements can be inserted
- * and removed from the top only. A stack typically consists of a fixed-size 
- * array or a linked list implementation. Operations such as push (insertion) 
+ * and removed from the top only. A stack typically consists of a fixed-size
+ * array or a linked list implementation. Operations such as push (insertion)
  * and pop (removal) are used to manipulate the stack.
  *
- * Push adds an element to the top of the stack, while pop removes the element 
- * from the top. The stack allows for efficient access to the most recently 
- * added elements and is commonly used in scenarios like function calls, 
+ * Push adds an element to the top of the stack, while pop removes the element
+ * from the top. The stack allows for efficient access to the most recently
+ * added elements and is commonly used in scenarios like function calls,
  * expression evaluation, and backtracking algorithms.
  */
 
@@ -25,6 +25,7 @@
 #include "vector.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 
 struct Stack {
   // a reference to the embedded Vector

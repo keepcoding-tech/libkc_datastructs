@@ -1,9 +1,9 @@
 #include "../include/vector.h"
 
 // MARK: PUBLIC MEMBER METHODS
-void push_v(struct Vector *self, const void *data, size_t size);
-size_t max_size_v(struct Vector *self);
-void erase_v(struct Vector *self, int index);
+void push_v(struct Vector* self, const void* data, size_t size);
+size_t max_size_v(struct Vector* self);
+void erase_v(struct Vector* self, int index);
 
 // MARK: PRIVATE MEMBER METHODS
 void resizeVector(struct Vector* self, size_t new_capacity);
@@ -24,8 +24,6 @@ struct Vector* new_vector() {
   new_vector->capacity = 16;
   new_vector->size = 0;
   new_vector->data = malloc(new_vector->capacity * sizeof(void*));
-  new_vector->front = 0;
-  new_vector->back = 0;
 
   // assigns the public member methods
   new_vector->push = push_v;
@@ -36,7 +34,7 @@ struct Vector* new_vector() {
 }
 
 // The destructor removes all the items.
-void destroy_vector(struct Vector *vector) {
+void destroy_vector(struct Vector* vector) {
   if (vector == NULL) {
     return;
   }
@@ -51,7 +49,7 @@ void destroy_vector(struct Vector *vector) {
 }
 
 // This function pushs a new item in the vector.
-void push_v(struct Vector *self, const void* value, size_t size) {
+void push_v(struct Vector* self, const void* value, size_t size) {
   // reallocate more memory if the capacity is full
   if (self->size >= self->capacity) {
     resizeVector(self, self->capacity * 2);
@@ -73,14 +71,14 @@ void push_v(struct Vector *self, const void* value, size_t size) {
   self->data[self->size++] = new_elem;
 }
 
-// This functino returns the maximum capacity of 
+// This functino returns the maximum capacity of
 // the vector before reallocating more memory.
-size_t max_size_v(struct Vector *self) {
+size_t max_size_v(struct Vector* self) {
   return (int)self->capacity;
 }
 
 // This functino will remove a specific item from the vector.
-void erase_v(struct Vector *self, int index) {
+void erase_v(struct Vector* self, int index) {
   // confirm the user has specified a valid index
   if (index < 0 || index >= self->size) {
     printf("keepcoding/Vector ... \n");

@@ -5,15 +5,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-void primitive_data_types() {
-  // test the integer (int) data type
+// Test the integer (int) data type.
+void test_primitive_int() {
+  // initialize the node
   int data_int = 10;
-
-  struct Node* node_int = malloc(sizeof *node_int);
-  node_int = node_constructor(&data_int, sizeof(data_int));
+  struct Node* node_int = node_constructor(&data_int, sizeof(data_int));
 
   // verify with a pointer
-  int *ptr_int = (int *)node_int->data;
+  int *ptr_int = (int*)node_int->data;
   assert(*ptr_int == data_int);
 
   // verify by direct access memory
@@ -25,8 +24,8 @@ void primitive_data_types() {
   int data_int_array[] = {1, 2, 3, 4, 5};
   size_t size_int = sizeof(data_int_array) / sizeof(data_int_array[0]);
 
-  struct Node* node_int_array = malloc(sizeof *node_int_array);
-  node_int_array = node_constructor(data_int_array, sizeof(int) * size_int);
+  struct Node* node_int_array = node_constructor(data_int_array,
+      sizeof(int) * size_int);
 
   int *ptr_int_array = (int *)node_int_array->data;
   for (size_t i = 0; i < size_int; i++) {
@@ -38,15 +37,16 @@ void primitive_data_types() {
   }
 
   node_destructor(node_int_array);
+}
 
-  // test the character (char) data type
+// Test the character (char) data type.
+void test_primitive_char() {
+  // initialize the node
   char data_char = 'A';
-
-  struct Node* node_char = malloc(sizeof *node_char);
-  node_char = node_constructor(&data_char, sizeof(data_char));
+  struct Node* node_char = node_constructor(&data_char, sizeof(data_char));
 
   // verify with a pointer
-  char *ptr_char = (char *)node_char->data;
+  char *ptr_char = (char*)node_char->data;
   assert(*ptr_char == data_char);
 
   // verify by direct access memory
@@ -58,8 +58,8 @@ void primitive_data_types() {
   char data_char_array[] = {'H', 'e', 'l', 'l', 'o'};
   size_t size_char = sizeof(data_char_array) / sizeof(data_char_array[0]);
 
-  struct Node* node_char_array = malloc(sizeof *node_char_array);
-  node_char_array = node_constructor(data_char_array, sizeof(int) * size_char);
+  struct Node* node_char_array = node_constructor(data_char_array,
+      sizeof(int) * size_char);
 
   char *ptr_char_array = (char *)node_char_array->data;
   for (size_t i = 0; i < size_char; i++) {
@@ -71,12 +71,13 @@ void primitive_data_types() {
   }
 
   node_destructor(node_char_array);
+}
 
-  // test the maximum limit of integer (unsigned long long) data type
+// Test the maximum limit of integer (unsigned long long) data type.
+void test_primitive_long() {
+  // initialize the node
   unsigned long long data_max = 184467440737095516;
-
-  struct Node* node_max = malloc(sizeof *node_max);
-  node_max = node_constructor(&data_max, sizeof(data_max));
+  struct Node* node_max = node_constructor(&data_max, sizeof(data_max));
 
   // verify with a pointer
   unsigned long long *ptr_max = (unsigned long long *)node_max->data;
@@ -94,11 +95,12 @@ struct Test {
   char *key;
 };
 
-void customized_data_type() {
+// Test the custom data type (struct).
+void test_customized_data_type() {
   struct Test data_customized = { 200, "test" };
 
-  struct Node* node = malloc(sizeof *node);
-  node = node_constructor(&data_customized, sizeof(data_customized));
+  struct Node* node = node_constructor(&data_customized,
+      sizeof(data_customized));
 
   // verify with a pointer
   struct Test *ptr_customized = (struct Test *)node->data;
@@ -109,8 +111,10 @@ void customized_data_type() {
 }
 
 int main() {
-  primitive_data_types();
-  customized_data_type();
+  test_primitive_int();
+  test_primitive_char();
+  test_primitive_long();
+  test_customized_data_type();
   printf("node.t ..................... OK\n");
   return 0;
 }

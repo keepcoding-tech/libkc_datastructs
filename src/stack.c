@@ -1,5 +1,4 @@
 #include "../include/stack.h"
-#include <stdlib.h>
 
 // MARK: PUBLIC MEMBER METHODS
 void pop_s(struct Stack* self);
@@ -23,6 +22,9 @@ struct Stack* new_stack() {
 // The destructor removes all the items by calling the Vector destructor.
 void destroy_stack(struct Stack* stack) {
   destroy_vector(stack->vector);
+
+  // free the stack too
+  free(stack);
 }
 
 // This function removes the last item in the vector.

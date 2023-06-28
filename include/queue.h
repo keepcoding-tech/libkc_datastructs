@@ -19,24 +19,26 @@
 
 #include "linked_list.h"
 
+#include <stdlib.h>
+
 struct Queue {
   // a reference to the embedded LinkedList
-  struct LinkedList list;
+  struct LinkedList* list;
 
   // retrieves the data from the front of the list
-  void * (*peek)(struct Queue *self);
+  void* (*peek)(struct Queue* self);
 
   // removes the first item in the list
-  void (*pop)(struct Queue *self);
+  void (*pop)(struct Queue* self);
 
   // adds a node to the end of the chain
-  void (*push)(struct Queue *self, void *data, size_t size);
+  void (*push)(struct Queue* self, void* data, size_t size);
 };
 
 // the constructor should be used to create Queues
-struct Queue new_queue();
+struct Queue* new_queue();
 
 // the destructor should be used to destroy a Queues
-void destroy_queue(struct Queue *queue);
+void destroy_queue(struct Queue* queue);
 
 #endif /* QUEUE_H */

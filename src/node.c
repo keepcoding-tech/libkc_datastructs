@@ -1,7 +1,7 @@
 #include "../include/node.h"
 
 // The constructor is used to create new instances of nodes.
-struct Node* node_constructor(void *data, size_t size) {
+struct Node* node_constructor(void* data, size_t size) {
   // confirm the size of the data is at least one
   if (size < 1) {
     printf("keepcoding/Node ... \n");
@@ -12,7 +12,7 @@ struct Node* node_constructor(void *data, size_t size) {
 
   // create a Node instance to be returned
   // and allocate space for the data
-  struct Node* node = malloc(size);
+  struct Node* node = malloc(sizeof(struct Node));
   node->data = malloc(size);
 
   // confirm that there is memory to allocate
@@ -34,7 +34,7 @@ struct Node* node_constructor(void *data, size_t size) {
 }
 
 // The destructor removes a node by freeing the node's data and its node.
-void node_destructor(struct Node *node) {
+void node_destructor(struct Node* node) {
   free(node->data);
   free(node);
 }
