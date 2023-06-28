@@ -9,7 +9,7 @@ struct Entry* entry_constructor(void* key, size_t key_size,
     printf("keepcoding/Entry ... \n");
     printf("Error at %s:%d in function %s. \n", __FILE__, __LINE__, __func__);
     printf("Error code: Invalid data size for entry!\n");
-    exit(1);
+    return NULL;
   }
 
   // create a Entry instance to be returned
@@ -24,7 +24,7 @@ struct Entry* entry_constructor(void* key, size_t key_size,
     printf("keepcoding/Entry ... \n");
     printf("Error at %s:%d in function %s. \n", __FILE__, __LINE__, __func__);
     printf("Error code: The memory could not be allocated!\n");
-    exit(1);
+    return NULL;
   }
 
   // copy the data parameters into the new object
