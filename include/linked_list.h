@@ -42,7 +42,7 @@ struct LinkedList {
   struct Node* tail;
 
   // length refers to the number of nodes in the chain
-  int length;
+  size_t length;
 
   // adds new items to the chain at a specified location
   void (*add)(struct LinkedList* self, int index, void* data, size_t size);

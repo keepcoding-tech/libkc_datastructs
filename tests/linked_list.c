@@ -20,22 +20,49 @@ void test_add() {
   // create a new instance of a LinkedList
   struct LinkedList* list = new_linked_list();
 
-  // add ten new nodes
+  // add ten new nodes of type int
   for (int i = 0; i < 10; ++i) {
-    list->add(list, i, &i, sizeof(i));
+    list->add(list, i, &i, sizeof(int));
 
     // check the length of the list
     assert(list->length == i + 1);
   }
 
-  for (int i = 0; i < 10; ++i) {
+  // add ten new nodes of type char
+  for (int i = 10; i < 20; ++i) {
+    char c = 'a' + i;
+    list->add(list, i, &c, sizeof(char));
+
+    // check the length of the list
+    assert(list->length == i + 1);
+  }
+
+  for (int i = 0; i < 20; ++i) {
     struct Node* cursor = list->head;
     for (int j = 0; j < i; ++j) {
       cursor = cursor->next;
     }
 
     // check if the nodes have been inserted correctly
-    assert(*(int*)cursor->data == i);
+    if (i < 10) {
+      assert(*(int*)cursor->data == i);
+    } else {
+      assert(*(char*)cursor->data == 'a' + i);
+    }
+  }
+
+  // add a new node of type int[] (array)
+  int nums[] = {1, 2, 3, 4, 5};
+  size_t size = sizeof(nums) / sizeof(nums[0]);
+  list->add(list, 20, &nums, sizeof(int) * size);
+
+  // get the 21st node
+  struct Node* cursor = list->tail;
+
+  // check if the node has been inserted correctly
+  int* ptr = (int*)cursor->data;
+  for (int i = 0; i < size; ++i) {
+    assert(ptr[i] == nums[i]);
   }
 
   destroy_linked_list(list);

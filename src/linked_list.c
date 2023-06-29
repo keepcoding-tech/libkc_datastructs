@@ -149,7 +149,7 @@ bool search_node_ll(struct LinkedList* self, void* query,
   struct Node* node = self->head;
 
   // search the node by value
-  while (node) {
+  while (node != NULL) {
     if (compare(node->data, query)) {
       return true;
     }
