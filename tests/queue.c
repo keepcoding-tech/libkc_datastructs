@@ -60,6 +60,21 @@ void test_push() {
     assert(ptr[i] == nums[i]);
   }
 
+  // add a new node of type Test (struct)
+  struct Test {
+    int key;
+    char* value;
+  };
+
+  struct Test test = { 100, "example" };
+  queue->push(queue, &test, sizeof(struct Test));
+
+  // get the 22st node
+  cursor = queue->list->tail;
+
+  assert((int)(((struct Test*)cursor->data)->key) == test.key);
+  assert(strcmp((char*)(((struct Test*)cursor->data)->value), test.value) == 0);
+
   destroy_queue(queue);
 }
 
@@ -106,6 +121,7 @@ void test_peek() {
 }
 
 int main() {
+  test_creation_and_destruction();
   test_push();
   test_pop();
   test_peek();
