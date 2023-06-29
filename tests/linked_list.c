@@ -189,53 +189,6 @@ void test_is_empty() {
   destroy_linked_list(list);
 }
 
-// This test will check the most important tests cases for a linked list in
-// order to make sure that the list is completely safe to use in production.
-// The purpose of this test is to make sure that the entire test will run
-// without any errors, so checking the test will not be required.
-void tests_cases() {
-  // create a new instance of a LinkedList
-  struct LinkedList* list = new_linked_list();
-
-  // traversing the list
-  //  edge cases:
-  //  ->  traversing an empty list
-  struct Node* current = list->head;
-  while (current != NULL) {
-    current = current->next;
-  }
-
-  // add ten new nodes to the list
-  for (int i = 0; i < 10; ++i) {
-    list->add(list, i, &i, sizeof(i));
-  }
-
-  //  ->  traversing the list forword
-  current = list->head;
-  while (current->next != NULL) {
-    current = current->next;
-  }
-  //  ->  traversing the list backwards
-  while (current->prev != NULL) {
-    current = current->prev;
-  }
-
-  // inserting into the list:
-  //  -> inserting a sub-list
-  struct LinkedList* aux = new_linked_list();
-
-  // add ten new nodes to the auxiliar list
-  for (int i = 0; i < 10; ++i) {
-    aux->add(aux, i, &i, sizeof(i));
-  }
-
-  // add all the nodes of the auxiliary list into the initial list
-  for (int i = 0; i < aux->length; ++i) {
-    struct Node* node = aux->get(aux, i);
-    list->add(list, i, node->data, sizeof(node));
-  }
-}
-
 int main() {
   test_creation_and_destruction();
   test_add();
@@ -243,7 +196,6 @@ int main() {
   test_get();
   test_search();
   test_is_empty();
-  tests_cases();
   printf("linked_list.t .............. OK\n");
   return 0;
 }

@@ -31,9 +31,12 @@ void destroy_queue(struct Queue* queue) {
 
 // This function returns the data from the first item in the chain.
 void* peek(struct Queue* self) {
-  // utilize the get function from LinkedList with enforced parameters
-  struct Node* node_data = self->list->get(self->list, 0);
-  return node_data->data;
+  // check if the head of the list exists
+  if (self->list->head != NULL) {
+    return self->list->head->data;
+  }
+
+  return NULL;
 }
 
 // This function removes the first item in the chain.

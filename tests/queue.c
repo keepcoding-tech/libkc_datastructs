@@ -15,9 +15,18 @@ void test_push() {
   // create a new instance of a Queue
   struct Queue* queue = new_queue();
 
-  // push ten new nodes
+  // push ten new nodes of type int
   for (int i = 0; i < 10; ++i) {
     queue->push(queue, &i, sizeof(i));
+
+    // check the length of the list
+    assert(queue->list->length == i + 1);
+  }
+
+  // push ten new nodes of type char
+  for (int i = 10; i < 20; ++i) {
+    char c = 'a' + i;
+    queue->push(queue, &c, sizeof(char));
 
     // check the length of the list
     assert(queue->list->length == i + 1);
@@ -29,8 +38,26 @@ void test_push() {
       cursor = cursor->next;
     }
 
-    // check if the nodes have been pushed correctly
-    assert(*(int *)cursor->data == i);
+    // check if the nodes have been inserted correctly
+    if (i < 10) {
+      assert(*(int*)cursor->data == i);
+    } else {
+      assert(*(char*)cursor->data == 'a' + i);
+    }
+  }
+
+  // add a new node of type int[] (array)
+  int nums[] = {1, 2, 3, 4, 5};
+  size_t size = sizeof(nums) / sizeof(nums[0]);
+  queue->push(queue, &nums, sizeof(int) * size);
+
+  // get the 21st node
+  struct Node* cursor = queue->list->tail;
+
+  // check if the node has been inserted correctly
+  int* ptr = (int*)cursor->data;
+  for (int i = 0; i < size; ++i) {
+    assert(ptr[i] == nums[i]);
   }
 
   destroy_queue(queue);
