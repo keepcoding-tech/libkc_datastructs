@@ -13,6 +13,7 @@
 
 # Specify the compiler and compiler flags
 CC := gcc
+STD := -std=c99
 CFLAGS := -Wall -Werror -Wpedantic -g -Iinclude
 
 # Specify the source and the include directory
@@ -55,7 +56,7 @@ $(OBJ_DIRS):
 
 # Generic pattern rule to compile each source file into an object file
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(HEADERS)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(STD) $(CFLAGS) -c $< -o $@
 
 # Create the test directory
 $(TEST_DIR):
@@ -63,7 +64,7 @@ $(TEST_DIR):
 
 # Dynamically generate the test targets and compile the test files
 $(TEST_DIR)/%: tests/%.c $(OBJECTS) | $(TEST_DIR)
-	$(CC) $(CFLAGS) $^ -o $@
+	$(CC) $(STD) $(CFLAGS) $^ -o $@
 
 libkeepcoding.a: $(OBJECTS)
 	ar rcs libkeepcoding.a $(OBJECTS)
