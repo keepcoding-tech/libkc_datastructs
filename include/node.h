@@ -48,4 +48,31 @@ struct Node* node_constructor(void* data, size_t size);
 // the destructor should be used to destroy nodes
 void node_destructor(struct Node* node);
 
+// This macro is designed for primitive data types to
+// simplify usage and provide efficient data access.
+#define NODE(type) \
+  struct Node_##type {        \
+    type data;                \
+    struct Node_##type* next; \
+    struct Node_##type* prev; \
+  };                          \
+                              \
+  struct Node_##type* node_##type(type data) {                   \
+    struct Node_##type* node =                                   \
+        (struct Node_##type*)malloc(sizeof(struct Node_##type)); \
+    if (node == NULL) {                                          \
+      printf("keepcoding/Node ... \n");                          \
+      printf("Error code: Invalid data size for node!\n");       \
+      return NULL;                                               \
+    }                                                            \
+    node->data = data;                                           \
+    node->next = NULL;                                           \
+    node->prev = NULL;                                           \
+    return node;                                                 \
+  }                                                              \
+                                                                 \
+  void node_destructor_##type(struct Node_##type* node) { \
+    free(node);                                           \
+  }
+
 #endif /* NODE_H */

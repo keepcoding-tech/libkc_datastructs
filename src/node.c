@@ -5,20 +5,26 @@ struct Node* node_constructor(void* data, size_t size) {
   // confirm the size of the data is at least one
   if (size < 1) {
     printf("keepcoding/Node ... \n");
-    printf("Error at %s:%d in function %s. \n", __FILE__, __LINE__, __func__);
     printf("Error code: Invalid data size for node!\n");
     return NULL;
   }
 
   // create a Node instance to be returned
-  // and allocate space for the data
   struct Node* node = malloc(sizeof(struct Node));
+
+  // confirm that there is memory to allocate
+  if (node == NULL) {
+    printf("keepcoding/Node ... \n");
+    printf("Error code: The memory could not be allocated!\n");
+    return NULL;
+  }
+
+  // allocate space for the data
   node->data = malloc(size);
 
   // confirm that there is memory to allocate
   if (node->data == NULL) {
     printf("keepcoding/Node ... \n");
-    printf("Error at %s:%d in function %s. \n", __FILE__, __LINE__, __func__);
     printf("Error code: The memory could not be allocated!\n");
     return NULL;
   }
