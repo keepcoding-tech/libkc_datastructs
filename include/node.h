@@ -50,34 +50,30 @@ void node_destructor(struct Node* node);
 
 // This macro is designed for primitive data types to
 // simplify usage and provide efficient data access.
-#define NODE(type) \
-  struct Node_##type {        \
-    type data;                \
-    struct Node_##type* next; \
-    struct Node_##type* prev; \
-  };                          \
-                              \
-  struct Node_##type* node_##type(type data) {                    \
-    struct Node_##type* node =                                    \
-        (struct Node_##type*)malloc(sizeof(struct Node_##type));  \
-    if (node == NULL) {                                           \
-      printf("keepcoding/Node ... \n");                           \
-      printf("Error code: The memory could not be allocated!\n"); \
-      return NULL;                                                \
-    }                                                             \
-    if (!data) {                                                  \
-      printf("keepcoding/Node ... \n");                           \
-      printf("Error code: Invalid data size for node!\n");        \
-      return NULL;                                                \
-    }                                                             \
-    node->data = data;                                            \
-    node->next = NULL;                                            \
-    node->prev = NULL;                                            \
-    return node;                                                  \
-  }                                                               \
-                                                                  \
-  void node_destructor_##type(struct Node_##type* node) { \
-    free(node);                                           \
+#define CUSTOM_NODE(type, node_name) \
+  struct node_name {                 \
+    type data;                       \
+    struct node_name* next;          \
+    struct node_name* prev;          \
+  };                                 \
+                                     \
+  struct node_name* node_name##_constructor(type data) {             \
+    struct Node* node = node_constructor(&data, sizeof(type));       \
+    if (node != NULL) {                                              \
+      struct node_name* new_node = malloc(sizeof(struct node_name)); \
+      new_node->data = *(type*)node->data;                           \
+      new_node->next = NULL;                                         \
+      new_node->prev = NULL;                                         \
+      node_destructor(node);                                         \
+      return new_node;                                               \
+    }                                                                \
+    return NULL;                                                     \
+  }                                                                  \
+                                                                     \
+  void node_name##_destructor(struct node_name* node) { \
+    free(node);                                         \
   }
+
+#define NODE(type) CUSTOM_NODE(type, Node_##type)
 
 #endif /* NODE_H */
