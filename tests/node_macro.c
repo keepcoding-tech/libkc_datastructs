@@ -53,83 +53,84 @@ NODE(uintmax_t)
 NODE(float)
 NODE(double)
 NODE(_Bool)
+NODE(bool)
 
 void test_long_double() {
-  struct Node_long_double* node = Node_long_double_constructor(1.23);
-  assert(node->data == 1.23);
+  struct Node_long_double* node = Node_long_double_constructor(3.1415926535897932384626433832795029L);
+  assert(node->data == 3.1415926535897932384626433832795029L);
 
-  node->data = 4.56;
-  assert(node->data == 4.56);
+  node->data = 0.3333333333333333333333333333333333L;
+  assert(node->data == 0.3333333333333333333333333333333333L);
 
   Node_long_double_destructor(node);
 }
 
 void test_signed_char() {
-  struct Node_signed_char* node = Node_signed_char_constructor('a');
-  assert(node->data == 'a');
+  struct Node_signed_char* node = Node_signed_char_constructor(-128);
+  assert(node->data == -128);
 
-  node->data = 'b';
-  assert(node->data == 'b');
+  node->data = (signed char)128;
+  assert(node->data == (signed char)128);
 
   Node_signed_char_destructor(node);
 }
 
 void test_unsigned_char() {
-  struct Node_unsigned_char* node = Node_unsigned_char_constructor('x');
-  assert(node->data == 'x');
+  struct Node_unsigned_char* node = Node_unsigned_char_constructor(255);
+  assert(node->data == 255);
 
-  node->data = 'y';
-  assert(node->data == 'y');
+  node->data = 0;
+  assert(node->data == 0);
 
   Node_unsigned_char_destructor(node);
 }
 
 void test_unsigned_short() {
-  struct Node_unsigned_short* node = Node_unsigned_short_constructor(1234);
-  assert(node->data == 1234);
+  struct Node_unsigned_short* node = Node_unsigned_short_constructor(65535);
+  assert(node->data == 65535);
 
-  node->data = 5678;
-  assert(node->data == 5678);
+  node->data = 0;
+  assert(node->data == 0);
 
   Node_unsigned_short_destructor(node);
 }
 
 void test_unsigned_int() {
-  struct Node_unsigned_int* node = Node_unsigned_int_constructor(12345);
-  assert(node->data == 12345);
+  struct Node_unsigned_int* node = Node_unsigned_int_constructor(4294967295);
+  assert(node->data == 4294967295);
 
-  node->data = 67890;
-  assert(node->data == 67890);
+  node->data = 0;
+  assert(node->data == 0);
 
   Node_unsigned_int_destructor(node);
 }
 
 void test_unsigned_long() {
-  struct Node_unsigned_long* node = Node_unsigned_long_constructor(1234567890);
-  assert(node->data == 1234567890);
+  struct Node_unsigned_long* node = Node_unsigned_long_constructor(1844674407370955161);
+  assert(node->data == 1844674407370955161);
 
-  node->data = 9876543210;
-  assert(node->data == 9876543210);
+  node->data = 0;
+  assert(node->data == 0);
 
   Node_unsigned_long_destructor(node);
 }
 
 void test_long_long() {
-  struct Node_long_long* node = Node_long_long_constructor(123456789012);
-  assert(node->data == 123456789012);
+  struct Node_long_long* node = Node_long_long_constructor(9223372036854775807);
+  assert(node->data == 9223372036854775807);
 
-  node->data = 987654321098;
-  assert(node->data == 987654321098);
+  node->data = -9223372036854775807;
+  assert(node->data == -9223372036854775807);
 
   Node_long_long_destructor(node);
 }
 
 void test_unsigned_long_long() {
-  struct Node_unsigned_long_long* node = Node_unsigned_long_long_constructor(12345678901234);
-  assert(node->data == 12345678901234);
+  struct Node_unsigned_long_long* node = Node_unsigned_long_long_constructor(1844674407370955161);
+  assert(node->data == 1844674407370955161);
 
-  node->data = 98765432109876;
-  assert(node->data == 98765432109876);
+  node->data = 0;
+  assert(node->data == 0);
 
   Node_unsigned_long_long_destructor(node);
 }
@@ -175,41 +176,41 @@ void test_long() {
 }
 
 void test_int8_t() {
-  struct Node_int8_t* node = Node_int8_t_constructor(12);
-  assert(node->data == 12);
+  struct Node_int8_t* node = Node_int8_t_constructor(127);
+  assert(node->data == 127);
 
-  node->data = 34;
-  assert(node->data == 34);
+  node->data = -128;
+  assert(node->data == -128);
 
   Node_int8_t_destructor(node);
 }
 
 void test_uint8_t() {
-  struct Node_uint8_t* node = Node_uint8_t_constructor(56);
-  assert(node->data == 56);
+  struct Node_uint8_t* node = Node_uint8_t_constructor(255);
+  assert(node->data == 255);
 
-  node->data = 78;
-  assert(node->data == 78);
+  node->data = 0;
+  assert(node->data == 0);
 
   Node_uint8_t_destructor(node);
 }
 
 void test_int16_t() {
-  struct Node_int16_t* node = Node_int16_t_constructor(1234);
-  assert(node->data == 1234);
+  struct Node_int16_t* node = Node_int16_t_constructor(-32768);
+  assert(node->data == -32768);
 
-  node->data = 5678;
-  assert(node->data == 5678);
+  node->data = 32767;
+  assert(node->data == 32767);
 
   Node_int16_t_destructor(node);
 }
 
 void test_uint16_t() {
-  struct Node_uint16_t* node = Node_uint16_t_constructor(12345);
-  assert(node->data == 12345);
+  struct Node_uint16_t* node = Node_uint16_t_constructor(65535);
+  assert(node->data == 65535);
 
-  node->data = (uint16_t)67890;
-  assert(node->data == (uint16_t)67890);
+  node->data = 0;
+  assert(node->data == 0);
 
   Node_uint16_t_destructor(node);
 }
@@ -435,21 +436,21 @@ void test_uintptr_t() {
 }
 
 void test_intmax_t() {
-  struct Node_intmax_t* node = Node_intmax_t_constructor(12345);
-  assert(node->data == 12345);
+  struct Node_intmax_t* node = Node_intmax_t_constructor(9223372036854775807);
+  assert(node->data == 9223372036854775807);
 
-  node->data = 67890;
-  assert(node->data == 67890);
+  node->data = -9223372036854775807;
+  assert(node->data == -9223372036854775807);
 
   Node_intmax_t_destructor(node);
 }
 
 void test_uintmax_t() {
-  struct Node_uintmax_t* node = Node_uintmax_t_constructor(54321);
-  assert(node->data == 54321);
+  struct Node_uintmax_t* node = Node_uintmax_t_constructor(1844674407370955161);
+  assert(node->data == 1844674407370955161);
 
-  node->data = 98760;
-  assert(node->data == 98760);
+  node->data = 0;
+  assert(node->data == 0);
 
   Node_uintmax_t_destructor(node);
 }
@@ -474,7 +475,7 @@ void test_double() {
   Node_double_destructor(node);
 }
 
-void test_Bool() {
+void test__Bool() {
   struct Node__Bool* node = Node__Bool_constructor(1);
   assert(node->data == 1);
 
@@ -482,6 +483,16 @@ void test_Bool() {
   assert(node->data == 0);
 
   Node__Bool_destructor(node);
+}
+
+void test_bool() {
+  struct Node_bool* node = Node_bool_constructor(true);
+  assert(node->data == true);
+
+  node->data = false;
+  assert(node->data == false);
+
+  Node_bool_destructor(node);
 }
 
 int main() {
@@ -527,7 +538,8 @@ int main() {
   test_uintmax_t();
   test_float();
   test_double();
-  test_Bool();
+  test__Bool();
+  test_bool();
   printf("node_macro.t ............... OK\n");
   return 0;
 }
