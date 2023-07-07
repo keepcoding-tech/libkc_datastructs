@@ -217,6 +217,56 @@ void test_insert() {
   destroy_list(list);
 }
 
+// Test case for the pop_back() method.
+void test_pop_back() {
+  // create a new instance of a List
+  struct List* list = new_list();
+
+  // insert ten new nodes
+  for (int i = 0; i < 10; ++i) {
+    list->insert(list, i, &i, sizeof(int));
+  }
+
+  // insert ten new nodes
+  for (int i = 0; i < 10; ++i) {
+    // the length should be reduced only after the pop
+    assert(*(int*)list->tail->data == 10 - (i + 1));
+    assert(list->length == 10 - i);
+
+    list->pop_back(list);
+
+    // check if the last node was deleted correctly
+    assert(list->length == 10 - (i + 1));
+  }
+
+  destroy_list(list);
+}
+
+// Test case for the pop_front() method.
+void test_pop_front() {
+  // create a new instance of a List
+  struct List* list = new_list();
+
+  // insert ten new nodes
+  for (int i = 0; i < 10; ++i) {
+    list->insert(list, i, &i, sizeof(int));
+  }
+
+  // insert ten new nodes
+  for (int i = 0; i < 10; ++i) {
+    // the length should be reduced only after the pop
+    assert(*(int*)list->head->data == i);
+    assert(list->length == 10 - i);
+
+    list->pop_front(list);
+
+    // check if the last node was deleted correctly
+    assert(list->length == 10 - (i + 1));
+  }
+
+  destroy_list(list);
+}
+
 // Test case for the search() method.
 bool compare(void* data_one, void* data_two) {
   return (*(int*)data_one == *(int*)data_two);
@@ -252,6 +302,8 @@ int main() {
   test_front();
   test_get();
   test_insert();
+  test_pop_back();
+  test_pop_front();
   test_search();
   printf("list.t ..................... OK\n");
   return 0;

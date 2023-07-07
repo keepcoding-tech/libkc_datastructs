@@ -2,8 +2,8 @@
 
 // MARK: PUBLIC MEMBER METHODS PROTOTYPES
 // void erase_all_nodes(struct List* self);
-// void erase_first_node(struct List* self);
-// void erase_last_node(struct List* self);
+void erase_first_node(struct List* self);
+void erase_last_node(struct List* self);
 void erase_node(struct List* self, size_t index);
 // void erase_nodes_by_value(struct List* self, void* data,
 //     bool (*compare)(void* data_one, void* data_two));
@@ -42,8 +42,8 @@ struct List* new_list() {
   new_list->front = get_first_node;
   new_list->get = get_node;
   new_list->insert = insert_new_node;
-  // new_list->pop_back = erase_last_node;
-  // new_list->pop_front = erase_first_node;
+  new_list->pop_back = erase_last_node;
+  new_list->pop_front = erase_first_node;
   // new_list->push_back = insert_new_tail;
   // new_list->push_front = insert_new_head;
   // new_list->remove = erase_nodes_by_value;
@@ -65,6 +65,16 @@ void destroy_list(struct List* list) {
 }
 
 // MARK: PUBLIC MEMBER METHODS DEFINITIONS
+
+// This function removes the last element in the list, reducing the size by one
+void erase_first_node(struct List* self) {
+  erase_node(self, 0);
+}
+
+// This function removes the first element in the list, reducing the size by one
+void erase_last_node(struct List* self) {
+  erase_node(self, self->length - 1);
+}
 
 // This function removes from the list a single element (position).
 void erase_node(struct List* self, size_t index) {
