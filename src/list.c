@@ -1,7 +1,7 @@
 #include "../include/list.h"
 
 // MARK: PUBLIC MEMBER METHODS PROTOTYPES
-// void erase_all_nodes(struct List* self);
+void erase_all_nodes(struct List* self);
 void erase_first_node(struct List* self);
 void erase_last_node(struct List* self);
 void erase_node(struct List* self, size_t index);
@@ -18,7 +18,6 @@ bool search_node(struct List* self, void* query,
     bool (*compare)(void* data_one, void* data_two));
 
 // MARK: PRIVATE MEMBER METHODS PROTOTYPES
-void destroy_node_ll(struct Node* node_to_destroy);
 struct Node* iterate_ll(struct List* self, int index);
 
 
@@ -36,7 +35,7 @@ struct List* new_list() {
 
   // assigns the public member methods
   new_list->back = get_last_node;
-  // new_list->clear = erase_all_nodes;
+  new_list->clear = erase_all_nodes;
   new_list->empty = is_list_empty;
   new_list->erase = erase_node;
   new_list->front = get_first_node;
@@ -54,17 +53,27 @@ struct List* new_list() {
 
 // The destructor removes all the nodes by freeing the nodes instances and data.
 void destroy_list(struct List* list) {
-  // access the linked list length only once
-  int list_length = list->length;
-  for (int i = 0; i < list_length; ++i) {
-    list->erase(list, 0);
+  // Erase nodes only if the list is not empty
+  if (list != NULL) {
+    erase_all_nodes(list);
+    free(list);
   }
-
-  // free the linked list too
-  free(list);
 }
 
 // MARK: PUBLIC MEMBER METHODS DEFINITIONS
+
+// This function removes all elements from the list leaving it with a size of 0.
+void erase_all_nodes(struct List* self) {
+  struct Node* current = self->head;
+  while (current != NULL) {
+    struct Node* next = current->next;
+    node_destructor(current);
+    current = next;
+  }
+  self->head = NULL;
+  self->tail = NULL;
+  self->length = 0;
+}
 
 // This function removes the last element in the list, reducing the size by one.
 void erase_first_node(struct List* self) {
@@ -92,7 +101,7 @@ void erase_node(struct List* self, size_t index) {
   // check if the item being removed is the "head"
   if (index == 0) {
     self->head = current->next;
-    destroy_node_ll(current);
+    node_destructor(current);
   } else {
     // find the node in the list before the one that is going to be removed
     current = iterate_ll(self, index - 1);
@@ -110,7 +119,7 @@ void erase_node(struct List* self, size_t index) {
     }
 
     // remove the node
-    destroy_node_ll(node_to_remove);
+    node_destructor(node_to_remove);
   }
 
   // decrement the list length
@@ -219,12 +228,6 @@ bool search_node(struct List* self, void* query,
 }
 
 // MARK: PRIVATE MEMBER METHODS DEFINITIONS
-
-// This function removes a node by deallocating it's memory
-// address, this simply renames the node destructor function.
-void destroy_node_ll(struct Node* node_to_destroy) {
-  node_destructor(node_to_destroy);
-}
 
 // This function traverses the list from beginning to end.
 struct Node* iterate_ll(struct List* self, int index) {
