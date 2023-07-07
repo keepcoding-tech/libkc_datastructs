@@ -17,7 +17,7 @@
 #include "include/binary_tree.h"
 #include "include/dictionary.h"
 #include "include/entry.h"
-#include "include/linked_list.h"
+#include "include/list.h"
 #include "include/node.h"
 #include "include/queue.h"
 #include "include/stack.h"

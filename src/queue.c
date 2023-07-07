@@ -10,8 +10,8 @@ struct Queue* new_queue() {
   // create a Queue instance to be returned
   struct Queue* queue = malloc(sizeof(struct Queue));
 
-  // instantiate the queue's LinkedList via the constructor
-  queue->list = new_linked_list();
+  // instantiate the queue's List via the constructor
+  queue->list = new_list();
 
   // assigns the public member methods
   queue->push = push_q;
@@ -23,7 +23,7 @@ struct Queue* new_queue() {
 
 // The destructor removes all the nodes by calling the linked list destructor.
 void destroy_queue(struct Queue* queue) {
-  destroy_linked_list(queue->list);
+  destroy_list(queue->list);
 
   // free the queue too
   free(queue);
@@ -41,12 +41,12 @@ void* peek(struct Queue* self) {
 
 // This function removes the first item in the chain.
 void pop_q(struct Queue *self) {
-  // utilize the remove from LinkedList with enforced parameters
-  self->list->remove(self->list, 0);
+  // utilize the remove from List with enforced parameters
+  self->list->erase(self->list, 0);
 }
 
 // This function adds an item to the end of the list.
 void push_q(struct Queue *self, void *data, size_t size) {
-  // utilize add from LinkedList with enforced parameters
-  self->list->add(self->list, self->list->length, data, size);
+  // utilize add from List with enforced parameters
+  self->list->insert(self->list, self->list->length, data, size);
 }
