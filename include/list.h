@@ -65,10 +65,10 @@ struct List {
   // adds new items to the chain at a specified location
   void (*insert)(struct List* self, int index, void* data, size_t size);
 
-  // removes the last element in the list reducing the size by one
+  // removes the last element in the list, reducing the size by one
   void (*pop_back)(struct List* self);
 
-  // removes the first element in the list reducing the size by one
+  // removes the first element in the list, reducing the size by one
   void (*pop_front)(struct List* self);
 
   // adds a new element at the end of the list, incrementing the size
