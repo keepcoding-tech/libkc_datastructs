@@ -15,6 +15,35 @@ void test_creation_and_destruction() {
   destroy_list(list);
 }
 
+// Test case for the back() method.
+void test_back() {
+  // create a new instance of a List
+  struct List* list = new_list();
+
+  // there shouldn't be any nodes
+  assert(list->back(list) == NULL);
+
+  // insert ten new nodes
+  for (int i = 0; i < 10; ++i) {
+    list->insert(list, i, &i, sizeof(int));
+
+    // check if the last element is returned correctly
+    struct Node* back = list->back(list);
+    assert(*(int*)back->data == i);
+  }
+
+  // remove all the nodes
+  for (int i = 9; i >= 0; --i) {
+    // check if the last element is returned correctly
+    struct Node* back = list->back(list);
+    assert(*(int*)back->data == i);
+
+    list->erase(list, i);
+  }
+
+  destroy_list(list);
+}
+
 // Test case for the empty() method.
 void test_empty() {
   // create a new instance of a List
@@ -23,17 +52,15 @@ void test_empty() {
   // the list should be empty
   assert(list->empty(list));
 
-  // insert ten new nodes (if the test reached here then the "add_node"
-  // function was successfully tested, so we can freely use it)
+  // insert ten new nodes
   for (int i = 0; i < 10; ++i) {
-    list->insert(list, i, &i, sizeof(i));
+    list->insert(list, i, &i, sizeof(int));
   }
 
   // the list should not be empty
   assert(!list->empty(list));
 
-  // remove all nodes (if the test reached here then the "remove_node"
-  // function was successfully tested, so we can freely use it)
+  // remove all nodes
   for (int i = 0; i < 10; ++i) {
     list->erase(list, 0);
   }
@@ -49,10 +76,9 @@ void test_erase() {
   // create a new instance of a List
   struct List* list = new_list();
 
-  // insert ten new nodes (if the test reached here then the "add_node"
-  // function was successfully tested, so we can freely use it)
+  // insert ten new nodes
   for (int i = 0; i < 10; ++i) {
-    list->insert(list, i, &i, sizeof(i));
+    list->insert(list, i, &i, sizeof(int));
   }
 
   // remove the node from position 5
@@ -73,6 +99,43 @@ void test_erase() {
   cursor = list->head;
   assert(*(int*)cursor->data != 0 || list->length != 9);
 
+  // remove the remaining nodes in reverse
+  for (int i = list->length - 1; i >= 0; --i) {
+    list->erase(list, i);
+    assert(list->length == i);
+  }
+
+  destroy_list(list);
+}
+
+// Test case for the front() method.
+void test_front() {
+  // create a new instance of a List
+  struct List* list = new_list();
+
+  // there shouldn't be any nodes
+  assert(list->front(list) == NULL);
+
+  // insert ten new nodes
+  for (int i = 0; i < 10; ++i) {
+    list->insert(list, i, &i, sizeof(int));
+
+    // check if the first element is returned correctly,
+    // it should always be zero (the same value)
+    struct Node* front = list->front(list);
+    assert(*(int*)front->data == 0);
+  }
+
+  // remove all the nodes
+  for (int i = 0; i < 10; ++i) {
+    // check if the first element is returned correctly
+    struct Node* front = list->front(list);
+    assert(*(int*)front->data == i);
+
+    // erase only the first node for each iteration
+    list->erase(list, 0);
+  }
+
   destroy_list(list);
 }
 
@@ -81,10 +144,9 @@ void test_get() {
   // create a new instance of a List
   struct List* list = new_list();
 
-  // insert ten new nodes (if the test reached here, then the "add_node"
-  // function was successfully tested, so we can freely use it)
+  // insert ten new nodes
   for (int i = 0; i < 10; ++i) {
-    list->insert(list, i, &i, sizeof(i));
+    list->insert(list, i, &i, sizeof(int));
   }
 
   // check if the node was correctly retrieved
@@ -164,10 +226,9 @@ void test_search() {
   // create a new instance of a List
   struct List* list = new_list();
 
-  // insert ten new nodes (if the test reached here then the "add_node"
-  // function was successfully tested, so we can freely use it)
+  // insert ten new nodes
   for (int i = 0; i < 10; ++i) {
-    list->insert(list, i, &i, sizeof(i));
+    list->insert(list, i, &i, sizeof(int));
   }
 
   // check if the values are in the list
@@ -185,8 +246,10 @@ void test_search() {
 
 int main() {
   test_creation_and_destruction();
+  test_back();
   test_empty();
   test_erase();
+  test_front();
   test_get();
   test_insert();
   test_search();

@@ -7,8 +7,8 @@
 void erase_node(struct List* self, size_t index);
 // void erase_nodes_by_value(struct List* self, void* data,
 //     bool (*compare)(void* data_one, void* data_two));
-// struct Node* get_first_node(struct List* self);
-// struct Node* get_last_node(struct List* self);
+struct Node* get_first_node(struct List* self);
+struct Node* get_last_node(struct List* self);
 struct Node* get_node(struct List* self, int index);
 // void insert_new_head(struct List* self, void* data, size_t size);
 void insert_new_node(struct List* self, int index, void* data, size_t size);
@@ -35,11 +35,11 @@ struct List* new_list() {
   new_list->length = 0;
 
   // assigns the public member methods
-  // new_list->back = get_last_node;
+  new_list->back = get_last_node;
   // new_list->clear = erase_all_nodes;
   new_list->empty = is_list_empty;
   new_list->erase = erase_node;
-  // new_list->front = get_first_node;
+  new_list->front = get_first_node;
   new_list->get = get_node;
   new_list->insert = insert_new_node;
   // new_list->pop_back = erase_last_node;
@@ -89,8 +89,15 @@ void erase_node(struct List* self, size_t index) {
 
     // use the node returned to define the node to be removed
     struct Node *node_to_remove = current->next;
-    current->next = node_to_remove->next;
-    current->next->prev = current;
+
+    // check if the item being removed is the "tail"
+    if (index == self->length - 1) {
+      self->tail = current;
+      current->next = NULL;
+    } else {
+      current->next = node_to_remove->next;
+      current->next->prev = current;
+    }
 
     // remove the node
     destroy_node_ll(node_to_remove);
@@ -98,6 +105,16 @@ void erase_node(struct List* self, size_t index) {
 
   // decrement the list length
   --self->length;
+}
+
+// This function returns a reference to the first element in the list
+struct Node* get_first_node(struct List* self) {
+  return self->head;
+}
+
+// This function returns a reference to the last element in the list
+struct Node* get_last_node(struct List* self) {
+  return self->tail;
 }
 
 // This function allows data in the chain to be accessed.
@@ -127,6 +144,12 @@ void insert_new_node(struct List* self, int index, void* data, size_t size) {
   if (index == 0) {
     new_node->next = self->head;
     self->head = new_node;
+
+    // if length is less than 1 then head is also tail
+    if (self->length == 0) {
+      self->tail = new_node;
+    }
+
     ++self->length;
     return;
   }
