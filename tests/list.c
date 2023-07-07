@@ -44,6 +44,32 @@ void test_back() {
   destroy_list(list);
 }
 
+// Test case for the clear() method.
+void test_clear() {
+  // create a new instance of a List
+  struct List* list = new_list();
+
+  // the list should be empty
+  assert(list->empty(list));
+
+  // insert ten new nodes
+  for (int i = 0; i < 10; ++i) {
+    list->insert(list, i, &i, sizeof(int));
+  }
+
+  // the list should not be empty now
+  assert(list->length == 10);
+  assert(list->empty(list) == false);
+
+  // clear the list
+  list->clear(list);
+
+  // the list should be empty again
+  assert(list->empty(list));
+
+  destroy_list(list);
+}
+
 // Test case for the empty() method.
 void test_empty() {
   // create a new instance of a List
@@ -337,6 +363,7 @@ void test_search() {
 int main() {
   test_creation_and_destruction();
   test_back();
+  test_clear();
   test_empty();
   test_erase();
   test_front();
