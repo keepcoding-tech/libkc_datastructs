@@ -267,6 +267,46 @@ void test_pop_front() {
   destroy_list(list);
 }
 
+// Test case for the push_back() method.
+void test_push_back() {
+  // create a new instance of a List
+  struct List* list = new_list();
+
+  // push back ten new nodes
+  for (int i = 0; i < 10; ++i) {
+    // the length should be incremented only after push
+    assert(list->length == i);
+
+    list->push_back(list, &i, sizeof(int));
+
+    // check if the node was inserted correctly
+    assert(*(int*)list->tail->data == i);
+    assert(list->length == i + 1);
+  }
+
+  destroy_list(list);
+}
+
+// Test case for the push_front() method.
+void test_push_front() {
+  // create a new instance of a List
+  struct List* list = new_list();
+
+  // push back ten new nodes
+  for (int i = 0; i < 10; ++i) {
+    // the length should be incremented only after push
+    assert(list->length == i);
+
+    list->push_front(list, &i, sizeof(int));
+
+    // check if the node was inserted correctly
+    assert(*(int*)list->head->data == i);
+    assert(list->length == i + 1);
+  }
+
+  destroy_list(list);
+}
+
 // Test case for the search() method.
 bool compare(void* data_one, void* data_two) {
   return (*(int*)data_one == *(int*)data_two);
@@ -304,6 +344,8 @@ int main() {
   test_insert();
   test_pop_back();
   test_pop_front();
+  test_push_back();
+  test_push_front();
   test_search();
   printf("list.t ..................... OK\n");
   return 0;
