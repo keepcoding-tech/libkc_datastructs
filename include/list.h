@@ -78,12 +78,12 @@ struct List {
   void (*push_front)(struct List* self, void* data, size_t size);
 
   // removes from the list all the elements that compare equal to value
-  void (*remove)(struct List* self, void* data,
-      bool (*compare)(void* data_one, void* data_two));
+  void (*remove)(struct List* self, void* value,
+      int (*compare)(const void* a, const void* b));
 
   // search a specified node by value
-  bool (*search)(struct List* self, void* query,
-      bool (*compare)(void* data_one, void* data_two));
+  bool (*search)(struct List* self, void* value,
+      int (*compare)(const void* a, const void* b));
 };
 
 // the constructor should be used to create linked lists

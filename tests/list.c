@@ -333,11 +333,45 @@ void test_push_front() {
   destroy_list(list);
 }
 
-// Test case for the search() method.
-bool compare(void* data_one, void* data_two) {
-  return (*(int*)data_one == *(int*)data_two);
+// Test case for the search() and remove() method.
+int compare(const void* data_one, const void* data_two) {
+  return (*(int*)data_one - *(int*)data_two);
 }
 
+// Test case for the remove() method.
+void test_remove() {
+  // create a new instance of a List
+  struct List* list = new_list();
+
+  // use the same data
+  int data = 10;
+
+  // add 5 new nodes
+  for (int i = 0; i < 5; ++i) {
+    list->insert(list, i, &data, sizeof(int));
+  }
+
+  data = 20;
+
+  // add 5 new nodes
+  for (int i = 5; i < 10; ++i) {
+    list->insert(list, i, &data, sizeof(int));
+  }
+
+  // should remove only 5 nodes
+  list->remove(list, &data, compare);
+  assert(list->length == 5);
+
+  data = 10;
+
+  // should remove all 5 nodes
+  list->remove(list, &data, compare);
+  assert(list->empty(list));
+
+  destroy_list(list);
+}
+
+// Test case for the search() method.
 void test_search() {
   // create a new instance of a List
   struct List* list = new_list();
@@ -373,6 +407,7 @@ int main() {
   test_pop_front();
   test_push_back();
   test_push_front();
+  test_remove();
   test_search();
   printf("list.t ..................... OK\n");
   return 0;
