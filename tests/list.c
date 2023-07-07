@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdint.h>
 #include <string.h>
 
 // Test the creation and destruction of a linked list.
@@ -394,6 +395,33 @@ void test_search() {
   destroy_list(list);
 }
 
+COMPARE_LIST(int, compare_int)
+COMPARE_LIST(char, compare_char)
+COMPARE_LIST(int8_t, compare_int8_t)
+
+void test_compare() {
+  int a_int = 1, b_int = 2;
+  assert(compare_int(&a_int, &b_int) < 0);
+  a_int = 2, b_int = 1;
+  assert(compare_int(&a_int, &b_int) > 0);
+  a_int = 1, b_int = 1;
+  assert(compare_int(&a_int, &b_int) == 0);
+
+  char a_char = 'a', b_char = 'b';
+  assert(compare_char(&a_char, &b_char) < 0);
+  a_char = 'b', b_char = 'a';
+  assert(compare_char(&a_char, &b_char) > 0);
+  a_char = 'a', b_char = 'a';
+  assert(compare_char(&a_char, &b_char) == 0);
+
+  int8_t a_int8_t = 1, b_int8_t = 2;
+  assert(compare_int8_t(&a_int8_t, &b_int8_t) < 0);
+  a_int8_t = 2, b_int8_t = 1;
+  assert(compare_int8_t(&a_int8_t, &b_int8_t) > 0);
+  a_int8_t = 1, b_int8_t = 1;
+  assert(compare_int8_t(&a_int8_t, &b_int8_t) == 0);
+}
+
 int main() {
   test_creation_and_destruction();
   test_back();
@@ -409,6 +437,7 @@ int main() {
   test_push_front();
   test_remove();
   test_search();
+  test_compare();
   printf("list.t ..................... OK\n");
   return 0;
 }

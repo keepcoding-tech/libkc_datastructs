@@ -92,4 +92,16 @@ struct List* new_list();
 // the destructor should be used to destroy linked lists
 void destroy_list(struct List *list);
 
+// use this macro to define any type of primitive data comparison function
+#define COMPARE_LIST(type, function_name) \
+  int function_name(const void* a, const void* b) { \
+    if (*(type*)a < *(type*)b) {                    \
+      return -1;                                    \
+    }                                               \
+    if (*(type*)a > *(type*)b) {                    \
+      return 1;                                     \
+    }                                               \
+    return 0;                                       \
+  }
+
 #endif /* LIST_H */
