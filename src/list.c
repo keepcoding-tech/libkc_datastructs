@@ -19,7 +19,7 @@ bool search_node(struct List* self, void* value,
 
 // MARK: PRIVATE MEMBER METHODS PROTOTYPES
 struct Node* iterate_ll(struct List* self, int index);
-
+void throw_error(const char* error, const int line, const char* func);
 
 // MARK: CONSTRUCTOR & DESTRUCTOR DEFINITIONS
 
@@ -51,7 +51,8 @@ struct List* new_list() {
   return new_list;
 }
 
-// The destructor removes all the nodes by freeing the nodes instances and data.
+// The destructor removes all the nodes by freeing
+// the nodes instances and data.
 void destroy_list(struct List* list) {
   // Erase nodes only if the list is not empty
   if (list != NULL) {
@@ -62,25 +63,31 @@ void destroy_list(struct List* list) {
 
 // MARK: PUBLIC MEMBER METHODS DEFINITIONS
 
-// This function removes all elements from the list leaving it with a size of 0.
+// This function removes all elements from
+// the list leaving it with a size of 0.
 void erase_all_nodes(struct List* self) {
-  struct Node* current = self->head;
-  while (current != NULL) {
-    struct Node* next = current->next;
-    node_destructor(current);
-    current = next;
+  // start iterating from the head
+  struct Node* cursor = self->head;
+  while (cursor != NULL) {
+    struct Node* next = cursor->next;
+    node_destructor(cursor);
+    cursor = next;
   }
+
+  // reset the head, tail and size
   self->head = NULL;
   self->tail = NULL;
   self->length = 0;
 }
 
-// This function removes the last element in the list, reducing the size by one.
+// This function removes the last element in
+// the list, reducing the size by one.
 void erase_first_node(struct List* self) {
   erase_node(self, 0);
 }
 
-// This function removes the first element in the list, reducing the size by one.
+// This function removes the first element in
+// the list, reducing the size by one.
 void erase_last_node(struct List* self) {
   erase_node(self, self->length - 1);
 }
@@ -89,9 +96,7 @@ void erase_last_node(struct List* self) {
 void erase_node(struct List* self, size_t index) {
   // confirm the user has specified a valid index
   if (index < 0 || index >= self->length) {
-    printf("keepcoding/List ... \n");
-    printf("Error at %s:%d in function %s. \n", __FILE__, __LINE__, __func__);
-    printf("Error code: Index out of bound!\n");
+    throw_error("Error code: Index out of bound!", __LINE__, __func__);
     return;
   }
 
@@ -118,16 +123,15 @@ void erase_node(struct List* self, size_t index) {
       current->next->prev = current;
     }
 
-    // remove the node
     node_destructor(node_to_remove);
   }
 
-  // decrement the list length
   --self->length;
 }
 
 
-// This function removes from the list all the nodes that compare equal to value
+// This function removes from the list all
+// the nodes that compare equal to value
 void erase_nodes_by_value(struct List* self, void* value,
     int (*compare)(const void* a, const void* b)) {
   // start from the head
@@ -162,7 +166,7 @@ struct Node* get_last_node(struct List* self) {
 
 // This function allows data in the chain to be accessed.
 struct Node* get_node(struct List* self, int index) {
-  // find the desired node and return its data
+  // find the desired node and return it
   struct Node* node = iterate_ll(self, index);
 
   if (node) {
@@ -174,7 +178,8 @@ struct Node* get_node(struct List* self, int index) {
 }
 
 
-// This function adds a new element at the end of the list, incrementing the size.
+// This function adds a new element at the end
+// of the list, incrementing the size.
 void insert_new_head(struct List* self, void* data, size_t size) {
   insert_new_node(self, 0, data, size);
 }
@@ -224,7 +229,8 @@ void insert_new_node(struct List* self, int index, void* data, size_t size) {
   ++self->length;
 }
 
-// This function adds a new element at the front of the list, incrementing the size.
+// This function adds a new element at the
+// front of the list, incrementing the size.
 void insert_new_tail(struct List* self, void* data, size_t size) {
   insert_new_node(self, self->length, data, size);
 }
@@ -257,9 +263,7 @@ bool search_node(struct List* self, void* value,
 struct Node* iterate_ll(struct List* self, int index) {
   // confirm the user has specified a valid index
   if (index < 0 || index >= self->length) {
-    printf("keepcoding/List ... \n");
-    printf("Error at %s:%d in function %s. \n", __FILE__, __LINE__, __func__);
-    printf("Error code: Index out of bound!\n");
+    throw_error("Error code: Index out of bound!", __LINE__, __func__);
     return NULL;
   }
 
@@ -284,4 +288,11 @@ struct Node* iterate_ll(struct List* self, int index) {
   }
 
   return cursor;
+}
+
+// throw an error and display it to the user
+void throw_error(const char* error, const int line, const char* func) {
+  printf("keepcoding/List ... \n");
+  printf("Error at %s:%d in function %s. \n", __FILE__, line, func);
+  printf("Error code: %s!\n", error);
 }
