@@ -10,9 +10,9 @@ void erase_node(struct List* self, size_t index);
 struct Node* get_first_node(struct List* self);
 struct Node* get_last_node(struct List* self);
 struct Node* get_node(struct List* self, int index);
-// void insert_new_head(struct List* self, void* data, size_t size);
+void insert_new_head(struct List* self, void* data, size_t size);
 void insert_new_node(struct List* self, int index, void* data, size_t size);
-// void insert_new_tail(struct List* self, void* data, size_t size);
+void insert_new_tail(struct List* self, void* data, size_t size);
 bool is_list_empty(struct List* self);
 bool search_node(struct List* self, void* query,
     bool (*compare)(void* data_one, void* data_two));
@@ -44,8 +44,8 @@ struct List* new_list() {
   new_list->insert = insert_new_node;
   new_list->pop_back = erase_last_node;
   new_list->pop_front = erase_first_node;
-  // new_list->push_back = insert_new_tail;
-  // new_list->push_front = insert_new_head;
+  new_list->push_back = insert_new_tail;
+  new_list->push_front = insert_new_head;
   // new_list->remove = erase_nodes_by_value;
   new_list->search = search_node;
 
@@ -66,12 +66,12 @@ void destroy_list(struct List* list) {
 
 // MARK: PUBLIC MEMBER METHODS DEFINITIONS
 
-// This function removes the last element in the list, reducing the size by one
+// This function removes the last element in the list, reducing the size by one.
 void erase_first_node(struct List* self) {
   erase_node(self, 0);
 }
 
-// This function removes the first element in the list, reducing the size by one
+// This function removes the first element in the list, reducing the size by one.
 void erase_last_node(struct List* self) {
   erase_node(self, self->length - 1);
 }
@@ -117,12 +117,12 @@ void erase_node(struct List* self, size_t index) {
   --self->length;
 }
 
-// This function returns a reference to the first element in the list
+// This function returns a reference to the first element in the list.
 struct Node* get_first_node(struct List* self) {
   return self->head;
 }
 
-// This function returns a reference to the last element in the list
+// This function returns a reference to the last element in the list.
 struct Node* get_last_node(struct List* self) {
   return self->tail;
 }
@@ -138,6 +138,12 @@ struct Node* get_node(struct List* self, int index) {
 
   // if no node found, return null
   return NULL;
+}
+
+
+// This function adds a new element at the end of the list, incrementing the size.
+void insert_new_head(struct List* self, void* data, size_t size) {
+  insert_new_node(self, 0, data, size);
 }
 
 // This function adds new items to the chain at a specified location.
@@ -183,6 +189,11 @@ void insert_new_node(struct List* self, int index, void* data, size_t size) {
 
   // increment the list length
   ++self->length;
+}
+
+// This function adds a new element at the front of the list, incrementing the size.
+void insert_new_tail(struct List* self, void* data, size_t size) {
+  insert_new_node(self, self->length, data, size);
 }
 
 // This function returns whether the list is empty or not.
