@@ -16,7 +16,7 @@ struct Dictionary* new_dictionary(int (*compare)(void* key_one, void* key_two)) 
 
   // initialize the structure members fields
   dictionary->binary_tree = new_binary_tree(compare);
-  dictionary->keys = new_linked_list();
+  dictionary->keys = new_list();
 
   // assigns the public member methods
   dictionary->insert = insert_dict;
@@ -28,7 +28,7 @@ struct Dictionary* new_dictionary(int (*compare)(void* key_one, void* key_two)) 
 // Destroy the linked list and the binary search tree to free the memory.
 void destroy_dictionary(struct Dictionary* dictionary) {
   // free the linked list memory
-  destroy_linked_list(dictionary->keys);
+  destroy_list(dictionary->keys);
 
   // free the binary tree memory
   if (dictionary->binary_tree->root != NULL) {

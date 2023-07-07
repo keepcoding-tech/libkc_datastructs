@@ -7,23 +7,23 @@
 // 22/06/2023
 
 /*
- * The Queue struct is a modified version of the LinkedList that enforces
+ * The Queue struct is a modified version of the List that enforces
  * specific rules regarding the addition and retrieval of items. In this
  * structure, items are consistently added to the end of the queue and removed
  * from the front. The methods implemented in the Queue struct primarily make
- * use of the corresponding methods in LinkedList in a predefined manner.
+ * use of the corresponding methods in List in a predefined manner.
  */
 
 #ifndef QUEUE_H
 #define QUEUE_H
 
-#include "linked_list.h"
+#include "list.h"
 
 #include <stdlib.h>
 
 struct Queue {
-  // a reference to the embedded LinkedList
-  struct LinkedList* list;
+  // a reference to the embedded List
+  struct List* list;
 
   // retrieves the data from the front of the list
   void* (*peek)(struct Queue* self);

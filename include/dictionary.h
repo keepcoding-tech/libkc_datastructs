@@ -19,7 +19,7 @@
 #ifndef DICTIONARY_H
 #define DICTIONARY_H
 
-#include "linked_list.h"
+#include "list.h"
 #include "binary_tree.h"
 #include "entry.h"
 
@@ -32,7 +32,7 @@ struct Dictionary {
   struct BinaryTree* binary_tree;
 
   // a linked list to store the dictionary keys for easy iteration
-  struct LinkedList* keys;
+  struct List* keys;
 
   // adds new items to the dictionary. Only the key, value,
   // and their respective sizes need to be specified.

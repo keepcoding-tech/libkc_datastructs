@@ -12,7 +12,7 @@ void test_creation_and_destruction() {
 
 // Test case for the push() method.
 void test_push() {
-  // create a new instance of a LinkedList
+  // create a new instance of a List
   struct Vector* vector = new_vector();
 
   // push 20 new items
@@ -34,7 +34,7 @@ void test_push() {
 
 // Test case for the max_size() method.
 void test_max_size() {
-  // create a new instance of a LinkedList
+  // create a new instance of a List
   struct Vector* vector = new_vector();
 
   // check the capacity of the vector
@@ -63,7 +63,7 @@ void test_max_size() {
 
 // Test case for the erase() method.
 void test_erase() {
-  // create a new instance of a LinkedList
+  // create a new instance of a List
   struct Vector* vector = new_vector();
 
   // push 20 new items
@@ -74,7 +74,7 @@ void test_erase() {
   // erase the newly created items
   for (int i = 0; i < 10; ++i) {
     vector->erase(vector, 10);
-    
+
     // check the size
     assert(vector->size == 19 - i);
 
