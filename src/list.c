@@ -5,8 +5,8 @@ void erase_all_nodes(struct List* self);
 void erase_first_node(struct List* self);
 void erase_last_node(struct List* self);
 void erase_node(struct List* self, size_t index);
-// void erase_nodes_by_value(struct List* self, void* data,
-//     bool (*compare)(void* data_one, void* data_two));
+void erase_nodes_by_value(struct List* self, void* value,
+    int (*compare)(const void* a, const void* b));
 struct Node* get_first_node(struct List* self);
 struct Node* get_last_node(struct List* self);
 struct Node* get_node(struct List* self, int index);
@@ -14,8 +14,8 @@ void insert_new_head(struct List* self, void* data, size_t size);
 void insert_new_node(struct List* self, int index, void* data, size_t size);
 void insert_new_tail(struct List* self, void* data, size_t size);
 bool is_list_empty(struct List* self);
-bool search_node(struct List* self, void* query,
-    bool (*compare)(void* data_one, void* data_two));
+bool search_node(struct List* self, void* value,
+    int (*compare)(const void* a, const void* b));
 
 // MARK: PRIVATE MEMBER METHODS PROTOTYPES
 struct Node* iterate_ll(struct List* self, int index);
@@ -45,7 +45,7 @@ struct List* new_list() {
   new_list->pop_front = erase_first_node;
   new_list->push_back = insert_new_tail;
   new_list->push_front = insert_new_head;
-  // new_list->remove = erase_nodes_by_value;
+  new_list->remove = erase_nodes_by_value;
   new_list->search = search_node;
 
   return new_list;
@@ -124,6 +124,30 @@ void erase_node(struct List* self, size_t index) {
 
   // decrement the list length
   --self->length;
+}
+
+
+// This function removes from the list all the nodes that compare equal to value
+void erase_nodes_by_value(struct List* self, void* value,
+    int (*compare)(const void* a, const void* b)) {
+  // start from the head
+  struct Node* cursor = self->head;
+  size_t index = 0;
+
+  // search the node by value
+  while (cursor != NULL) {
+    // erase the node if the values match
+    if (compare(cursor->data, value) == 0) {
+      struct Node* next_node = cursor->next;
+      cursor = next_node;
+      erase_node(self, index);
+      continue;
+    }
+
+    // continue searching
+    cursor = cursor->next;
+    ++index;
+  }
 }
 
 // This function returns a reference to the first element in the list.
@@ -211,14 +235,14 @@ bool is_list_empty(struct List* self) {
 }
 
 // This function searchs for a specific node by data.
-bool search_node(struct List* self, void* query,
-    bool (*compare)(void* data_one, void* data_two)) {
+bool search_node(struct List* self, void* value,
+    int (*compare)(const void* a, const void* b)) {
   // create a new node instance
   struct Node* node = self->head;
 
   // search the node by value
   while (node != NULL) {
-    if (compare(node->data, query)) {
+    if (compare(node->data, value) == 0) {
       return true;
     }
     node = node->next;
