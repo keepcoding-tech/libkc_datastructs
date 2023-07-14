@@ -88,6 +88,12 @@ void erase_all_nodes(struct List* self) {
 // This function removes the last element in
 // the list, reducing the size by one.
 void erase_first_node(struct List* self) {
+  // check if the head and the tail exists
+  if (self->head == NULL) {
+    throw_error("Error code: Non-existing node!", __LINE__, __func__);
+    return ;
+  }
+
   struct Node* old_head = self->head;
 
   // check if this is alos the last node
@@ -106,6 +112,12 @@ void erase_first_node(struct List* self) {
 // This function removes the first element in
 // the list, reducing the size by one.
 void erase_last_node(struct List* self) {
+  // check if the head and the tail exists
+  if (self->tail == NULL) {
+    throw_error("Error code: Non-existing node!", __LINE__, __func__);
+    return ;
+  }
+
   struct Node* old_tail = self->tail;
 
   // check if this is alos the last node
@@ -242,6 +254,10 @@ void insert_new_node(struct List* self, int index, void* data, size_t size) {
 
   // find the item in the list immediately before the desired index
   struct Node* cursor = iterate_ll(self, index - 1);
+
+  if (cursor == NULL) {
+    return /* an error has already been displayed */;
+  }
 
   new_node->next = cursor->next;
   new_node->prev = cursor;
