@@ -19,6 +19,8 @@ bool search_node(struct List* self, void* value,
 
 // MARK: PRIVATE MEMBER METHODS PROTOTYPES
 struct Node* iterate_ll(struct List* self, int index);
+struct Node* iterate_forward_ll(struct Node* head, int index);
+struct Node* iterate_reverse_ll(struct Node* head, int index);
 void throw_error(const char* error, const int line, const char* func);
 
 // MARK: CONSTRUCTOR & DESTRUCTOR DEFINITIONS
@@ -54,17 +56,20 @@ struct List* new_list() {
 // The destructor removes all the nodes by freeing
 // the nodes instances and data.
 void destroy_list(struct List* list) {
-  // Erase nodes only if the list is not empty
-  if (list != NULL) {
-    erase_all_nodes(list);
-    free(list);
+  // erase nodes only if the list is not empty
+  if (list == NULL) {
+    throw_error("Error code: Dereferenced object!", __LINE__, __func__);
+    return;
   }
+
+  erase_all_nodes(list);
+  free(list);
 }
 
 // MARK: PUBLIC MEMBER METHODS DEFINITIONS
 
-// This function removes all elements from
-// the list leaving it with a size of 0.
+// This function removes all elements from the list leaving it
+// with a size of 0 and reinitializing the head and tail to NULL.
 void erase_all_nodes(struct List* self) {
   // start iterating from the head
   struct Node* cursor = self->head;
@@ -83,13 +88,37 @@ void erase_all_nodes(struct List* self) {
 // This function removes the last element in
 // the list, reducing the size by one.
 void erase_first_node(struct List* self) {
-  erase_node(self, 0);
+  struct Node* old_head = self->head;
+
+  // check if this is alos the last node
+  if (old_head->next == NULL) {
+    self->head = NULL;
+    self->tail = NULL;
+  } else {
+    self->head = old_head->next;
+    self->head->prev = NULL;
+  }
+
+  node_destructor(old_head);
+  --self->length;
 }
 
 // This function removes the first element in
 // the list, reducing the size by one.
 void erase_last_node(struct List* self) {
-  erase_node(self, self->length - 1);
+  struct Node* old_tail = self->tail;
+
+  // check if this is alos the last node
+  if (old_tail->prev == NULL) {
+    self->tail = NULL;
+    self->head = NULL;
+  } else {
+    self->tail = old_tail->prev;
+    self->tail->next = NULL;
+  }
+
+  node_destructor(old_tail);
+  --self->length;
 }
 
 // This function removes from the list a single element (position).
@@ -100,38 +129,33 @@ void erase_node(struct List* self, size_t index) {
     return;
   }
 
-  // get the "head" of the list
-  struct Node* current = self->head;
-
-  // check if the item being removed is the "head"
+  // check if the item being removed is the head
   if (index == 0) {
-    self->head = current->next;
-    node_destructor(current);
-  } else {
-    // find the node in the list before the one that is going to be removed
-    current = iterate_ll(self, index - 1);
-
-    // use the node returned to define the node to be removed
-    struct Node *node_to_remove = current->next;
-
-    // check if the item being removed is the "tail"
-    if (index == self->length - 1) {
-      self->tail = current;
-      current->next = NULL;
-    } else {
-      current->next = node_to_remove->next;
-      current->next->prev = current;
-    }
-
-    node_destructor(node_to_remove);
+    erase_first_node(self);
+    return;
   }
+
+  // check if the item being removed is the tail
+  if (index == self->length - 1) {
+    erase_last_node(self);
+    return;
+  }
+
+  // find the node in the list before the one that is going to be removed
+  struct Node* current = iterate_ll(self, index - 1);
+
+  // use the node returned to define the node to be removed
+  struct Node *node_to_remove = current->next;
+  current->next = node_to_remove->next;
+  current->next->prev = current;
+
+  node_destructor(node_to_remove);
 
   --self->length;
 }
 
-
 // This function removes from the list all
-// the nodes that compare equal to value
+// the nodes that compare equal to value.
 void erase_nodes_by_value(struct List* self, void* value,
     int (*compare)(const void* a, const void* b)) {
   // start from the head
@@ -140,11 +164,28 @@ void erase_nodes_by_value(struct List* self, void* value,
 
   // search the node by value
   while (cursor != NULL) {
-    // erase the node if the values match
     if (compare(cursor->data, value) == 0) {
-      struct Node* next_node = cursor->next;
-      cursor = next_node;
-      erase_node(self, index);
+      // erase the head
+      if (index == 0) {
+        cursor = cursor->next;
+        erase_first_node(self);
+        continue;
+      }
+
+      // erase the tail
+      if (index == self->length - 1) {
+        erase_last_node(self);
+        break;
+      }
+
+      // use the node cursor to define the node to be removed
+      struct Node *node_to_remove = cursor;
+      cursor->prev->next = cursor->next;
+      cursor->next->prev = cursor->prev;
+      cursor = cursor->next;
+
+      node_destructor(node_to_remove);
+      --self->length;
       continue;
     }
 
@@ -166,20 +207,11 @@ struct Node* get_last_node(struct List* self) {
 
 // This function allows data in the chain to be accessed.
 struct Node* get_node(struct List* self, int index) {
-  // find the desired node and return it
-  struct Node* node = iterate_ll(self, index);
-
-  if (node) {
-    return node;
-  }
-
-  // if no node found, return null
-  return NULL;
+  return iterate_ll(self, index);
 }
 
-
 // This function adds a new element at the end
-// of the list, incrementing the size.
+// of the list, incrementing the size by one.
 void insert_new_head(struct List* self, void* data, size_t size) {
   insert_new_node(self, 0, data, size);
 }
@@ -229,15 +261,15 @@ void insert_new_node(struct List* self, int index, void* data, size_t size) {
   ++self->length;
 }
 
-// This function adds a new element at the
-// front of the list, incrementing the size.
+// This function adds a new element at the front
+// of the list, incrementing the size by one.
 void insert_new_tail(struct List* self, void* data, size_t size) {
   insert_new_node(self, self->length, data, size);
 }
 
 // This function returns whether the list is empty or not.
 bool is_list_empty(struct List* self) {
-  return self->length == 0 && !self->head;
+  return self->length == 0 && self->head == NULL && self->tail == NULL;
 }
 
 // This function searchs for a specific node by data.
@@ -247,14 +279,11 @@ bool search_node(struct List* self, void* value,
   struct Node* node = self->head;
 
   // search the node by value
-  while (node != NULL) {
-    if (compare(node->data, value) == 0) {
-      return true;
-    }
+  while (node != NULL && compare(node->data, value) != 0) {
     node = node->next;
   }
 
-  return false;
+  return node != NULL;
 }
 
 // MARK: PRIVATE MEMBER METHODS DEFINITIONS
@@ -267,30 +296,40 @@ struct Node* iterate_ll(struct List* self, int index) {
     return NULL;
   }
 
-  // check if the index is over the half of the list
-  bool over_half = index <= self->length / 2;
-
-  // create a cursor node for iteration, if the index is smaller then the
-  // half of the list, then start from 0, otherwise start from the tail
-  struct Node* cursor = over_half ? self->head : self->tail;
-
-  if (over_half) {
-    // step through the list until the desired index is reached
-    for (int i = 0; i < index; ++i) {
-      cursor = cursor->next;
-    }
-    return cursor;
+  // check if the head and the tail exists
+  if (self->head == NULL || self->tail == NULL) {
+    throw_error("Error code: Non-existing node!", __LINE__, __func__);
+    return NULL;
   }
 
-  // step through the list until the desired index is reached
-  for (int i = self->length - 1; i > index; --i) {
-    cursor = cursor->prev;
-  }
+  // check if the index is over the half of the list length, if the index is
+  // smaller, then start from the head, otherwise start from the tail
+  struct Node* node = index <= self->length / 2 ?
+      iterate_forward_ll(self->head, index) :
+      iterate_reverse_ll(self->tail, (self->length - 1) - index);
 
+  return node;
+}
+
+// This function traverses the list from beginning to the position specified.
+struct Node* iterate_forward_ll(struct Node* head, int index) {
+  struct Node* cursor = head;
+  for (int i = 0; i < index; ++i) {
+    cursor = cursor->next;
+  }
   return cursor;
 }
 
-// throw an error and display it to the user
+// This function traverses the list from end to the position specified.
+struct Node* iterate_reverse_ll(struct Node* tail, int index) {
+  struct Node* cursor = tail;
+  for (int i = 0; i < index; ++i) {
+    cursor = cursor->prev;
+  }
+  return cursor;
+}
+
+// Throw an error and display it to the user.
 void throw_error(const char* error, const int line, const char* func) {
   printf("keepcoding/List ... \n");
   printf("Error at %s:%d in function %s. \n", __FILE__, line, func);
