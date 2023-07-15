@@ -11,13 +11,58 @@ void test_creation_and_destruction() {
   destroy_queue(queue);
 }
 
+// Test case for the peek() method.
+void test_peek() {
+  // create a new instance of a Queue
+  struct Queue* queue = new_queue();
+
+  // push ten new nodes (if the test reached here then the "push"
+  // function was successfully tested, so we can freely use it)
+  for (int i = 0; i < 10; ++i) {
+    queue->push(queue, &i, sizeof(i));
+  }
+
+  for (int i = 0; i < 10; ++i) {
+    // check if the nodes have been peeked correctly
+    assert(*(int *)queue->peek(queue) == i);
+
+    // destroy the first node (if the test reached here then the "pop"
+    // function was successfully tested, so we can freely use it)
+    queue->pop(queue);
+  }
+
+  destroy_queue(queue);
+}
+
+// Test case for the pop() method.
+void test_pop() {
+  // create a new instance of a Queue
+  struct Queue* queue = new_queue();
+
+  // push ten new nodes (if the test reached here then the "push"
+  // function was successfully tested, so we can freely use it)
+  for (int i = 0; i < 10; ++i) {
+    queue->push(queue, &i, sizeof(i));
+  }
+
+  for (int i = 1; i < 10; ++i) {
+    queue->pop(queue);
+
+    // check if the nodes have been removed correctly
+    assert(queue->list->length == 10 - i);
+  }
+
+  destroy_queue(queue);
+}
+
+// Test case for the push() method.
 void test_push() {
   // create a new instance of a Queue
   struct Queue* queue = new_queue();
 
   // push ten new nodes of type int
   for (int i = 0; i < 10; ++i) {
-    queue->push(queue, &i, sizeof(i));
+    queue->push(queue, &i, sizeof(int));
 
     // check the length of the list
     assert(queue->list->length == i + 1);
@@ -32,7 +77,7 @@ void test_push() {
     assert(queue->list->length == i + 1);
   }
 
-  for (int i = 0; i < 10; ++i) {
+  for (int i = 0; i < 20; ++i) {
     struct Node* cursor = queue->list->head;
     for (int j = 0; j < i; ++j) {
       cursor = cursor->next;
@@ -78,53 +123,11 @@ void test_push() {
   destroy_queue(queue);
 }
 
-void test_pop() {
-  // create a new instance of a Queue
-  struct Queue* queue = new_queue();
-
-  // push ten new nodes (if the test reached here then the "push"
-  // function was successfully tested, so we can freely use it)
-  for (int i = 0; i < 10; ++i) {
-    queue->push(queue, &i, sizeof(i));
-  }
-
-  for (int i = 1; i < 10; ++i) {
-    queue->pop(queue);
-
-    // check if the nodes have been removed correctly
-    assert(queue->list->length == 10 - i);
-  }
-
-  destroy_queue(queue);
-}
-
-void test_peek() {
-  // create a new instance of a Queue
-  struct Queue* queue = new_queue();
-
-  // push ten new nodes (if the test reached here then the "push"
-  // function was successfully tested, so we can freely use it)
-  for (int i = 0; i < 10; ++i) {
-    queue->push(queue, &i, sizeof(i));
-  }
-
-  for (int i = 0; i < 10; ++i) {
-    // check if the nodes have been peeked correctly
-    assert(*(int *)queue->peek(queue) == i);
-
-    // destroy the first node (if the test reached here then the "pop"
-    // function was successfully tested, so we can freely use it)
-    queue->pop(queue);
-  }
-
-  destroy_queue(queue);
-}
-
 int main() {
   test_creation_and_destruction();
-  test_push();
-  test_pop();
   test_peek();
+  test_pop();
+  test_push();
   printf("queue.t .................... OK\n");
   return 0;
 }

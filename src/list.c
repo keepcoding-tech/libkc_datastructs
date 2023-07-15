@@ -235,7 +235,7 @@ void insert_new_node(struct List* self, int index, void* data, size_t size) {
 
   // if the node is NULL, don't make the insertion
   if (new_node == NULL) {
-    return;
+    return /* an error has already been displayed */;
   }
 
   // check if this node will be the new head
