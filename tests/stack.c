@@ -20,14 +20,14 @@ void test_push() {
     stack->push(stack, &i, sizeof(i));
 
     // check the length of the list
-    assert(stack->vector->size == i + 1);
+    assert(stack->vector->length == i + 1);
   }
 
   for (int i = 0; i < 10; ++i) {
     // check if the nodes have been pushed correctly
     assert(*(int*)stack->vector->data[i] == i);
   }
-  
+
   destroy_stack(stack);
 }
 
@@ -45,9 +45,9 @@ void test_pop() {
     stack->pop(stack);
 
     // check if the items have been removed correctly
-    assert(stack->vector->size == 10 - i);
+    assert(stack->vector->length == 10 - i);
   }
-  
+
   destroy_stack(stack);
 }
 

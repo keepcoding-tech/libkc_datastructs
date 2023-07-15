@@ -18,9 +18,9 @@ bool search_node(struct List* self, void* value,
     int (*compare)(const void* a, const void* b));
 
 // MARK: PRIVATE MEMBER METHODS PROTOTYPES
-struct Node* iterate_ll(struct List* self, int index);
+struct Node* iterate_ll(struct List* list, int index);
 struct Node* iterate_forward_ll(struct Node* head, int index);
-struct Node* iterate_reverse_ll(struct Node* head, int index);
+struct Node* iterate_reverse_ll(struct Node* tail, int index);
 void throw_error(const char* error, const int line, const char* func);
 
 // MARK: CONSTRUCTOR & DESTRUCTOR DEFINITIONS
@@ -29,6 +29,12 @@ void throw_error(const char* error, const int line, const char* func);
 struct List* new_list() {
   // create a List instance to be returned
   struct List* new_list = malloc(sizeof(struct List));
+
+  // confirm that there is memory to allocate
+  if (new_list == NULL) {
+    throw_error("Error code: The memory could not be allocated!", __LINE__, __func__);
+    return NULL;
+  }
 
   // initialize the structure members fields
   new_list->head = NULL;

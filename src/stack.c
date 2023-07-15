@@ -36,5 +36,5 @@ void pop_s(struct Stack* self) {
 // This function adds an item to the end of the vector.
 void push_s(struct Stack* self, void* data, size_t size) {
   // utilize the push from Vector with enforced parameters
-  self->vector->push(self->vector, data, size);
+  self->vector->insert(self->vector, self->vector->length, data, size);
 }
