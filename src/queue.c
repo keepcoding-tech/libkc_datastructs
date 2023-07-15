@@ -1,9 +1,11 @@
 #include "../include/queue.h"
 
-// MARK: PUBLIC MEMBER METHODS
-void* peek(struct Queue* self);
-void pop_q(struct Queue* self);
-void push_q(struct Queue* self, void* data, size_t size);
+// MARK: PUBLIC MEMBER METHODS PROTOTYPES
+void* get_next_item_queue(struct Queue* self);
+void remove_next_item_queue(struct Queue* self);
+void insert_next_item_queue(struct Queue* self, void* data, size_t size);
+
+// MARK: CONSTRUCTOR & DESTRUCTOR DEFINITIONS
 
 // The constructor is used to create new instances of queue.
 struct Queue* new_queue() {
@@ -14,39 +16,47 @@ struct Queue* new_queue() {
   queue->list = new_list();
 
   // assigns the public member methods
-  queue->push = push_q;
-  queue->peek = peek;
-  queue->pop = pop_q;
+  queue->peek = get_next_item_queue;
+  queue->pop = remove_next_item_queue;
+  queue->push = insert_next_item_queue;
 
   return queue;
 }
 
 // The destructor removes all the nodes by calling the linked list destructor.
 void destroy_queue(struct Queue* queue) {
-  destroy_list(queue->list);
+  // erase nodes only if the queue is not empty
+  if (queue == NULL) {
+    //throw_error("Error code: Dereferenced object!", __LINE__, __func__);
+    return;
+  }
 
-  // free the queue too
+  destroy_list(queue->list);
   free(queue);
 }
 
+// MARK: PUBLIC MEMBER METHODS DEFINITIONS
+
 // This function returns the data from the first item in the chain.
-void* peek(struct Queue* self) {
+void* get_next_item_queue(struct Queue* self) {
+  struct Node* next_item = self->list->front(self->list);
+
   // check if the head of the list exists
-  if (self->list->head != NULL) {
-    return self->list->head->data;
+  if (next_item  != NULL) {
+    return next_item->data;
   }
 
+  // return null if non-existing
   return NULL;
 }
 
 // This function removes the first item in the chain.
-void pop_q(struct Queue *self) {
-  // utilize the remove from List with enforced parameters
-  self->list->erase(self->list, 0);
+void remove_next_item_queue(struct Queue *self) {
+  self->list->pop_front(self->list);
 }
 
 // This function adds an item to the end of the list.
-void push_q(struct Queue *self, void *data, size_t size) {
-  // utilize add from List with enforced parameters
-  self->list->insert(self->list, self->list->length, data, size);
+void insert_next_item_queue(struct Queue *self, void *data, size_t size) {
+  self->list->push_back(self->list, data, size);
 }
+
