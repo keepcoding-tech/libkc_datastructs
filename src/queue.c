@@ -1,9 +1,10 @@
 #include "../include/queue.h"
 
 // MARK: PUBLIC MEMBER METHODS PROTOTYPES
+size_t get_list_length_queue(struct Queue* self);
 void* get_next_item_queue(struct Queue* self);
-void remove_next_item_queue(struct Queue* self);
 void insert_next_item_queue(struct Queue* self, void* data, size_t size);
+void remove_next_item_queue(struct Queue* self);
 
 // MARK: CONSTRUCTOR & DESTRUCTOR DEFINITIONS
 
@@ -16,6 +17,7 @@ struct Queue* new_queue() {
   queue->list = new_list();
 
   // assigns the public member methods
+  queue->length = get_list_length_queue;
   queue->peek = get_next_item_queue;
   queue->pop = remove_next_item_queue;
   queue->push = insert_next_item_queue;
@@ -37,6 +39,11 @@ void destroy_queue(struct Queue* queue) {
 
 // MARK: PUBLIC MEMBER METHODS DEFINITIONS
 
+// This function returns the length of the list
+size_t get_list_length_queue(struct Queue* self) {
+  return self->list->length;
+}
+
 // This function returns the data from the first item in the chain.
 void* get_next_item_queue(struct Queue* self) {
   struct Node* next_item = self->list->front(self->list);
@@ -50,13 +57,13 @@ void* get_next_item_queue(struct Queue* self) {
   return NULL;
 }
 
-// This function removes the first item in the chain.
-void remove_next_item_queue(struct Queue *self) {
-  self->list->pop_front(self->list);
-}
-
 // This function adds an item to the end of the list.
 void insert_next_item_queue(struct Queue *self, void *data, size_t size) {
   self->list->push_back(self->list, data, size);
+}
+
+// This function removes the first item in the chain.
+void remove_next_item_queue(struct Queue *self) {
+  self->list->pop_front(self->list);
 }
 

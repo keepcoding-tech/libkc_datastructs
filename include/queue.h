@@ -25,6 +25,9 @@ struct Queue {
   // a reference to the embedded List
   struct List* list;
 
+  // returns the length of the list
+  size_t (*length)(struct Queue* self);
+
   // retrieves the data from the front of the list
   void* (*peek)(struct Queue* self);
 
