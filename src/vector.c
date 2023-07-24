@@ -1,7 +1,7 @@
 #include "../include/vector.h"
 
 // MARK: PUBLIC MEMBER METHODS PROTOTYPES
-// void erase_all_elems(struct Vector* self);
+void erase_all_elems(struct Vector* self);
 void erase_elem(struct Vector* self, int index);
 // void erase_first_elem(struct Vector* self);
 // void erase_last_elem(struct Vector* self);
@@ -58,7 +58,7 @@ struct Vector* new_vector() {
   // assigns the public member methods
   new_vector->at = get_elem;
   new_vector->back = get_last_elem;
-  // new_vector->clear = erase_all_elems;
+  new_vector->clear = erase_all_elems;
   // new_vector->empty = is_vector_empty;
   new_vector->erase = erase_elem;
   new_vector->front = get_first_elem;
@@ -95,6 +95,22 @@ void destroy_vector(struct Vector* vector) {
 
 // MARK: PUBLIC MEMBER METHODS DEFINITIONS
 
+// This function will remove all the elements in the vector.
+void erase_all_elems(struct Vector* self) {
+  // Free the memory for each element
+  for (int i = 0; i < self->length; ++i) {
+    free(self->data[i]);
+  }
+
+  // reallocate less memory
+  if (self->capacity > 16) {
+    resize_vector(self, 16);
+  }
+
+  // reset the length
+  self->length = 0;
+}
+
 // This functino will remove a specific item from the vector.
 void erase_elem(struct Vector* self, int index) {
   // confirm the user has specified a valid index
@@ -109,6 +125,11 @@ void erase_elem(struct Vector* self, int index) {
   permute_to_left(self, index, self->length);
   free(self->data[self->length]);
   --self->length;
+
+  // resize if the length of the vector is less than half
+  if (self->length < self->capacity / 2 && self->capacity > 16) {
+    resize_vector(self, self->capacity / 2);
+  }
 }
 
 // This function returns a void pointer to the element at position specified.

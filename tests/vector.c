@@ -44,6 +44,28 @@ void test_back() {
   destroy_vector(vector);
 }
 
+// Test case for the clear() method.
+void test_clear() {
+  // create a new instance of a List
+  struct Vector* vector = new_vector();
+
+  // push 20 new items
+  for (int i = 0; i < 20; ++i) {
+    vector->insert(vector, i, &i, sizeof(int));
+  }
+
+  assert(vector->length == 20);
+  assert(vector->capacity == 32);
+
+  // clear and check again
+  vector->clear(vector);
+
+  assert(vector->length == 0);
+  assert(vector->capacity == 16);
+
+  destroy_vector(vector);
+}
+
 // Test case for the erase() method.
 void test_erase() {
   // create a new instance of a List
@@ -66,6 +88,17 @@ void test_erase() {
       assert(*(int*)vector->data[j] == j + 1 + i);
     }
   }
+
+  // if the length is less than half of the capacity,
+  // should resize the max_size to half
+  assert(vector->max_size(vector) == 16);
+
+  // erase the last elements
+  for (int i = 0; i < 10; ++i) {
+    vector->erase(vector, 0);
+  }
+
+  assert(vector->max_size(vector) == 16);
 
   destroy_vector(vector);
 }
@@ -178,6 +211,7 @@ int main() {
   test_creation_and_destruction();
   test_at();
   test_back();
+  test_clear();
   test_erase();
   test_front();
   test_insert();
