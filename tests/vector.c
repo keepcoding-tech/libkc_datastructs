@@ -56,6 +56,16 @@ void test_insert() {
   // check the capacity of the vector
   assert(vector->capacity == 32);
 
+  int data = 100;
+  vector->insert(vector, 10, &data, sizeof(int));
+  vector->insert(vector, 11, &data, sizeof(int));
+  vector->insert(vector, 12, &data, sizeof(int));
+
+  // check the values of the vector
+  assert(*(int*)vector->data[10] == 100);
+  assert(*(int*)vector->data[11] == 100);
+  assert(*(int*)vector->data[12] == 100);
+
   destroy_vector(vector);
 }
 
