@@ -30,6 +30,20 @@ void test_at() {
   destroy_vector(vector);
 }
 
+// Test case for the back() method.
+void test_back() {
+  // create a new instance of a List
+  struct Vector* vector = new_vector();
+
+  // push 10 new items and check the last element
+  for (int i = 0; i < 10; ++i) {
+    vector->insert(vector, i, &i, sizeof(int));
+    assert(*(int*)vector->back(vector) == i);
+  }
+
+  destroy_vector(vector);
+}
+
 // Test case for the erase() method.
 void test_erase() {
   // create a new instance of a List
@@ -51,6 +65,20 @@ void test_erase() {
     for (int j = 10; j < vector->length; ++j) {
       assert(*(int*)vector->data[j] == j + 1 + i);
     }
+  }
+
+  destroy_vector(vector);
+}
+
+// Test case for the front() method.
+void test_front() {
+  // create a new instance of a List
+  struct Vector* vector = new_vector();
+
+  // push 10 new items and check the last element
+  for (int i = 0; i < 10; ++i) {
+    vector->insert(vector, 0, &i, sizeof(int));
+    assert(*(int*)vector->front(vector) == i);
   }
 
   destroy_vector(vector);
@@ -149,7 +177,9 @@ void test_all_data_types() {
 int main() {
   test_creation_and_destruction();
   test_at();
+  test_back();
   test_erase();
+  test_front();
   test_insert();
   test_max_size();
   test_all_data_types();
