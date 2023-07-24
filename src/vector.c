@@ -119,6 +119,14 @@ size_t get_vector_capacity(struct Vector* self) {
 
 // This function inserts a new item in the vector.
 void insert_new_elem(struct Vector* self, int index, void* data, size_t size) {
+  // confirm the user has specified a valid index
+  if (index < 0 || index > self->length) {
+    printf("keepcoding/Vector ... \n");
+    printf("Error at %s:%d in function %s. \n", __FILE__, __LINE__, __func__);
+    printf("Error code: Index out of bound!\n");
+    return;
+  }
+
   // reallocate more memory if the capacity is full
   if (self->length + 1 >= self->capacity) {
     resize_vector(self, self->capacity * 2);
@@ -137,7 +145,7 @@ void insert_new_elem(struct Vector* self, int index, void* data, size_t size) {
 
   // insert the value at the specified location
   memcpy(new_elem, data, size);
-  permute_to_right(self, index - 1, self->length - 1);
+  permute_to_right(self, index, self->length);
   self->data[index] = new_elem;
   ++self->length;
 }
@@ -155,8 +163,8 @@ void permute_to_left(struct Vector* vector, int start, int end) {
 // This function will permute all the elements (to the right) from the
 // starting point specified to the ending point specified.
 void permute_to_right(struct Vector* vector, int start, int end) {
-  for (int i = end; i > start; --i) {
-    vector->data[i] = vector->data[i + 1];
+  for (int i = end; i >= start; --i) {
+    vector->data[i] = vector->data[i - 1];
   }
 }
 
