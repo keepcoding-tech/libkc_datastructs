@@ -11,6 +11,25 @@ void test_creation_and_destruction() {
   destroy_vector(vector);
 }
 
+// Test case for the at() method.
+void test_at() {
+  // create a new instance of a List
+  struct Vector* vector = new_vector();
+
+  // push 10 new items
+  for (int i = 0; i < 10; ++i) {
+    vector->insert(vector, i, &i, sizeof(int));
+  }
+
+  // get and verify each element
+  for (int i = 0; i < 10; ++i) {
+    // check the values of the vector
+    assert(*(int*)vector->at(vector, i) == i);
+  }
+
+  destroy_vector(vector);
+}
+
 // Test case for the erase() method.
 void test_erase() {
   // create a new instance of a List
@@ -129,6 +148,7 @@ void test_all_data_types() {
 
 int main() {
   test_creation_and_destruction();
+  test_at();
   test_erase();
   test_insert();
   test_max_size();

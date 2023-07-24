@@ -7,7 +7,7 @@ void erase_elem(struct Vector* self, int index);
 // void erase_last_elem(struct Vector* self);
 // void erase_elems_by_value(struct Vector* self, void* value,
     // int (*compare)(const void* a, const void* b));
-// void* get_elem(struct Vector* self, int index);
+void* get_elem(struct Vector* self, int index);
 // void* get_first_elem(struct Vector* self);
 // void* get_last_elem(struct Vector* self);
 size_t get_vector_capacity(struct Vector* self);
@@ -56,7 +56,7 @@ struct Vector* new_vector() {
   }
 
   // assigns the public member methods
-  // new_vector->at = get_elem;
+  new_vector->at = get_elem;
   // new_vector->back = get_last_elem;
   // new_vector->clear = erase_all_elems;
   // new_vector->empty = is_vector_empty;
@@ -109,6 +109,18 @@ void erase_elem(struct Vector* self, int index) {
   permute_to_left(self, index, self->length);
   free(self->data[self->length]);
   --self->length;
+}
+
+void* get_elem(struct Vector* self, int index) {
+  // confirm the user has specified a valid index
+  if (index < 0 || index > self->length) {
+    printf("keepcoding/Vector ... \n");
+    printf("Error at %s:%d in function %s. \n", __FILE__, __LINE__, __func__);
+    printf("Error code: Index out of bound!\n");
+    return NULL;
+  }
+
+  return self->data[index];
 }
 
 // This functino returns the maximum capacity of
