@@ -8,8 +8,8 @@ void erase_elem(struct Vector* self, int index);
 // void erase_elems_by_value(struct Vector* self, void* value,
     // int (*compare)(const void* a, const void* b));
 void* get_elem(struct Vector* self, int index);
-// void* get_first_elem(struct Vector* self);
-// void* get_last_elem(struct Vector* self);
+void* get_first_elem(struct Vector* self);
+void* get_last_elem(struct Vector* self);
 size_t get_vector_capacity(struct Vector* self);
 // void insert_at_beginning(struct Vector* self);
 // void insert_at_end(struct Vector* self);
@@ -57,11 +57,11 @@ struct Vector* new_vector() {
 
   // assigns the public member methods
   new_vector->at = get_elem;
-  // new_vector->back = get_last_elem;
+  new_vector->back = get_last_elem;
   // new_vector->clear = erase_all_elems;
   // new_vector->empty = is_vector_empty;
   new_vector->erase = erase_elem;
-  // new_vector->front = get_first_elem;
+  new_vector->front = get_first_elem;
   new_vector->insert = insert_new_elem;
   new_vector->max_size = get_vector_capacity;
   // new_vector->pop_back = erase_last_elem;
@@ -111,6 +111,7 @@ void erase_elem(struct Vector* self, int index) {
   --self->length;
 }
 
+// This function returns a void pointer to the element at position specified.
 void* get_elem(struct Vector* self, int index) {
   // confirm the user has specified a valid index
   if (index < 0 || index > self->length) {
@@ -120,7 +121,25 @@ void* get_elem(struct Vector* self, int index) {
     return NULL;
   }
 
+  // make sure the list is not empty
+  if (self->length == 0) {
+    printf("keepcoding/Vector ... \n");
+    printf("Error at %s:%d in function %s. \n", __FILE__, __LINE__, __func__);
+    printf("Error code: Vector is empty!\n");
+    return NULL;
+  }
+
   return self->data[index];
+}
+
+// This function returns a void pointer to the first element.
+void* get_first_elem(struct Vector* self) {
+  return get_elem(self, 0);
+}
+
+// This function returns a void pointer to the last element.
+void* get_last_elem(struct Vector* self) {
+  return get_elem(self, self->length - 1);
 }
 
 // This functino returns the maximum capacity of
