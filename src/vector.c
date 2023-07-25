@@ -3,8 +3,8 @@
 // MARK: PUBLIC MEMBER METHODS PROTOTYPES
 void erase_all_elems(struct Vector* self);
 void erase_elem(struct Vector* self, int index);
-// void erase_first_elem(struct Vector* self);
-// void erase_last_elem(struct Vector* self);
+void erase_first_elem(struct Vector* self);
+void erase_last_elem(struct Vector* self);
 // void erase_elems_by_value(struct Vector* self, void* value,
     // int (*compare)(const void* a, const void* b));
 void* get_elem(struct Vector* self, int index);
@@ -64,8 +64,8 @@ struct Vector* new_vector() {
   new_vector->front = get_first_elem;
   new_vector->insert = insert_new_elem;
   new_vector->max_size = get_vector_capacity;
-  // new_vector->pop_back = erase_last_elem;
-  // new_vector->pop_front = erase_first_elem;
+  new_vector->pop_back = erase_last_elem;
+  new_vector->pop_front = erase_first_elem;
   // new_vector->push_back = insert_at_end;
   // new_vector->push_front = insert_at_beginning;
   // new_vector->remove = erase_elems_by_value;
@@ -113,6 +113,14 @@ void erase_all_elems(struct Vector* self) {
 
 // This functino will remove a specific item from the vector.
 void erase_elem(struct Vector* self, int index) {
+  // make sure the list is not empty
+  if (self->length == 0) {
+    printf("keepcoding/Vector ... \n");
+    printf("Error at %s:%d in function %s. \n", __FILE__, __LINE__, __func__);
+    printf("Error code: Vector is empty!\n");
+    return;
+  }
+
   // confirm the user has specified a valid index
   if (index < 0 || index >= self->length) {
     printf("keepcoding/Vector ... \n");
@@ -132,21 +140,29 @@ void erase_elem(struct Vector* self, int index) {
   }
 }
 
+void erase_first_elem(struct Vector* self) {
+  erase_elem(self, 0);
+}
+
+void erase_last_elem(struct Vector* self) {
+  erase_elem(self, self->length - 1);
+}
+
 // This function returns a void pointer to the element at position specified.
 void* get_elem(struct Vector* self, int index) {
-  // confirm the user has specified a valid index
-  if (index < 0 || index > self->length) {
-    printf("keepcoding/Vector ... \n");
-    printf("Error at %s:%d in function %s. \n", __FILE__, __LINE__, __func__);
-    printf("Error code: Index out of bound!\n");
-    return NULL;
-  }
-
   // make sure the list is not empty
   if (self->length == 0) {
     printf("keepcoding/Vector ... \n");
     printf("Error at %s:%d in function %s. \n", __FILE__, __LINE__, __func__);
     printf("Error code: Vector is empty!\n");
+    return NULL;
+  }
+
+  // confirm the user has specified a valid index
+  if (index < 0 || index > self->length) {
+    printf("keepcoding/Vector ... \n");
+    printf("Error at %s:%d in function %s. \n", __FILE__, __LINE__, __func__);
+    printf("Error code: Index out of bound!\n");
     return NULL;
   }
 
