@@ -283,6 +283,41 @@ void test_push_front() {
   destroy_vector(vector);
 }
 
+// Test case for the remove() method.
+int compare(const void* a, const void* b) {
+  return (*(int*)a - *(int*)b);
+}
+
+// Test case for the remove() method.
+void test_remove() {
+  // create a new instance of a List
+  struct Vector* vector = new_vector();
+
+  // add 5 new elements
+  int data = 10;
+  for (int i = 0; i < 5; ++i) {
+    vector->push_back(vector, &data, sizeof(int));
+  }
+
+  // add 5 more new elements
+  data = 20;
+  for (int i = 0; i < 5; ++i) {
+    vector->push_back(vector, &data, sizeof(int));
+  }
+
+  // should remove only 5 elements
+  vector->remove(vector, &data, compare);
+  assert(vector->length == 5);
+
+  data = 10;
+
+  // should remove all 5 elements
+  vector->remove(vector, &data, compare);
+  assert(vector->empty(vector));
+
+  destroy_vector(vector);
+}
+
 // Test case for all data types.
 void test_all_data_types() {
   struct Vector* vector = new_vector();
@@ -326,6 +361,7 @@ int main() {
   test_pop_front();
   test_push_back();
   test_push_front();
+  test_remove();
   test_all_data_types();
   printf("vector.t ................... OK\n");
   return 0;
