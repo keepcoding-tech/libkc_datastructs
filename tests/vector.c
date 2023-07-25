@@ -207,6 +207,50 @@ void test_max_size() {
   destroy_vector(vector);
 }
 
+// Test case for the pop_back() method.
+void test_pop_back() {
+  // create a new instance of a List
+  struct Vector* vector = new_vector();
+
+  // push 15 new items
+  for (int i = 0; i < 15; ++i) {
+    vector->insert(vector, i, &i, sizeof(int));
+  }
+
+  // erase the last elements
+  for (int i = 0; i < 15; ++i) {
+    // check the last element before poping
+    assert(vector->length == 15 - i);
+    assert(*(int*)vector->back(vector) == 14 - i);
+
+    vector->pop_back(vector);
+  }
+
+  destroy_vector(vector);
+}
+
+// Test case for the pop_front() method.
+void test_pop_front() {
+  // create a new instance of a List
+  struct Vector* vector = new_vector();
+
+  // push 15 new items
+  for (int i = 0; i < 15; ++i) {
+    vector->insert(vector, i, &i, sizeof(int));
+  }
+
+  // erase the first elements
+  for (int i = 0; i < 15; ++i) {
+    // check the first element before poping
+    assert(vector->length == 15 - i);
+    assert(*(int*)vector->front(vector) == i);
+
+    vector->pop_front(vector);
+  }
+
+  destroy_vector(vector);
+}
+
 // Test case for all data types.
 void test_all_data_types() {
   struct Vector* vector = new_vector();
@@ -246,6 +290,8 @@ int main() {
   test_front();
   test_insert();
   test_max_size();
+  test_pop_back();
+  test_pop_front();
   test_all_data_types();
   printf("vector.t ................... OK\n");
   return 0;
