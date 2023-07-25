@@ -140,8 +140,8 @@ void erase_elem(struct Vector* self, int index) {
   }
 }
 
-// This function removes from the list all the elements
-// that compare equal to a given value.
+// This function removes from the vector all the
+// elements that compare equal to a given value.
 void erase_elems_by_value(struct Vector* self, void* value,
     int (*compare)(const void* a, const void* b)) {
   // go through the array and check each element
