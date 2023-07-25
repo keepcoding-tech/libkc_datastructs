@@ -16,8 +16,8 @@ void insert_at_end(struct Vector* self, void* data, size_t size);
 bool is_vector_empty(struct Vector* self);
 void insert_new_elem(struct Vector* self, int index, void* data, size_t size);
 void resize_vector_capacity(struct Vector* self, size_t new_capacity);
-// bool search_elem(struct Vector* self, void* value,
-    // int (*compare)(const void* a, const void* b));
+bool search_elem(struct Vector* self, void* value,
+    int (*compare)(const void* a, const void* b));
 
 // MARK: PRIVATE MEMBER METHODS PROTOTYPES
 void permute_to_left(struct Vector* vector, int start, int end);
@@ -70,7 +70,7 @@ struct Vector* new_vector() {
   new_vector->push_front = insert_at_beginning;
   new_vector->remove = erase_elems_by_value;
   new_vector->resize = resize_vector_capacity;
-  // new_vector->search = search_elem;
+  new_vector->search = search_elem;
 
   return new_vector;
 }
@@ -257,6 +257,20 @@ void insert_new_elem(struct Vector* self, int index, void* data, size_t size) {
 // This function resizes the vector so that it contains "n" elements.
 void resize_vector_capacity(struct Vector* self, size_t new_capacity) {
   resize_vector(self, new_capacity);
+}
+
+// This function search a specified element by value.
+bool search_elem(struct Vector* self, void* value,
+    int (*compare)(const void* a, const void* b)) {
+
+  // go through the array and return true if found
+  for (int i = 0; i < self->length; ++i) {
+    if (compare(self->data[i], value) == 0) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 // MARK: PRIVATE MEMBER METHODS DEFINITIONS
