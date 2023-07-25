@@ -3,10 +3,10 @@
 // MARK: PUBLIC MEMBER METHODS PROTOTYPES
 void erase_all_elems(struct Vector* self);
 void erase_elem(struct Vector* self, int index);
+void erase_elems_by_value(struct Vector* self, void* value,
+    int (*compare)(const void* a, const void* b));
 void erase_first_elem(struct Vector* self);
 void erase_last_elem(struct Vector* self);
-// void erase_elems_by_value(struct Vector* self, void* value,
-    // int (*compare)(const void* a, const void* b));
 void* get_elem(struct Vector* self, int index);
 void* get_first_elem(struct Vector* self);
 void* get_last_elem(struct Vector* self);
@@ -68,7 +68,7 @@ struct Vector* new_vector() {
   new_vector->pop_front = erase_first_elem;
   new_vector->push_back = insert_at_end;
   new_vector->push_front = insert_at_beginning;
-  // new_vector->remove = erase_elems_by_value;
+  new_vector->remove = erase_elems_by_value;
   // new_vector->resize = resize_vector_capacity;
   // new_vector->search = search_elem;
 
@@ -137,6 +137,21 @@ void erase_elem(struct Vector* self, int index) {
   // resize if the length of the vector is less than half
   if (self->length < self->capacity / 2 && self->capacity > 16) {
     resize_vector(self, self->capacity / 2);
+  }
+}
+
+// This function removes from the list all the elements
+// that compare equal to a given value.
+void erase_elems_by_value(struct Vector* self, void* value,
+    int (*compare)(const void* a, const void* b)) {
+  // go through the array and check each element
+  int index = 0;
+  while (index < self->length) {
+    if (compare(self->data[index], value) == 0) {
+      erase_elem(self, index);
+      continue;
+    }
+    ++index;
   }
 }
 
