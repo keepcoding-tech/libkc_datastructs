@@ -11,8 +11,8 @@ void* get_elem(struct Vector* self, int index);
 void* get_first_elem(struct Vector* self);
 void* get_last_elem(struct Vector* self);
 size_t get_vector_capacity(struct Vector* self);
-// void insert_at_beginning(struct Vector* self);
-// void insert_at_end(struct Vector* self);
+void insert_at_beginning(struct Vector* self, void* data, size_t size);
+void insert_at_end(struct Vector* self, void* data, size_t size);
 bool is_vector_empty(struct Vector* self);
 void insert_new_elem(struct Vector* self, int index, void* data, size_t size);
 // void resize_vector_capacity(struct Vector* self, size_t new_capacity);
@@ -66,8 +66,8 @@ struct Vector* new_vector() {
   new_vector->max_size = get_vector_capacity;
   new_vector->pop_back = erase_last_elem;
   new_vector->pop_front = erase_first_elem;
-  // new_vector->push_back = insert_at_end;
-  // new_vector->push_front = insert_at_beginning;
+  new_vector->push_back = insert_at_end;
+  new_vector->push_front = insert_at_beginning;
   // new_vector->remove = erase_elems_by_value;
   // new_vector->resize = resize_vector_capacity;
   // new_vector->search = search_elem;
@@ -140,10 +140,14 @@ void erase_elem(struct Vector* self, int index) {
   }
 }
 
+// This function removes the first element in the
+// vector, reducing the size by one.
 void erase_first_elem(struct Vector* self) {
   erase_elem(self, 0);
 }
 
+// This function removes the last element in the
+// vector, reducing the size by one.
 void erase_last_elem(struct Vector* self) {
   erase_elem(self, self->length - 1);
 }
@@ -183,6 +187,18 @@ void* get_last_elem(struct Vector* self) {
 // the vector before reallocating more memory.
 size_t get_vector_capacity(struct Vector* self) {
   return self->capacity;
+}
+
+// This function adds a new element at the beginning
+// of the vector, incrementing the size.
+void insert_at_beginning(struct Vector* self, void* data, size_t size) {
+  insert_new_elem(self, 0, data, size);
+}
+
+// This function adds a new element at the end
+// of the vector, incrementing the size.
+void insert_at_end(struct Vector* self, void* data, size_t size) {
+  insert_new_elem(self, self->length, data, size);
 }
 
 // This functino returns whether the vector is empty or not.
