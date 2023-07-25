@@ -13,7 +13,7 @@ void* get_last_elem(struct Vector* self);
 size_t get_vector_capacity(struct Vector* self);
 // void insert_at_beginning(struct Vector* self);
 // void insert_at_end(struct Vector* self);
-// bool is_vector_empty(struct Vector* self);
+bool is_vector_empty(struct Vector* self);
 void insert_new_elem(struct Vector* self, int index, void* data, size_t size);
 // void resize_vector_capacity(struct Vector* self, size_t new_capacity);
 // bool search_elem(struct Vector* self, void* value,
@@ -59,7 +59,7 @@ struct Vector* new_vector() {
   new_vector->at = get_elem;
   new_vector->back = get_last_elem;
   new_vector->clear = erase_all_elems;
-  // new_vector->empty = is_vector_empty;
+  new_vector->empty = is_vector_empty;
   new_vector->erase = erase_elem;
   new_vector->front = get_first_elem;
   new_vector->insert = insert_new_elem;
@@ -167,6 +167,11 @@ void* get_last_elem(struct Vector* self) {
 // the vector before reallocating more memory.
 size_t get_vector_capacity(struct Vector* self) {
   return self->capacity;
+}
+
+// This functino returns whether the vector is empty or not.
+bool is_vector_empty(struct Vector* self) {
+  return self->length == 0;
 }
 
 // This function inserts a new item in the vector.
