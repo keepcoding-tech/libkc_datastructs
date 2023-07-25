@@ -1,6 +1,7 @@
 #include "../include/vector.h"
 
 #include <assert.h>
+#include <stdlib.h>
 #include <string.h>
 
 // Test the creation and destruction of a vector.
@@ -62,6 +63,34 @@ void test_clear() {
 
   assert(vector->length == 0);
   assert(vector->capacity == 16);
+
+  // reuse the freed memory
+  vector->data[4] = malloc(sizeof(int));
+  *(int*)vector->data[4] = 10;
+  assert(*(int*)vector->data[4] == 10);
+
+  destroy_vector(vector);
+}
+
+// Test case for the empty() method.
+void test_empty() {
+  // create a new instance of a List
+  struct Vector* vector = new_vector();
+
+  // the vector should be empty
+  assert(vector->empty(vector));
+
+  // push 20 new items
+  for (int i = 0; i < 20; ++i) {
+    vector->insert(vector, i, &i, sizeof(int));
+  }
+
+  // the vector should not be empty
+  assert(!vector->empty(vector));
+
+  // the vector should be empty again
+  vector->clear(vector);
+  assert(vector->empty(vector));
 
   destroy_vector(vector);
 }
@@ -212,6 +241,7 @@ int main() {
   test_at();
   test_back();
   test_clear();
+  test_empty();
   test_erase();
   test_front();
   test_insert();
