@@ -73,7 +73,7 @@ struct Vector {
   // adds a new element at the beginning of the vector, incrementing the size
   void (*push_front)(struct Vector* self, void* data, size_t size);
 
-  // removes from the list all the elements that compare equal to value
+  // removes from the vector all the elements that compare equal to value
   void (*remove)(struct Vector* self, void* value,
       int (*compare)(const void* a, const void* b));
 
