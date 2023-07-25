@@ -251,6 +251,38 @@ void test_pop_front() {
   destroy_vector(vector);
 }
 
+// Test case for the push_back() method.
+void test_push_back() {
+  // create a new instance of a List
+  struct Vector* vector = new_vector();
+
+  for (int i = 0; i < 10; ++i) {
+    vector->push_back(vector, &i, sizeof(int));
+
+    // check the length and the data inserted
+    assert(vector->length == i + 1);
+    assert(*(int*)vector->at(vector, vector->length - 1) == i);
+  }
+
+  destroy_vector(vector);
+}
+
+// Test case for the push_front() method.
+void test_push_front() {
+  // create a new instance of a List
+  struct Vector* vector = new_vector();
+
+  for (int i = 0; i < 10; ++i) {
+    vector->push_front(vector, &i, sizeof(int));
+
+    // check the length and the data inserted
+    assert(vector->length == i + 1);
+    assert(*(int*)vector->at(vector, 0) == i);
+  }
+
+  destroy_vector(vector);
+}
+
 // Test case for all data types.
 void test_all_data_types() {
   struct Vector* vector = new_vector();
@@ -292,6 +324,8 @@ int main() {
   test_max_size();
   test_pop_back();
   test_pop_front();
+  test_push_back();
+  test_push_front();
   test_all_data_types();
   printf("vector.t ................... OK\n");
   return 0;
