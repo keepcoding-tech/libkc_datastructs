@@ -15,7 +15,7 @@ void insert_at_beginning(struct Vector* self, void* data, size_t size);
 void insert_at_end(struct Vector* self, void* data, size_t size);
 bool is_vector_empty(struct Vector* self);
 void insert_new_elem(struct Vector* self, int index, void* data, size_t size);
-// void resize_vector_capacity(struct Vector* self, size_t new_capacity);
+void resize_vector_capacity(struct Vector* self, size_t new_capacity);
 // bool search_elem(struct Vector* self, void* value,
     // int (*compare)(const void* a, const void* b));
 
@@ -69,7 +69,7 @@ struct Vector* new_vector() {
   new_vector->push_back = insert_at_end;
   new_vector->push_front = insert_at_beginning;
   new_vector->remove = erase_elems_by_value;
-  // new_vector->resize = resize_vector_capacity;
+  new_vector->resize = resize_vector_capacity;
   // new_vector->search = search_elem;
 
   return new_vector;
@@ -254,6 +254,11 @@ void insert_new_elem(struct Vector* self, int index, void* data, size_t size) {
   ++self->length;
 }
 
+// This function resizes the vector so that it contains "n" elements.
+void resize_vector_capacity(struct Vector* self, size_t new_capacity) {
+  resize_vector(self, new_capacity);
+}
+
 // MARK: PRIVATE MEMBER METHODS DEFINITIONS
 
 // This function will permute all the elements (to the left) from the
@@ -274,6 +279,14 @@ void permute_to_right(struct Vector* vector, int start, int end) {
 
 // This functino will double the capacity of the vector.
 void resize_vector(struct Vector* vector, size_t new_capacity) {
+  // make sure the user specific a valid capacity size
+  if (new_capacity < 1) {
+    printf("keepcoding/Vector ... \n");
+    printf("Error at %s:%d in function %s. \n", __FILE__, __LINE__, __func__);
+    printf("Error code: Invalid capacity size!\n");
+    return;
+  }
+
   // temporarlly store the new data
   void** new_data = realloc(vector->data, new_capacity * sizeof(void*));
 

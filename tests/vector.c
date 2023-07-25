@@ -318,6 +318,25 @@ void test_remove() {
   destroy_vector(vector);
 }
 
+// Test case for the resize() method.
+void test_resize() {
+  // create a new instance of a List
+  struct Vector* vector = new_vector();
+
+  // check the default capacity size
+  assert(vector->max_size(vector) == 16);
+
+  // change the capacity and check it
+  vector->resize(vector, 64);
+  assert(vector->max_size(vector) == 64);
+  vector->resize(vector, 128);
+  assert(vector->max_size(vector) == 128);
+  vector->resize(vector, 16);
+  assert(vector->max_size(vector) == 16);
+
+  destroy_vector(vector);
+}
+
 // Test case for all data types.
 void test_all_data_types() {
   struct Vector* vector = new_vector();
@@ -362,6 +381,7 @@ int main() {
   test_push_back();
   test_push_front();
   test_remove();
+  test_resize();
   test_all_data_types();
   printf("vector.t ................... OK\n");
   return 0;
