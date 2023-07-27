@@ -30,13 +30,13 @@
 #include <stdio.h>
 
 struct Tree {
-  // head points to the top-most node in the tree
+  // root points to the top-most node in the tree
   struct Node* root;
 
   // the "compare" function is provided by the user and is responsible for
   // comparing the data of two nodes. This function must accept two void
-  // pointers as arguments and return either 1, -1, or 0.
-  int (*compare)(void* data_one, void* data_two);
+  // pointers as arguments and return either 1 (or greater), -1 (or less), or 0.
+  int (*compare)(const void* a, const void* b);
 
   // adds new items to the tree
   void (*insert)(struct Tree* self, void* data, size_t size);
@@ -46,16 +46,21 @@ struct Tree {
 };
 
 // the constructor should be used to create binary search trees
-struct Tree* new_tree(
-    int (*compare)(void* data_one, void* data_two));
+struct Tree* new_tree(int (*compare)(const void* a, const void* b));
 
 // the destructor should be used to destroy binary search trees
 void destroy_tree(struct Tree* tree);
 
-// compare two integers and return if the first one is bigger, smaller or equal
-int btree_compare_int(void* data_one, void* data_two);
-
-// compare two strings and return if the first one is greater, smaller or equal
-int btree_compare_str(void* data_one, void* data_two);
+// use this macro to define any type of primitive data comparison function
+#define COMPARE_TREE(type, function_name) \
+  int function_name(const void* a, const void* b) { \
+    if (*(type*)a < *(type*)b) {                    \
+      return -1;                                    \
+    }                                               \
+    if (*(type*)a > *(type*)b) {                    \
+      return 1;                                     \
+    }                                               \
+    return 0;                                       \
+  }
 
 #endif /* TREE_H */

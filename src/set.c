@@ -10,7 +10,7 @@ void recursive_dictionary_destroy(struct Node* node);
 
 // The constructor takes a "compare" function pointer as its only argument
 // and returns a defined Dictionary struct.
-struct Dictionary* new_dictionary(int (*compare)(void* key_one, void* key_two)) {
+struct Dictionary* new_dictionary(int (*compare)(const void* key_one, const void* key_two)) {
   // create a Dictionary instance to be returned
   struct Dictionary* dictionary = malloc(sizeof(struct Dictionary));
 
@@ -90,13 +90,13 @@ void recursive_dictionary_destroy(struct Node* node) {
 }
 
 // Compare two integers casting them into Entry.
-int dict_compare_int(void* entry_one, void* entry_two) {
+int dict_compare_int(const void* entry_one, const void* entry_two) {
   return (*(int*)(((struct Entry*)entry_one)->key) -
       *(int*)(((struct Entry*)entry_two)->key));
 }
 
 // Compare two string casting them into Entry.
-int dict_compare_str(void* entry_one, void* entry_two) {
+int dict_compare_str(const void* entry_one, const void* entry_two) {
   return strcmp((char*)(((struct Entry*)entry_one)->key),
       (char*)(((struct Entry*)entry_two)->key));
 }

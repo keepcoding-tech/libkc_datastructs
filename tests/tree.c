@@ -8,6 +8,9 @@
 #include <stddef.h>
 #include <string.h>
 
+COMPARE_TREE(int, btree_compare_int)
+COMPARE_TREE(char, btree_compare_str)
+
 // Test the creation and destruction of a binary tree
 void test_creation_and_destruction() {
   struct Tree* tree = new_tree(btree_compare_int);
@@ -20,12 +23,12 @@ void test_insert_and_search() {
   struct Tree* tree = new_tree(btree_compare_int);
 
   // insert 10 new nodes
-  for (int data = 0; data < 10; ++data) {
+  for (int data = 0; data < 30; ++data) {
     tree->insert(tree, &data, sizeof(int));
   }
 
   // search for the newlly created nodes
-  for (int data = 0; data < 10; ++data) {
+  for (int data = 0; data < 30; ++data) {
     struct Node* found_node = tree->search(tree, &data);
 
     // check the data inserted
@@ -34,7 +37,7 @@ void test_insert_and_search() {
   }
 
   // search again, but in reverse
-  for (int data = 9; data >= 0; --data) {
+  for (int data = 29; data >= 0; --data) {
     struct Node *found_node = tree->search(tree, &data);
 
     // check the data inserted
@@ -74,7 +77,7 @@ void test_string_comparison() {
 }
 
 // use this function for testing a custom compare function
-int compare(void* a, void* b) {
+int compare(const void* a, const void* b) {
   return (*(int*)(((struct Entry*)a)->key) -
       *(int*)(((struct Entry*)b)->key));
 }

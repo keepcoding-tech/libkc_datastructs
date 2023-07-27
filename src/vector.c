@@ -77,6 +77,7 @@ struct Vector* new_vector() {
 
 // The destructor removes all the items and the vector instance.
 void destroy_vector(struct Vector* vector) {
+  // destroy vector only if is not dereferenced
   if (vector == NULL) {
     printf("keepcoding/Vector ... \n");
     printf("Error at %s:%d in function %s. \n", __FILE__, __LINE__, __func__);
