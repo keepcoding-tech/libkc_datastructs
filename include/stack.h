@@ -9,8 +9,7 @@
 /*
  * A stack is a fundamental data structure that follows the Last-In-First-Out
  * (LIFO) principle. It functions as a container where elements can be inserted
- * and removed from the top only. A stack typically consists of a fixed-size
- * array or a linked list implementation. Operations such as push (insertion)
+ * and removed from the top only. Operations such as push (insertion)
  * and pop (removal) are used to manipulate the stack.
  *
  * Push adds an element to the top of the stack, while pop removes the element
@@ -31,11 +30,17 @@ struct Stack {
   // a reference to the embedded Vector
   struct Vector* vector;
 
+  // returns the length of the vector
+  size_t (*length)(struct Stack* self);
+
   // removes the last item in the vector
   void (*pop)(struct Stack* self);
 
   // adds an item to the end of the vector
   void (*push)(struct Stack* self, void* data, size_t size);
+
+  // returns the top element (last element in the vector)
+  void* (*top)(struct Stack* self);
 };
 
 // the constructor should be used to create Stack

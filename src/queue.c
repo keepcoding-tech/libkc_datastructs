@@ -27,9 +27,11 @@ struct Queue* new_queue() {
 
 // The destructor removes all the nodes by calling the linked list destructor.
 void destroy_queue(struct Queue* queue) {
-  // erase nodes only if the queue is not empty
+  // destroy queue only if is not dereferenced
   if (queue == NULL) {
-    //throw_error("Error code: Dereferenced object!", __LINE__, __func__);
+    printf("keepcoding/Queue ... \n");
+    printf("Error at %s:%d in function %s. \n", __FILE__, __LINE__, __func__);
+    printf("Error code: Dereferenced object!\n");
     return;
   }
 
@@ -39,7 +41,7 @@ void destroy_queue(struct Queue* queue) {
 
 // MARK: PUBLIC MEMBER METHODS DEFINITIONS
 
-// This function returns the length of the list
+// This function returns the length of the list.
 size_t get_list_length_queue(struct Queue* self) {
   return self->list->length;
 }
