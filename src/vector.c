@@ -16,8 +16,8 @@ void insert_at_end(struct Vector* self, void* data, size_t size);
 bool is_vector_empty(struct Vector* self);
 void insert_new_elem(struct Vector* self, int index, void* data, size_t size);
 void resize_vector_capacity(struct Vector* self, size_t new_capacity);
-// bool search_elem(struct Vector* self, void* value,
-    // int (*compare)(const void* a, const void* b));
+bool search_elem(struct Vector* self, void* value,
+    int (*compare)(const void* a, const void* b));
 
 // MARK: PRIVATE MEMBER METHODS PROTOTYPES
 void permute_to_left(struct Vector* vector, int start, int end);
@@ -70,12 +70,12 @@ struct Vector* new_vector() {
   new_vector->push_front = insert_at_beginning;
   new_vector->remove = erase_elems_by_value;
   new_vector->resize = resize_vector_capacity;
-  // new_vector->search = search_elem;
+  new_vector->search = search_elem;
 
   return new_vector;
 }
 
-// The destructor removes all the items.
+// The destructor removes all the items and the vector instance.
 void destroy_vector(struct Vector* vector) {
   if (vector == NULL) {
     printf("keepcoding/Vector ... \n");
@@ -84,7 +84,7 @@ void destroy_vector(struct Vector* vector) {
     return;
   }
 
-  // Free the memory for each element and the array itself
+  // free the memory for each element and the array itself
   for (int i = 0; i < vector->length; ++i) {
     free(vector->data[i]);
   }
@@ -97,12 +97,12 @@ void destroy_vector(struct Vector* vector) {
 
 // This function will remove all the elements in the vector.
 void erase_all_elems(struct Vector* self) {
-  // Free the memory for each element
+  // free the memory for each element
   for (int i = 0; i < self->length; ++i) {
     free(self->data[i]);
   }
 
-  // reallocate less memory
+  // reallocate the default capacity
   if (self->capacity > 16) {
     resize_vector(self, 16);
   }
@@ -111,7 +111,7 @@ void erase_all_elems(struct Vector* self) {
   self->length = 0;
 }
 
-// This functino will remove a specific item from the vector.
+// This function will remove a specific item from the vector.
 void erase_elem(struct Vector* self, int index) {
   // make sure the list is not empty
   if (self->length == 0) {
@@ -198,7 +198,7 @@ void* get_last_elem(struct Vector* self) {
   return get_elem(self, self->length - 1);
 }
 
-// This functino returns the maximum capacity of
+// This function returns the maximum capacity of
 // the vector before reallocating more memory.
 size_t get_vector_capacity(struct Vector* self) {
   return self->capacity;
@@ -221,7 +221,7 @@ bool is_vector_empty(struct Vector* self) {
   return self->length == 0;
 }
 
-// This function inserts a new item in the vector.
+// This function inserts a new item in the vector at a specified position.
 void insert_new_elem(struct Vector* self, int index, void* data, size_t size) {
   // confirm the user has specified a valid index
   if (index < 0 || index > self->length) {
@@ -259,6 +259,20 @@ void resize_vector_capacity(struct Vector* self, size_t new_capacity) {
   resize_vector(self, new_capacity);
 }
 
+// This function searches for a specified element by value.
+bool search_elem(struct Vector* self, void* value,
+    int (*compare)(const void* a, const void* b)) {
+
+  // go through the array and return true if found
+  for (int i = 0; i < self->length; ++i) {
+    if (compare(self->data[i], value) == 0) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
 // MARK: PRIVATE MEMBER METHODS DEFINITIONS
 
 // This function will permute all the elements (to the left) from the
@@ -277,7 +291,7 @@ void permute_to_right(struct Vector* vector, int start, int end) {
   }
 }
 
-// This functino will double the capacity of the vector.
+// This function will resize the capacity of the vector for a given size.
 void resize_vector(struct Vector* vector, size_t new_capacity) {
   // make sure the user specific a valid capacity size
   if (new_capacity < 1) {

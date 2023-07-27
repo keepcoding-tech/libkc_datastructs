@@ -337,6 +337,31 @@ void test_resize() {
   destroy_vector(vector);
 }
 
+// Test case for the search() method.
+void test_search() {
+  // create a new instance of a List
+  struct Vector* vector = new_vector();
+
+  // add 10 new elements
+  for (int i = 0; i < 10; ++i) {
+    vector->push_back(vector, &i, sizeof(int));
+  }
+
+  // should return true
+  int search_data = 3;
+  assert(vector->search(vector, &search_data, compare) == true);
+
+  // should return true
+  search_data = 8;
+  assert(vector->search(vector, &search_data, compare) == true);
+
+  // should return false
+  search_data = 12;
+  assert(vector->search(vector, &search_data, compare) == false);
+
+  destroy_vector(vector);
+}
+
 // Test case for all data types.
 void test_all_data_types() {
   struct Vector* vector = new_vector();
@@ -382,6 +407,7 @@ int main() {
   test_push_front();
   test_remove();
   test_resize();
+  test_search();
   test_all_data_types();
   printf("vector.t ................... OK\n");
   return 0;
