@@ -1,7 +1,7 @@
 // open source c library
 // ==================================
 //
-// dictionary.h
+// set.h
 //
 // Daniel Tanase
 // 22/06/2023
@@ -20,7 +20,7 @@
 #define DICTIONARY_H
 
 #include "list.h"
-#include "binary_tree.h"
+#include "tree.h"
 #include "entry.h"
 
 #include <stdlib.h>
@@ -28,8 +28,8 @@
 #include <stdio.h>
 
 struct Dictionary {
-  // inheriting the BinaryTree object
-  struct BinaryTree* binary_tree;
+  // inheriting the Tree object
+  struct Tree* tree;
 
   // a linked list to store the dictionary keys for easy iteration
   struct List* keys;

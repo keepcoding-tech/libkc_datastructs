@@ -1,4 +1,4 @@
-#include "../include/dictionary.h"
+#include "../include/set.h"
 
 // MARK: PUBLIC MEMBER METHODS
 void insert_dict(struct Dictionary* self, void* key,
@@ -15,7 +15,7 @@ struct Dictionary* new_dictionary(int (*compare)(void* key_one, void* key_two)) 
   struct Dictionary* dictionary = malloc(sizeof(struct Dictionary));
 
   // initialize the structure members fields
-  dictionary->binary_tree = new_binary_tree(compare);
+  dictionary->tree = new_tree(compare);
   dictionary->keys = new_list();
 
   // assigns the public member methods
@@ -31,8 +31,8 @@ void destroy_dictionary(struct Dictionary* dictionary) {
   destroy_list(dictionary->keys);
 
   // free the binary tree memory
-  if (dictionary->binary_tree->root != NULL) {
-    recursive_dictionary_destroy(dictionary->binary_tree->root);
+  if (dictionary->tree->root != NULL) {
+    recursive_dictionary_destroy(dictionary->tree->root);
   }
 
   // free the instance too
@@ -47,7 +47,7 @@ void insert_dict(struct Dictionary* self, void* key,
   struct Entry* entry = entry_constructor(key, key_size, value, value_size);
 
   // insert that entry into the tree
-  self->binary_tree->insert(self->binary_tree, entry, sizeof(struct Entry));
+  self->tree->insert(self->tree, entry, sizeof(struct Entry));
 }
 
 // This function finds the value for a given key in the Dictionary.
@@ -58,9 +58,9 @@ void* search_dict(struct Dictionary* self, void* key, size_t key_size) {
   struct Entry* searchable = entry_constructor(key, key_size,
       &dummy_value, sizeof(dummy_value));
 
-  // use the iterate function of the BinaryTree to find the desired node
+  // use the iterate function of the Tree to find the desired node
   struct Node* result_node =
-      self->binary_tree->search(self->binary_tree, searchable);
+      self->tree->search(self->tree, searchable);
 
   // get the entry from the node
   struct Entry* result_entry = (struct Entry*)result_node->data;

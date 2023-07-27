@@ -1,4 +1,4 @@
-#include "../include/binary_tree.h"
+#include "../include/tree.h"
 #include "../include/entry.h"
 
 #include <assert.h>
@@ -10,14 +10,14 @@
 
 // Test the creation and destruction of a binary tree
 void test_creation_and_destruction() {
-  struct BinaryTree* tree = new_binary_tree(btree_compare_int);
+  struct Tree* tree = new_tree(btree_compare_int);
   assert(tree->root == NULL);
-  destroy_binary_tree(tree);
+  destroy_tree(tree);
 }
 
 // Test inserting elements into the binary tree and searching for them
 void test_insert_and_search() {
-  struct BinaryTree* tree = new_binary_tree(btree_compare_int);
+  struct Tree* tree = new_tree(btree_compare_int);
 
   // insert 10 new nodes
   for (int data = 0; data < 10; ++data) {
@@ -42,12 +42,12 @@ void test_insert_and_search() {
     assert(*(int *)found_node->data == data);
   }
 
-  destroy_binary_tree(tree);
+  destroy_tree(tree);
 }
 
 // Test comparing strings in the binary tree
 void test_string_comparison() {
-  struct BinaryTree* tree = new_binary_tree(btree_compare_str);
+  struct Tree* tree = new_tree(btree_compare_str);
 
   char* data1 = "apple";
   char* data2 = "banana";
@@ -70,18 +70,18 @@ void test_string_comparison() {
   assert(found_node3 != NULL);
   assert(strcmp(found_node3->data, data3) == 0);
 
-  destroy_binary_tree(tree);
+  destroy_tree(tree);
 }
 
 // use this function for testing a custom compare function
 int compare(void* a, void* b) {
-  return (*(int*)(((struct Entry*)a)->key) - 
+  return (*(int*)(((struct Entry*)a)->key) -
       *(int*)(((struct Entry*)b)->key));
 }
 
 // Test comparing custom data in the binary tree
 void test_custom_comparison() {
-  struct BinaryTree* tree = new_binary_tree(compare);
+  struct Tree* tree = new_tree(compare);
 
   // create a new Entry
   int key = 10, val = 100;
@@ -98,7 +98,7 @@ void test_custom_comparison() {
   assert(*(int*)found_entry->key == key);
   assert(*(int*)found_entry->value == val);
 
-  destroy_binary_tree(tree);
+  destroy_tree(tree);
 }
 
 int main() {
@@ -106,6 +106,6 @@ int main() {
   test_insert_and_search();
   test_string_comparison();
   test_custom_comparison();
-  printf("binary_tree.t .............. OK\n");
+  printf("tree.t ..................... OK\n");
   return 0;
 }

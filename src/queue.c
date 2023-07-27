@@ -11,18 +11,18 @@ void remove_next_item_queue(struct Queue* self);
 // The constructor is used to create new instances of queue.
 struct Queue* new_queue() {
   // create a Queue instance to be returned
-  struct Queue* queue = malloc(sizeof(struct Queue));
+  struct Queue* new_queue = malloc(sizeof(struct Queue));
 
   // instantiate the queue's List via the constructor
-  queue->list = new_list();
+  new_queue->list = new_list();
 
   // assigns the public member methods
-  queue->length = get_list_length_queue;
-  queue->peek = get_next_item_queue;
-  queue->pop = remove_next_item_queue;
-  queue->push = insert_next_item_queue;
+  new_queue->length = get_list_length_queue;
+  new_queue->peek = get_next_item_queue;
+  new_queue->pop = remove_next_item_queue;
+  new_queue->push = insert_next_item_queue;
 
-  return queue;
+  return new_queue;
 }
 
 // The destructor removes all the nodes by calling the linked list destructor.

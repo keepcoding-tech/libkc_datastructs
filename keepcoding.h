@@ -14,13 +14,13 @@
 #ifndef KEEPCODING_H
 #define KEEPCODING_H
 
-#include "include/binary_tree.h"
-#include "include/dictionary.h"
 #include "include/entry.h"
 #include "include/list.h"
 #include "include/node.h"
 #include "include/queue.h"
+#include "include/set.h"
 #include "include/stack.h"
+#include "include/tree.h"
 #include "include/vector.h"
 
 #endif /* KEEPCODING_H */

@@ -13,14 +13,14 @@ struct Entry* entry_constructor(void* key, size_t key_size,
   }
 
   // create a Entry instance to be returned
-  struct Entry* entry = malloc(sizeof(struct Entry));
+  struct Entry* new_entry = malloc(sizeof(struct Entry));
 
   // allocate space on the heap for the key and value
-  entry->key = malloc(key_size);
-  entry->value = malloc(value_size);
+  new_entry->key = malloc(key_size);
+  new_entry->value = malloc(value_size);
 
   // confirm that there is memory to allocate
-  if (entry->key == NULL || entry->value == NULL) {
+  if (new_entry->key == NULL || new_entry->value == NULL) {
     printf("keepcoding/Entry ... \n");
     printf("Error at %s:%d in function %s. \n", __FILE__, __LINE__, __func__);
     printf("Error code: The memory could not be allocated!\n");
@@ -28,14 +28,22 @@ struct Entry* entry_constructor(void* key, size_t key_size,
   }
 
   // copy the data parameters into the new object
-  memcpy(entry->key, key, key_size);
-  memcpy(entry->value, value, value_size);
+  memcpy(new_entry->key, key, key_size);
+  memcpy(new_entry->value, value, value_size);
 
-  return entry;
+  return new_entry;
 }
 
 // The destructor must free the key and value of a given entry.
 void entry_destructor(struct Entry* entry) {
+  // destroy entry only if is not dereferenced
+  if (entry == NULL) {
+    printf("keepcoding/Stack ... \n");
+    printf("Error at %s:%d in function %s. \n", __FILE__, __LINE__, __func__);
+    printf("Error code: Dereferenced object!\n");
+    return;
+  }
+
   free(entry->key);
   free(entry->value);
   free(entry);
