@@ -4,16 +4,29 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+<<<<<<< HEAD
 // Test the creation and destruction of a set.
 void test_creation_and_destruction() {
   struct Set* set = new_set(dict_compare_int);
+=======
+COMPARE_SET(int, set_compare_int)
+COMPARE_SET(char, set_compare_str)
+
+// Test the creation and destruction of a set.
+void test_creation_and_destruction() {
+  struct Set* set = new_set(set_compare_int);
+>>>>>>> refactor: set naming conv
   destroy_set(set);
 }
 
 // Test the "insert_dict" and the "search_dict" functions.
 void test_insert_and_search() {
   // create a new instance of a Set
+<<<<<<< HEAD
   struct Set* set = new_set(dict_compare_int);
+=======
+  struct Set* set = new_set(set_compare_int);
+>>>>>>> refactor: set naming conv
 
   // insert ten new entries
   for (int i = 0; i < 10; ++i) {
@@ -45,7 +58,11 @@ void test_insert_and_search() {
 
 // Test comparing strings in the binary tree
 void test_string_comparison() {
+<<<<<<< HEAD
   struct Set* set = new_set(dict_compare_str);
+=======
+  struct Set* set = new_set(set_compare_str);
+>>>>>>> refactor: set naming conv
 
   char key1[] = "1";
   char val1[] = "apple";

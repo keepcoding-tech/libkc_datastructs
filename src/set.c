@@ -131,6 +131,7 @@ void recursive_set_destroy(struct Node* node) {
   entry_destructor(node->data);
 }
 
+<<<<<<< HEAD
 // Compare two integers casting them into Entry.
 int dict_compare_int(const void* entry_one, const void* entry_two) {
   return (*(int*)(((struct Entry*)entry_one)->key) -
@@ -142,3 +143,5 @@ int dict_compare_str(const void* entry_one, const void* entry_two) {
   return strcmp((char*)((struct Entry*)entry_one)->key,
       (char*)((struct Entry*)entry_two)->key);
 }
+=======
+>>>>>>> refactor: set naming conv
