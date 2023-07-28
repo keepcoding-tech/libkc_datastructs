@@ -45,15 +45,15 @@ struct Dictionary {
 };
 
 // the constructor should be used to create Dictionaries
-struct Dictionary* new_dictionary(int (*compare)(void* key_one, void* key_two));
+struct Dictionary* new_dictionary(int (*compare)(const void* key_one, const void* key_two));
 
 // the destructor should be used to destroy a Dictionaries
 void destroy_dictionary(struct Dictionary* dictionary);
 
 // compare two integers casting them into Entry
-int dict_compare_int(void* entry_one, void* entry_two);
+int dict_compare_int(const void* entry_one, const void* entry_two);
 
 // compare two string casting them into Entry
-int dict_compare_str(void* entry_one, void* entry_two);
+int dict_compare_str(const void* entry_one, const void* entry_two);
 
 #endif /* DICTIONARY_H */
