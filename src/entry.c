@@ -3,7 +3,6 @@
 // The constructor is used to create new instances of entry.
 struct Entry* entry_constructor(void* key, size_t key_size,
     void* value, size_t value_size) {
-
   // confirm the size of the data is at least one
   if (key_size < 1 || value_size < 1) {
     printf("keepcoding/Entry ... \n");
@@ -14,6 +13,14 @@ struct Entry* entry_constructor(void* key, size_t key_size,
 
   // create a Entry instance to be returned
   struct Entry* new_entry = malloc(sizeof(struct Entry));
+
+  // confirm that there is memory to allocate
+  if (new_entry == NULL) {
+    printf("keepcoding/Entry ... \n");
+    printf("Error at %s:%d in function %s. \n", __FILE__, __LINE__, __func__);
+    printf("Error code: The memory could not be allocated!\n");
+    return NULL;
+  }
 
   // allocate space on the heap for the key and value
   new_entry->key = malloc(key_size);
@@ -28,8 +35,8 @@ struct Entry* entry_constructor(void* key, size_t key_size,
   }
 
   // copy the data parameters into the new object
-  memcpy(new_entry->key, key, key_size);
-  memcpy(new_entry->value, value, value_size);
+  memcpy(new_entry->key, key, key_size + 1);
+  memcpy(new_entry->value, value, value_size + 1);
 
   return new_entry;
 }
