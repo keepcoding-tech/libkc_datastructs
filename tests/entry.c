@@ -18,7 +18,7 @@ void test_integer_to_character() {
   int key = 2;
   char* value = "example";
   struct Entry* entry = entry_constructor(&key, sizeof(int),
-      value, strlen(value));
+      value, strlen(value) * sizeof(char));
 
   // Access the key and value
   assert(*(int*)entry->key == key);
@@ -28,8 +28,8 @@ void test_integer_to_character() {
 void test_character_to_character() {
   char* key = "key";
   char* value = "example";
-  struct Entry* entry = entry_constructor(key, strlen(key),
-      value, strlen(value));
+  struct Entry* entry = entry_constructor(key, strlen(key) * sizeof(char),
+      value, strlen(value) * sizeof(char));
 
   // Access the key and value
   assert(strcmp((char*)entry->key, key) == 0);
@@ -39,7 +39,7 @@ void test_character_to_character() {
 void test_character_to_integer() {
   char* key = "key";
   int value = 400;
-  struct Entry* entry = entry_constructor(key, strlen(key),
+  struct Entry* entry = entry_constructor(key, strlen(key) * sizeof(char),
       &value, sizeof(int));
 
   // Access the key and value
@@ -79,7 +79,7 @@ void test_primitive_char_array() {
   size_t size_char = sizeof(letters) / sizeof(letters[0]);
 
   struct Entry* entry = entry_constructor(key, strlen(key),
-      &letters, sizeof(int) * size_char);
+      &letters, sizeof(char) * size_char);
 
   char *ptr_array = (char*)entry->value;
   for (size_t i = 0; i < size_char; i++) {
