@@ -4,16 +4,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+COMPARE_SET(int, set_compare_int)
+COMPARE_SET(char, set_compare_str)
+
 // Test the creation and destruction of a set.
 void test_creation_and_destruction() {
-  struct Set* set = new_set(dict_compare_int);
+  struct Set* set = new_set(set_compare_int);
   destroy_set(set);
 }
 
 // Test the "insert_dict" and the "search_dict" functions.
 void test_insert_and_search() {
   // create a new instance of a Set
-  struct Set* set = new_set(dict_compare_int);
+  struct Set* set = new_set(set_compare_int);
 
   // insert ten new entries
   for (int i = 0; i < 10; ++i) {
@@ -43,9 +46,34 @@ void test_insert_and_search() {
   destroy_set(set);
 }
 
+// Test case for remove() method
+void test_remove() {
+  struct Set* set = new_set(set_compare_int);
+
+  // insert 10 new entries
+  for (int i = 0; i < 10; ++i) {
+    set->insert(set, &i, sizeof(int), &i, sizeof(int));
+  }
+
+  // remove the entry and check it's existance
+  int entry_to_remove = 5;
+  set->remove(set, &entry_to_remove, sizeof(int));
+  assert(set->search(set, &entry_to_remove, sizeof(int)) == NULL);
+
+  entry_to_remove = 0;
+  set->remove(set, &entry_to_remove, sizeof(int));
+  assert(set->search(set, &entry_to_remove, sizeof(int)) == NULL);
+
+  entry_to_remove = 9;
+  set->remove(set, &entry_to_remove, sizeof(int));
+  assert(set->search(set, &entry_to_remove, sizeof(int)) == NULL);
+
+  destroy_set(set);
+}
+
 // Test comparing strings in the binary tree
 void test_string_comparison() {
-  struct Set* set = new_set(dict_compare_str);
+  struct Set* set = new_set(set_compare_str);
 
   char key1[] = "1";
   char val1[] = "apple";
@@ -76,6 +104,7 @@ void test_string_comparison() {
 int main() {
   test_creation_and_destruction();
   test_insert_and_search();
+  test_remove();
   test_string_comparison();
   printf("set.t ...................... OK\n");
   return 0;

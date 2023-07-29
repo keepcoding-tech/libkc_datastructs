@@ -39,7 +39,7 @@ struct Set {
       size_t key_size, void* value, size_t value_size);
 
   // removes a specified element based on the key
-  void (*remove)(struct Set* self, void* key);
+  void (*remove)(struct Set* self, void* key, size_t key_size);
 
   // scans the set for a specified key and returns its corresponding
   // value, if the key is not found, the function returns NULL
@@ -52,10 +52,16 @@ struct Set* new_set(int (*compare)(const void* a, const void* b));
 // the destructor should be used to destroy a Dictionaries
 void destroy_set(struct Set* set);
 
-// compare two integers casting them into Entry
-int dict_compare_int(const void* entry_one, const void* entry_two);
-
-// compare two string casting them into Entry
-int dict_compare_str(const void* entry_one, const void* entry_two);
+// use this macro to define any type of primitive data comparison function
+#define COMPARE_SET(type, function_name) \
+  int function_name(const void* a, const void* b) { \
+    if (*(type*)((struct Entry*)a)->key < *(type*)((struct Entry*)b)->key) { \
+      return -1;                                                             \
+    }                                                                        \
+    if (*(type*)((struct Entry*)a)->key > *(type*)((struct Entry*)b)->key) { \
+      return 1;                                                              \
+    }                                                                        \
+    return 0;                                                                \
+  }
 
 #endif /* set_H */

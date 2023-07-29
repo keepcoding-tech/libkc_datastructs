@@ -22,7 +22,7 @@ void test_creation_and_destruction() {
 void test_insert_and_search() {
   struct Tree* tree = new_tree(btree_compare_int);
 
-  // insert 10 new nodes
+  // insert 30 new nodes
   for (int data = 0; data < 30; ++data) {
     tree->insert(tree, &data, sizeof(int));
   }
@@ -44,6 +44,51 @@ void test_insert_and_search() {
     assert(found_node != NULL);
     assert(*(int *)found_node->data == data);
   }
+
+  destroy_tree(tree);
+}
+
+// Test case for remove() method
+void test_remove() {
+  struct Tree* tree = new_tree(btree_compare_int);
+  int data[] = {50, 30, 60, 20, 70, 15, 75, 25, 65};
+
+  // insert nodes for all test cases
+  for (int i = 0; i < 9; ++i) {
+    tree->insert(tree, &data[i], sizeof(int));
+  }
+
+  // test case 1: remove node with 2 children
+  int remove = 20;
+  tree->remove(tree, &remove, sizeof(int));
+  struct Node* found_node = tree->root->prev->prev;
+  assert(*(int*)found_node->data == 25);
+  assert(*(int*)found_node->prev->data == 15);
+  assert(found_node->next == NULL);
+
+  // test case 2: remove node with 1 child
+  remove = 60;
+  tree->remove(tree, &remove, sizeof(int));
+  found_node = tree->root->next;
+  assert(*(int*)found_node->data == 70);
+  assert(*(int*)found_node->prev->data == 65);
+  assert(*(int*)found_node->next->data == 75);
+
+  // test case 3: remove node with 0 children
+  remove = 75;
+  tree->remove(tree, &remove, sizeof(int));
+  found_node = tree->root->next;
+  assert(*(int*)found_node->data == 70);
+  assert(*(int*)found_node->prev->data == 65);
+  assert(found_node->next == NULL);
+
+  // test case 4: remove root node
+  remove = 50;
+  tree->remove(tree, &remove, sizeof(int));
+  found_node = tree->root;
+  assert(*(int*)found_node->data == 65);
+  assert(*(int*)found_node->prev->data == 30);
+  assert(*(int*)found_node->next->data == 70);
 
   destroy_tree(tree);
 }
@@ -88,7 +133,7 @@ void test_custom_comparison() {
 
   // create a new Entry
   int key = 10, val = 100;
-  struct Entry* entry = entry_constructor(&key, sizeof(key), &val, sizeof(val));
+  struct Entry* entry = entry_constructor(&key, sizeof(int), &val, sizeof(int));
 
   // insert the new entry
   tree->insert(tree, entry, sizeof(struct Entry));
@@ -101,12 +146,18 @@ void test_custom_comparison() {
   assert(*(int*)found_entry->key == key);
   assert(*(int*)found_entry->value == val);
 
+  // check the remove function
+  tree->remove(tree, entry, sizeof(struct Entry));
+  assert(tree->root == NULL);
+
+  entry_destructor(entry);
   destroy_tree(tree);
 }
 
 int main() {
   test_creation_and_destruction();
   test_insert_and_search();
+  test_remove();
   test_string_comparison();
   test_custom_comparison();
   printf("tree.t ..................... OK\n");

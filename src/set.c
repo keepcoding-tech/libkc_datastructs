@@ -3,7 +3,7 @@
 // MARK: PUBLIC MEMBER METHODS PROTOTYPES
 void insert_new_entry_set(struct Set* self, void* key,
     size_t key_size, void* value, size_t value_size);
-void remove_entry_set(struct Set* self, void* key);
+void remove_entry_set(struct Set* self, void* key, size_t key_size);
 void* search_entry_set(struct Set* self, void* key, size_t key_size);
 
 // MARK: PRIVATE MEMBER METHODS PROTOTYPES
@@ -81,8 +81,15 @@ void insert_new_entry_set(struct Set* self, void* key,
 }
 
 // This function removes a specified element based on the key.
-void remove_entry_set(struct Set* self, void* key) {
+void remove_entry_set(struct Set* self, void* key, size_t key_size) {
+  // create a new entry by using a dummy value
+  char dummy_value = 'a';
+  struct Entry* entry_to_remove = entry_constructor(key, key_size,
+      &dummy_value, sizeof(char));
 
+  // call the remove function of the Tree structure
+  self->entries->remove(self->entries, entry_to_remove, sizeof(struct Entry));
+  entry_destructor(entry_to_remove);
 }
 
 // This function finds the value for a given key in the Set.
@@ -131,14 +138,3 @@ void recursive_set_destroy(struct Node* node) {
   entry_destructor(node->data);
 }
 
-// Compare two integers casting them into Entry.
-int dict_compare_int(const void* entry_one, const void* entry_two) {
-  return (*(int*)(((struct Entry*)entry_one)->key) -
-      *(int*)(((struct Entry*)entry_two)->key));
-}
-
-// Compare two string casting them into Entry.
-int dict_compare_str(const void* entry_one, const void* entry_two) {
-  return strcmp((char*)((struct Entry*)entry_one)->key,
-      (char*)((struct Entry*)entry_two)->key);
-}

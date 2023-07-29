@@ -41,6 +41,9 @@ struct Tree {
   // adds new items to the tree
   void (*insert)(struct Tree* self, void* data, size_t size);
 
+  // removes a node by value
+  void (*remove)(struct Tree* self, void* data, size_t size);
+
   // finds a node in the tree, returning its data or NULL if not found
   struct Node* (*search)(struct Tree* self, void* data);
 };
