@@ -39,7 +39,7 @@ struct Set {
       size_t key_size, void* value, size_t value_size);
 
   // removes a specified element based on the key
-  void (*remove)(struct Set* self, void* key);
+  void (*remove)(struct Set* self, void* key, size_t key_size);
 
   // scans the set for a specified key and returns its corresponding
   // value, if the key is not found, the function returns NULL
