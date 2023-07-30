@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 // Test the creation and destruction of a queue.
 void test_creation_and_destruction() {

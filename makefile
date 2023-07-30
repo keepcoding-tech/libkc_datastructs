@@ -17,8 +17,9 @@ STD := -std=c99
 CFLAGS := -Wall -Werror -Wpedantic -g -Iinclude
 
 # Specify the source and the include directory
-HDR_DIR := include
-SRC_DIR := src
+HDR_DIR  := include
+SRC_DIR  := src
+DEPS_DIR := deps
 
 # Specify the source files and headers
 SOURCES := $(wildcard $(SRC_DIR)/*.c)
@@ -32,6 +33,10 @@ TEST_DIR := build/bin/test
 OBJ_DIRS := $(sort $(dir $(SOURCES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)))
 
 .PHONY: all test clean help
+
+# Static libraries and their directories
+STATIC_LIB_DIRS := $(wildcard $(DEPS_DIR)/*)
+STATIC_LIBS := $(foreach dir, $(STATIC_LIB_DIRS), $(wildcard $(dir)/*.a))
 
 #################################### BUILD #####################################
 
@@ -51,8 +56,8 @@ $(OBJ_DIRS):
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(HEADERS)
 	$(CC) $(STD) $(CFLAGS) -c $< -o $@
 
-libkclog.a: $(OBJECTS)
-	ar rcs libkclog.a $(OBJECTS)
+libkeepcoding.a: $(OBJECTS)
+	ar rcsT libkeepcoding.a $(OBJECTS) $(STATIC_LIBS)
 
 ################################### INSTALL ####################################
 
@@ -67,21 +72,12 @@ install:
 
 ##################################### TEST #####################################
 
-# Define the SANITIZE variable to enable/disable AddressSanitizer
-# Use `make SANITIZE=1` to enable AddressSanitizer, and `make` to disable it.
-SANITIZE := 0
-ifeq ($(SANITIZE), 1)
-CFLAGS += -fsanitize=address
-endif
-
-# Extract the test file names from the source file names
+# Generate the files and all the static libraries for testing
 TEST_FILES := $(basename $(notdir $(wildcard tests/*.c)))
-
-# Generate the test targets dynamically
 TEST_TARGETS := $(addprefix $(TEST_DIR)/, $(TEST_FILES))
-
-# Specify the list of all test executables
 ALL_TESTS := $(addprefix $(TEST_DIR)/, $(TEST_FILES))
+TEST_STATIC_LIBS := $(foreach dir, $(STATIC_LIB_DIRS), $(patsubst $(dir)/lib%.a,%,$(wildcard $(dir)/lib*.a)))
+LDFLAGS := $(addprefix -L, $(STATIC_LIB_DIRS)) $(addprefix -l, $(TEST_STATIC_LIBS))
 
 # Test command to run all test executables consecutively
 test: $(TEST_TARGETS) $(ALL_TESTS)
@@ -93,9 +89,16 @@ test: $(TEST_TARGETS) $(ALL_TESTS)
 $(TEST_DIR):
 	mkdir -p $(TEST_DIR)
 
+# Define the SANITIZE variable to enable/disable AddressSanitizer
+# Use `make SANITIZE=1` to enable AddressSanitizer, and `make` to disable it.
+SANITIZE := 0
+ifeq ($(SANITIZE), 1)
+CFLAGS += -fsanitize=address
+endif
+
 # Dynamically generate the test targets and compile the test files
 $(TEST_DIR)/%: tests/%.c $(OBJECTS) | $(TEST_DIR)
-	$(CC) $(STD) $(CFLAGS) $^ -o $@
+	$(CC) $(STD) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
 #################################### CLEAN #####################################
 

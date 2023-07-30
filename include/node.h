@@ -25,10 +25,9 @@
 #ifndef NODE_H
 #define NODE_H
 
-#include <stddef.h>
+#include "../deps/kclog/kclog.h"
+
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 struct Node {
   // the data is stored as a void pointer,
