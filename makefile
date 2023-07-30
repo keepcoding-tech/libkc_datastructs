@@ -36,17 +36,8 @@ OBJ_DIRS := $(sort $(dir $(SOURCES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)))
 # Create a list of object files by replacing the file extensions
 OBJECTS := $(SOURCES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
-# Extract the test file names from the source file names
-TEST_FILES := $(basename $(notdir $(wildcard tests/*.c)))
-
-# Generate the test targets dynamically
-TEST_TARGETS := $(addprefix $(TEST_DIR)/, $(TEST_FILES))
-
-# Specify the list of all test executables
-ALL_TESTS := $(addprefix $(TEST_DIR)/, $(TEST_FILES))
-
 # Set the default target
-all: $(TEST_TARGETS) libkeepcoding.a
+all: $(OBJECTS) libkclog.a
 
 # Create the build directory and compile the object files
 $(OBJECTS): | $(OBJ_DIRS)
@@ -58,6 +49,26 @@ $(OBJ_DIRS):
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(HEADERS)
 	$(CC) $(STD) $(CFLAGS) -c $< -o $@
 
+libkclog.a: $(OBJECTS)
+	ar rcs libkclog.a $(OBJECTS)
+
+##################################### TEST #####################################
+
+# Extract the test file names from the source file names
+TEST_FILES := $(basename $(notdir $(wildcard tests/*.c)))
+
+# Generate the test targets dynamically
+TEST_TARGETS := $(addprefix $(TEST_DIR)/, $(TEST_FILES))
+
+# Specify the list of all test executables
+ALL_TESTS := $(addprefix $(TEST_DIR)/, $(TEST_FILES))
+
+# Test command to run all test executables consecutively
+test: $(TEST_TARGETS) $(ALL_TESTS)
+	@for test_executable in $(ALL_TESTS); do \
+		$$test_executable; \
+	done
+
 # Create the test directory
 $(TEST_DIR):
 	mkdir -p $(TEST_DIR)
@@ -65,17 +76,6 @@ $(TEST_DIR):
 # Dynamically generate the test targets and compile the test files
 $(TEST_DIR)/%: tests/%.c $(OBJECTS) | $(TEST_DIR)
 	$(CC) $(STD) $(CFLAGS) $^ -o $@
-
-libkeepcoding.a: $(OBJECTS)
-	ar rcs libkeepcoding.a $(OBJECTS)
-
-##################################### TEST #####################################
-
-# Test command to run all test executables consecutively
-test: $(ALL_TESTS)
-	@for test_executable in $(ALL_TESTS); do \
-		$$test_executable; \
-	done
 
 #################################### CLEAN #####################################
 
