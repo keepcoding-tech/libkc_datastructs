@@ -1,0 +1,3 @@
+[submodule "deps/kclog"]
+	path = deps/kclog
+	url = https://github.com/Daniel-Tanase/kclog.git

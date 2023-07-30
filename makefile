@@ -31,13 +31,15 @@ TEST_DIR := build/bin/test
 
 OBJ_DIRS := $(sort $(dir $(SOURCES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)))
 
+.PHONY: all test clean help
+
 #################################### BUILD #####################################
 
 # Create a list of object files by replacing the file extensions
 OBJECTS := $(SOURCES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 # Set the default target
-all: $(OBJECTS) libkclog.a
+all: $(OBJECTS) install libkclog.a
 
 # Create the build directory and compile the object files
 $(OBJECTS): | $(OBJ_DIRS)
@@ -51,6 +53,17 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(HEADERS)
 
 libkclog.a: $(OBJECTS)
 	ar rcs libkclog.a $(OBJECTS)
+
+################################### INSTALL ####################################
+
+install:
+	@echo "Installing dependencies ..."
+	git submodule update --init --recursive
+	@echo "All dependencies have been installed!"
+	@echo "Building dependencies..."
+	@for submodule in $$(git submodule foreach --quiet 'echo $$path'); do \
+		$(MAKE) -C $$submodule; \
+	done
 
 ##################################### TEST #####################################
 
@@ -95,9 +108,8 @@ clean:
 help:
 	@echo "Available targets:"
 	@echo "  all         : Compile all test executables"
+	@echo "  install     : Install all submodules dependencies"
 	@echo "  test        : Run all test executables consecutively"
 	@echo "  clean       : Clean up the object files and build directory"
 	@echo "  help        : Display this help message"
-
-.PHONY: all test clean help
 
