@@ -3,11 +3,12 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 void test_integer_to_integer() {
   int key = 1, value = 100;
-  struct Entry* entry = entry_constructor(&key, sizeof(int),
-      &value, sizeof(int));
+  struct Entry* entry = entry_constructor(&key,
+      sizeof(int), &value, sizeof(int));
 
   // Access the key and value
   assert(*(int*)entry->key == key);
@@ -17,8 +18,8 @@ void test_integer_to_integer() {
 void test_integer_to_character() {
   int key = 2;
   char* value = "example";
-  struct Entry* entry = entry_constructor(&key, sizeof(int),
-      value, strlen(value) * sizeof(char));
+  struct Entry* entry = entry_constructor(&key,
+      sizeof(int), value, strlen(value) + 1);
 
   // Access the key and value
   assert(*(int*)entry->key == key);
@@ -26,10 +27,10 @@ void test_integer_to_character() {
 }
 
 void test_character_to_character() {
-  char* key = "key";
+  char* key = "some_key";
   char* value = "example";
-  struct Entry* entry = entry_constructor(key, strlen(key) * sizeof(char),
-      value, strlen(value) * sizeof(char));
+  struct Entry* entry = entry_constructor(key,
+      strlen(key) + 1, value, strlen(value) + 1);
 
   // Access the key and value
   assert(strcmp((char*)entry->key, key) == 0);
@@ -39,8 +40,8 @@ void test_character_to_character() {
 void test_character_to_integer() {
   char* key = "key";
   int value = 400;
-  struct Entry* entry = entry_constructor(key, strlen(key) * sizeof(char),
-      &value, sizeof(int));
+  struct Entry* entry = entry_constructor(key,
+      strlen(key) + 1, &value, sizeof(int));
 
   // Access the key and value
   assert(strcmp((char*)entry->key, key) == 0);

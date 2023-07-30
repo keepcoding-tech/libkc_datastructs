@@ -128,6 +128,7 @@ void test_erase() {
   }
 
   assert(vector->max_size(vector) == 16);
+  assert(vector->empty(vector));
 
   destroy_vector(vector);
 }

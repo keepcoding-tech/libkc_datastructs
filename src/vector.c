@@ -87,7 +87,9 @@ void destroy_vector(struct Vector* vector) {
 
   // free the memory for each element and the array itself
   for (int i = 0; i < vector->length; ++i) {
-    free(vector->data[i]);
+    if (vector->data[i] != NULL) {
+      free(vector->data[i]);
+    }
   }
 
   free(vector->data);
@@ -100,7 +102,9 @@ void destroy_vector(struct Vector* vector) {
 void erase_all_elems(struct Vector* self) {
   // free the memory for each element
   for (int i = 0; i < self->length; ++i) {
-    free(self->data[i]);
+    if (self->data[i] != NULL) {
+      free(self->data[i]);
+    }
   }
 
   // reallocate the default capacity
@@ -132,7 +136,6 @@ void erase_elem(struct Vector* self, int index) {
 
   // free the memory from the desired position
   permute_to_left(self, index, self->length);
-  free(self->data[self->length]);
   --self->length;
 
   // resize if the length of the vector is less than half
@@ -237,7 +240,7 @@ void insert_new_elem(struct Vector* self, int index, void* data, size_t size) {
     resize_vector(self, self->capacity * 2);
   }
 
-  // alocate space to memory
+  // alocate space in memory
   void* new_elem = malloc(size);
 
   // check if the memory allocation was succesfull
@@ -279,7 +282,7 @@ bool search_elem(struct Vector* self, void* value,
 // This function will permute all the elements (to the left) from the
 // starting point specified to the ending point specified.
 void permute_to_left(struct Vector* vector, int start, int end) {
-  for (int i = start; i < end; ++i) {
+  for (int i = start; i < end && i < vector->length; ++i) {
     vector->data[i] = vector->data[i + 1];
   }
 }
@@ -287,7 +290,7 @@ void permute_to_left(struct Vector* vector, int start, int end) {
 // This function will permute all the elements (to the right) from the
 // starting point specified to the ending point specified.
 void permute_to_right(struct Vector* vector, int start, int end) {
-  for (int i = end; i >= start; --i) {
+  for (int i = end; i >= start && i > 0; --i) {
     vector->data[i] = vector->data[i - 1];
   }
 }

@@ -77,22 +77,19 @@ void test_string_comparison() {
 
   char key1[] = "1";
   char val1[] = "apple";
-  set->insert(set, &key1, strlen(key1) * sizeof(char),
-      &val1, strlen(val1) * sizeof(char));
+  set->insert(set, &key1, strlen(key1) + 1, &val1, strlen(val1) + 1);
 
   char key2[] = "2";
   char val2[] = "banana";
-  set->insert(set, &key2, strlen(key2) * sizeof(char),
-      &val2, strlen(val2) * sizeof(char));
+  set->insert(set, &key2, strlen(key2) + 1, &val2, strlen(val2) + 1);
 
   char key3[] = "3";
   char val3[] = "cherry";
-  set->insert(set, &key3, strlen(key3) * sizeof(char),
-      &val3, strlen(val3) * sizeof(char));
+  set->insert(set, &key3, strlen(key3) + 1, &val3, strlen(val3) + 1);
 
-  char* found1 = (char*)set->search(set, &key1, strlen(key1) * sizeof(char));
-  char* found2 = (char*)set->search(set, &key2, strlen(key2) * sizeof(char));
-  char* found3 = (char*)set->search(set, &key3, strlen(key3) * sizeof(char));
+  char* found1 = (char*)set->search(set, &key1, strlen(key1) + 1);
+  char* found2 = (char*)set->search(set, &key2, strlen(key2) + 1);
+  char* found3 = (char*)set->search(set, &key3, strlen(key3) + 1);
 
   assert(strcmp(found1, val1) == 0);
   assert(strcmp(found2, val2) == 0);

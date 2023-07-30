@@ -19,6 +19,10 @@ struct Entry* entry_constructor(void* key, size_t key_size,
     printf("keepcoding/Entry ... \n");
     printf("Error at %s:%d in function %s. \n", __FILE__, __LINE__, __func__);
     printf("Error code: The memory could not be allocated!\n");
+
+    // free the instance
+    free(new_entry);
+
     return NULL;
   }
 
@@ -31,12 +35,18 @@ struct Entry* entry_constructor(void* key, size_t key_size,
     printf("keepcoding/Entry ... \n");
     printf("Error at %s:%d in function %s. \n", __FILE__, __LINE__, __func__);
     printf("Error code: The memory could not be allocated!\n");
+
+    // free the instance
+    free(new_entry->key);
+    free(new_entry->value);
+    free(new_entry);
+
     return NULL;
   }
 
   // copy the data parameters into the new object
-  memcpy(new_entry->key, key, key_size + 1);
-  memcpy(new_entry->value, value, value_size + 1);
+  memcpy(new_entry->key, key, key_size);
+  memcpy(new_entry->value, value, value_size);
 
   return new_entry;
 }

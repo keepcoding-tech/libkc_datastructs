@@ -7,7 +7,6 @@
 // Test the creation and destruction of a stack.
 void test_creation_and_destruction() {
   struct Stack* stack = new_stack();
-  assert(stack->vector->data[0] == NULL);
   assert(stack->length(stack) == 0);
   assert(stack->vector->capacity == 16);
   destroy_stack(stack);

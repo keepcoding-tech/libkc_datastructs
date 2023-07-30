@@ -56,7 +56,7 @@ void test_primitive_char() {
   char letters[] = {'H', 'e', 'l', 'l', 'o'};
   size_t size_char = sizeof(letters) / sizeof(letters[0]);
 
-  struct Node* node_array = node_constructor(letters, sizeof(int) * size_char);
+  struct Node* node_array = node_constructor(letters, sizeof(char) * size_char);
 
   char *ptr_array = (char *)node_array->data;
   for (size_t i = 0; i < size_char; i++) {

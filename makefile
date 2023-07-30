@@ -54,6 +54,13 @@ libkclog.a: $(OBJECTS)
 
 ##################################### TEST #####################################
 
+# Define the SANITIZE variable to enable/disable AddressSanitizer
+# Use `make SANITIZE=1` to enable AddressSanitizer, and `make` to disable it.
+SANITIZE := 0
+ifeq ($(SANITIZE), 1)
+CFLAGS += -fsanitize=address
+endif
+
 # Extract the test file names from the source file names
 TEST_FILES := $(basename $(notdir $(wildcard tests/*.c)))
 
@@ -93,3 +100,4 @@ help:
 	@echo "  help        : Display this help message"
 
 .PHONY: all test clean help
+
