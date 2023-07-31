@@ -1,10 +1,10 @@
-// open source c library
+// This file is part of keepcoding
 // ==================================
 //
 // node.h
 //
-// Daniel Tanase
-// 20/06/2023
+// Copyright (c) 2023 Daniel Tanase
+// SPDX-License-Identifier: MIT License
 
 /*
  * The Node struct serves as a fundamental component of list objects, acting as

@@ -5,6 +5,16 @@
 #include <stdlib.h>
 #include <string.h>
 
+// Test the creation and destruction of a node.
+void test_creation_and_destruction() {
+  int data = 10000;
+  struct Node* node = node_constructor(&data, sizeof(int));
+  assert(*(int*)node->data == data);
+  assert(node->next == NULL);
+  assert(node->prev == NULL);
+  node_destructor(node);
+}
+
 // Test the integer (int) data type.
 void test_primitive_int() {
   // initialize the node
@@ -67,7 +77,21 @@ void test_primitive_char() {
     assert(((char *)node_array->data)[i] == letters[i]);
   }
 
-  node_destructor(node_array);
+  // test the string (char*) data type
+  char* string = "Hello, World!";
+
+  struct Node* node_string = node_constructor(string, strlen(string) + 1);
+
+  char *ptr_string = (char*)node_string->data;
+  for (size_t i = 0; i < strlen(string); i++) {
+    // verify with a pointer
+    assert(ptr_string[i] == string[i]);
+
+    // verify by direct access memory
+    assert(((char*)node_string->data)[i] == string[i]);
+  }
+
+  node_destructor(node_string);
 }
 
 // Test the maximum limit of integer (unsigned long long) data type.
@@ -113,6 +137,7 @@ void test_customized_data_type() {
 }
 
 int main() {
+  test_creation_and_destruction();
   test_primitive_int();
   test_primitive_char();
   test_primitive_long();
