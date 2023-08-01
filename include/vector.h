@@ -1,10 +1,10 @@
-// open source c library
+// This file is part of keepcoding
 // ==================================
 //
 // vector.h
 //
-// Daniel Tanase
-// 23/06/2023
+// Copyright (c) 2023 Daniel Tanase
+// SPDX-License-Identifier: MIT License
 
 /*
  * A dynamic vector refers to a data structure that allows for the efficient
@@ -17,6 +17,14 @@
  * accommodating the addition or removal of elements. The dynamic nature of the
  * vector ensures efficient memory utilization and facilitates dynamic data
  * storage, retrieval, and modification.
+ *
+ * To create and destroy instances of the Vector struct, it is recommended
+ * to use the constructor and destructor functions.
+ *
+ * It's important to note that when using member functions, a reference to the
+ * Vector instance needs to be passed, similar to how "self" is passed to
+ * class member functions in Python. This allows for accessing and manipulating
+ * the Vector object's data and behavior.
  */
 
 #ifndef VECTOR_H
@@ -24,8 +32,6 @@
 
 #include <stdbool.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 struct Vector {
   // array of data stored as void pointers
