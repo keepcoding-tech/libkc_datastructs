@@ -66,7 +66,7 @@ void destroy_queue(struct Queue* queue) {
 // This function returns the length of the list.
 size_t get_list_length_queue(struct Queue* self) {
   // if the queue reference is NULL, do nothing
-  if (check_queue_reference(self) == false) return -1;
+  if (check_queue_reference(self) == false) return 1;
 
   return self->list->length;
 }

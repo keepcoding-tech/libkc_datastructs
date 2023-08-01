@@ -1,4 +1,16 @@
+// This file is part of keepcoding
+// ==================================
+//
+// vector.c
+//
+// Copyright (c) 2023 Daniel Tanase
+// SPDX-License-Identifier: MIT License
+
+#include "../deps/kclog/kclog.h"
 #include "../include/vector.h"
+
+#include <stdlib.h>
+#include <string.h>
 
 // MARK: PUBLIC MEMBER METHODS PROTOTYPES
 void erase_all_elems(struct Vector* self);
@@ -20,6 +32,7 @@ bool search_elem(struct Vector* self, void* value,
     int (*compare)(const void* a, const void* b));
 
 // MARK: PRIVATE MEMBER METHODS PROTOTYPES
+bool check_vector_reference(struct Vector* vector);
 void permute_to_left(struct Vector* vector, int start, int end);
 void permute_to_right(struct Vector* vector, int start, int end);
 void resize_vector(struct Vector* vector, size_t new_capacity);
@@ -28,15 +41,22 @@ void resize_vector(struct Vector* vector, size_t new_capacity);
 
 // The constructor is used to create new instances of vector.
 struct Vector* new_vector() {
+  // create a new instance of console_log for loggining
+  struct ConsoleLog* log = new_console_log();
+
   // create a Vector instance to be returned
   struct Vector* new_vector = malloc(sizeof(struct Vector));
 
   // confirm that there is memory to allocate
   if (new_vector == NULL) {
-    printf("keepcoding/Vector ... \n");
-    printf("Error at %s:%d in function %s. \n", __FILE__, __LINE__, __func__);
-    printf("Error code: The memory could not be allocated!\n");
-    return NULL;
+    log->log_error("OUT_OF_MEMORY", "Failing to allocate memory dynamically "
+        "(e.g. using malloc) due to insufficient memory in the heap.",
+        __FILE__, __LINE__, __func__);
+    destroy_console_log(log);
+
+    // free the instance and exit
+    free(new_vector);
+    exit(1);
   }
 
   // initialize the structure members fields
@@ -46,14 +66,19 @@ struct Vector* new_vector() {
 
   // confirm that there is memory to allocate
   if (new_vector->data == NULL) {
-    printf("keepcoding/Vector ... \n");
-    printf("Error at %s:%d in function %s. \n", __FILE__, __LINE__, __func__);
-    printf("Error code: The memory could not be allocated!\n");
+    log->log_error("OUT_OF_MEMORY", "Failing to allocate memory dynamically "
+        "(e.g. using malloc) due to insufficient memory in the heap.",
+        __FILE__, __LINE__, __func__);
+    destroy_console_log(log);
 
-    // the memory for the vector was allocated, so we need to free it
+    // free the instances and exit
+    free(new_vector->data);
     free(new_vector);
-    return NULL;
+    exit(1);
   }
+
+  // free the console_log
+  destroy_console_log(log);
 
   // assigns the public member methods
   new_vector->at = get_elem;
@@ -77,13 +102,8 @@ struct Vector* new_vector() {
 
 // The destructor removes all the items and the vector instance.
 void destroy_vector(struct Vector* vector) {
-  // destroy vector only if is not dereferenced
-  if (vector == NULL) {
-    printf("keepcoding/Vector ... \n");
-    printf("Error at %s:%d in function %s. \n", __FILE__, __LINE__, __func__);
-    printf("Error code: Dereferenced object!\n");
-    return;
-  }
+  // if the vector reference is NULL, do nothing
+  if (check_vector_reference(vector) == false) return;
 
   // free the memory for each element and the array itself
   for (int i = 0; i < vector->length; ++i) {
@@ -100,6 +120,9 @@ void destroy_vector(struct Vector* vector) {
 
 // This function will remove all the elements in the vector.
 void erase_all_elems(struct Vector* self) {
+  // if the vector reference is NULL, do nothing
+  if (check_vector_reference(self) == false) return;
+
   // free the memory for each element
   for (int i = 0; i < self->length; ++i) {
     if (self->data[i] != NULL) {
@@ -118,21 +141,31 @@ void erase_all_elems(struct Vector* self) {
 
 // This function will remove a specific item from the vector.
 void erase_elem(struct Vector* self, int index) {
+  // if the vector reference is NULL, do nothing
+  if (check_vector_reference(self) == false) return;
+
+  // create a new instance of console_log for loggining
+  struct ConsoleLog* log = new_console_log();
+
   // make sure the list is not empty
   if (self->length == 0) {
-    printf("keepcoding/Vector ... \n");
-    printf("Error at %s:%d in function %s. \n", __FILE__, __LINE__, __func__);
-    printf("Error code: Vector is empty!\n");
+    log->log_error("EMPTY_STRUCTURE", "You are attempting to perform "
+        "operations on an empty data structure" ,__FILE__, __LINE__, __func__);
+    destroy_console_log(log);
     return;
   }
 
   // confirm the user has specified a valid index
   if (index < 0 || index >= self->length) {
-    printf("keepcoding/Vector ... \n");
-    printf("Error at %s:%d in function %s. \n", __FILE__, __LINE__, __func__);
-    printf("Error code: Index out of bound!\n");
+    log->log_warning("INDEX_OUT_OF_BOUNDS", "You are trying to access an "
+        "element at an invalid index in an array, list, or other indexed "
+        "data structure.", __FILE__, __LINE__, __func__);
+    destroy_console_log(log);
     return;
   }
+
+  // destroy the console log
+  destroy_console_log(log);
 
   // free the memory from the desired position
   permute_to_left(self, index, self->length);
@@ -148,6 +181,9 @@ void erase_elem(struct Vector* self, int index) {
 // elements that compare equal to a given value.
 void erase_elems_by_value(struct Vector* self, void* value,
     int (*compare)(const void* a, const void* b)) {
+  // if the vector reference is NULL, do nothing
+  if (check_vector_reference(self) == false) return;
+
   // go through the array and check each element
   int index = 0;
   while (index < self->length) {
@@ -162,76 +198,117 @@ void erase_elems_by_value(struct Vector* self, void* value,
 // This function removes the first element in the
 // vector, reducing the size by one.
 void erase_first_elem(struct Vector* self) {
+  // if the vector reference is NULL, do nothing
+  if (check_vector_reference(self) == false) return;
+
   erase_elem(self, 0);
 }
 
 // This function removes the last element in the
 // vector, reducing the size by one.
 void erase_last_elem(struct Vector* self) {
+  // if the vector reference is NULL, do nothing
+  if (check_vector_reference(self) == false) return;
+
   erase_elem(self, self->length - 1);
 }
 
 // This function returns a void pointer to the element at position specified.
 void* get_elem(struct Vector* self, int index) {
+  // if the vector reference is NULL, do nothing
+  if (check_vector_reference(self) == false) return NULL;
+
+  // create a new instance of console_log for loggining
+  struct ConsoleLog* log = new_console_log();
+
   // make sure the list is not empty
   if (self->length == 0) {
-    printf("keepcoding/Vector ... \n");
-    printf("Error at %s:%d in function %s. \n", __FILE__, __LINE__, __func__);
-    printf("Error code: Vector is empty!\n");
+    log->log_error("EMPTY_STRUCTURE", "You are attempting to perform "
+        "operations on an empty data structure" ,__FILE__, __LINE__, __func__);
+    destroy_console_log(log);
     return NULL;
   }
 
   // confirm the user has specified a valid index
-  if (index < 0 || index > self->length) {
-    printf("keepcoding/Vector ... \n");
-    printf("Error at %s:%d in function %s. \n", __FILE__, __LINE__, __func__);
-    printf("Error code: Index out of bound!\n");
+  if (index < 0 || index >= self->length) {
+    log->log_warning("INDEX_OUT_OF_BOUNDS", "You are trying to access an "
+        "element at an invalid index in an array, list, or other indexed "
+        "data structure.", __FILE__, __LINE__, __func__);
+    destroy_console_log(log);
     return NULL;
   }
+
+  // destroy the console log
+  destroy_console_log(log);
 
   return self->data[index];
 }
 
 // This function returns a void pointer to the first element.
 void* get_first_elem(struct Vector* self) {
+  // if the vector reference is NULL, do nothing
+  if (check_vector_reference(self) == false) return NULL;
+
   return get_elem(self, 0);
 }
 
 // This function returns a void pointer to the last element.
 void* get_last_elem(struct Vector* self) {
+  // if the vector reference is NULL, do nothing
+  if (check_vector_reference(self) == false) return NULL;
+
   return get_elem(self, self->length - 1);
 }
 
 // This function returns the maximum capacity of
 // the vector before reallocating more memory.
 size_t get_vector_capacity(struct Vector* self) {
+  // if the vector reference is NULL, do nothing
+  if (check_vector_reference(self) == false) return 1;
+
   return self->capacity;
 }
 
 // This function adds a new element at the beginning
 // of the vector, incrementing the size.
 void insert_at_beginning(struct Vector* self, void* data, size_t size) {
+  // if the vector reference is NULL, do nothing
+  if (check_vector_reference(self) == false) return;
+
   insert_new_elem(self, 0, data, size);
 }
 
 // This function adds a new element at the end
 // of the vector, incrementing the size.
 void insert_at_end(struct Vector* self, void* data, size_t size) {
+  // if the vector reference is NULL, do nothing
+  if (check_vector_reference(self) == false) return;
+
   insert_new_elem(self, self->length, data, size);
 }
 
 // This functino returns whether the vector is empty or not.
 bool is_vector_empty(struct Vector* self) {
+  // if the vector reference is NULL, do nothing
+  if (check_vector_reference(self) == false) return false;
+
   return self->length == 0;
 }
 
 // This function inserts a new item in the vector at a specified position.
 void insert_new_elem(struct Vector* self, int index, void* data, size_t size) {
+  // if the vector reference is NULL, do nothing
+  if (check_vector_reference(self) == false) return;
+
+  // create a new instance of console_log for loggining
+  struct ConsoleLog* log = new_console_log();
+
   // confirm the user has specified a valid index
   if (index < 0 || index > self->length) {
-    printf("keepcoding/Vector ... \n");
-    printf("Error at %s:%d in function %s. \n", __FILE__, __LINE__, __func__);
-    printf("Error code: Index out of bound!\n");
+    log->log_warning("INDEX_OUT_OF_BOUNDS", "You are trying to access an "
+        "element at an invalid index in an array, list, or other indexed "
+        "data structure.", __FILE__, __LINE__, __func__);
+    destroy_console_log(log);
     return;
   }
 
@@ -245,11 +322,15 @@ void insert_new_elem(struct Vector* self, int index, void* data, size_t size) {
 
   // check if the memory allocation was succesfull
   if (new_elem == NULL) {
-    printf("keepcoding/Vector ... \n");
-    printf("Error at %s:%d in function %s. \n", __FILE__, __LINE__, __func__);
-    printf("Error code: The memory could not be allocated!\n");
+    log->log_error("OUT_OF_MEMORY", "Failing to allocate memory dynamically "
+        "(e.g. using malloc) due to insufficient memory in the heap.",
+        __FILE__, __LINE__, __func__);
+    destroy_console_log(log);
     return;
   }
+
+  // destroy the console log
+  destroy_console_log(log);
 
   // insert the value at the specified location
   memcpy(new_elem, data, size);
@@ -260,12 +341,17 @@ void insert_new_elem(struct Vector* self, int index, void* data, size_t size) {
 
 // This function resizes the vector so that it contains "n" elements.
 void resize_vector_capacity(struct Vector* self, size_t new_capacity) {
+  // if the vector reference is NULL, do nothing
+  if (check_vector_reference(self) == false) return;
+
   resize_vector(self, new_capacity);
 }
 
 // This function searches for a specified element by value.
 bool search_elem(struct Vector* self, void* value,
     int (*compare)(const void* a, const void* b)) {
+  // if the vector reference is NULL, do nothing
+  if (check_vector_reference(self) == false) return false;
 
   // go through the array and return true if found
   for (int i = 0; i < self->length; ++i) {
@@ -278,6 +364,26 @@ bool search_elem(struct Vector* self, void* value,
 }
 
 // MARK: PRIVATE MEMBER METHODS DEFINITIONS
+
+// This function will check if the vector instance is not dereferenced.
+bool check_vector_reference(struct Vector* vector) {
+  if (vector == NULL) {
+    // create a new instance of console_log for loggining
+    struct ConsoleLog* log = new_console_log();
+
+    // log the warning to the console
+    log->log_warning("NULL_REFERENCE", "You are attempting to use a reference "
+        "or pointer that points to null or is uninitialized.",
+        __FILE__, __LINE__, __func__);
+
+    // destroy the console log
+    destroy_console_log(log);
+
+    return false;
+  }
+
+  return true;
+}
 
 // This function will permute all the elements (to the left) from the
 // starting point specified to the ending point specified.
@@ -297,11 +403,14 @@ void permute_to_right(struct Vector* vector, int start, int end) {
 
 // This function will resize the capacity of the vector for a given size.
 void resize_vector(struct Vector* vector, size_t new_capacity) {
+  // create a new instance of console_log for loggining
+  struct ConsoleLog* log = new_console_log();
+
   // make sure the user specific a valid capacity size
   if (new_capacity < 1) {
-    printf("keepcoding/Vector ... \n");
-    printf("Error at %s:%d in function %s. \n", __FILE__, __LINE__, __func__);
-    printf("Error code: Invalid capacity size!\n");
+    log->log_warning("UNDERFLOW", "The data type's size goes below its "
+        "minimum representable value.", __FILE__, __LINE__, __func__);
+    destroy_console_log(log);
     return;
   }
 
@@ -310,11 +419,15 @@ void resize_vector(struct Vector* vector, size_t new_capacity) {
 
   // check if the memory reallocation was succesfull
   if (new_data == NULL) {
-    printf("keepcoding/Vector ... \n");
-    printf("Error at %s:%d in function %s. \n", __FILE__, __LINE__, __func__);
-    printf("Error code: The memory could not be allocated!\n");
+    log->log_error("OUT_OF_MEMORY", "Failing to allocate memory dynamically "
+        "(e.g. using malloc) due to insufficient memory in the heap.",
+        __FILE__, __LINE__, __func__);
+    destroy_console_log(log);
     return;
   }
+
+  // destroy the console log
+  destroy_console_log(log);
 
   vector->data = new_data;
   vector->capacity = new_capacity;
