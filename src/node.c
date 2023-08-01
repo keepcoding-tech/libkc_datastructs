@@ -38,15 +38,15 @@ struct Node* node_constructor(void* data, size_t size) {
     return NULL;
   }
 
+  // destroy the console log
+  destroy_console_log(log);
+
   // copy the block of memory
   memcpy(new_node->data, data, size);
 
   // initialize the pointers
   new_node->next = NULL;
   new_node->prev = NULL;
-
-  // destroy the console log
-  destroy_console_log(log);
 
   return new_node;
 }
@@ -56,8 +56,9 @@ void node_destructor(struct Node* node) {
   // destroy node only if is not dereferenced
   if (node == NULL) {
     struct ConsoleLog* log = new_console_log();
-    log->log_warning("UNDERFLOW", "The data type's size goes below its "
-        "minimum representable value.", __FILE__, __LINE__, __func__);
+    log->log_warning("NULL_REFERENCE", "You are attempting to use a reference "
+        "or pointer that points to null or is uninitialized.",
+        __FILE__, __LINE__, __func__);
     destroy_console_log(log);
     return;
   }

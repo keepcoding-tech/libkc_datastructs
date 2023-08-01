@@ -1,5 +1,5 @@
 #include "../include/tree.h"
-#include "../include/entry.h"
+#include "../include/pair.h"
 
 #include <assert.h>
 #include <stdio.h>
@@ -123,34 +123,34 @@ void test_string_comparison() {
 
 // use this function for testing a custom compare function
 int compare(const void* a, const void* b) {
-  return (*(int*)(((struct Entry*)a)->key) -
-      *(int*)(((struct Entry*)b)->key));
+  return (*(int*)(((struct Pair*)a)->key) -
+      *(int*)(((struct Pair*)b)->key));
 }
 
 // Test comparing custom data in the binary tree
 void test_custom_comparison() {
   struct Tree* tree = new_tree(compare);
 
-  // create a new Entry
+  // create a new Pair
   int key = 10, val = 100;
-  struct Entry* entry = entry_constructor(&key, sizeof(int), &val, sizeof(int));
+  struct Pair* pair = pair_constructor(&key, sizeof(int), &val, sizeof(int));
 
-  // insert the new entry
-  tree->insert(tree, entry, sizeof(struct Entry));
+  // insert the new pair
+  tree->insert(tree, pair, sizeof(struct Pair));
 
-  // check if the entry was inserted and found corectlly
-  struct Node* found_node = tree->search(tree, entry);
-  struct Entry* found_entry = (struct Entry*)found_node->data;
+  // check if the pair was inserted and found corectlly
+  struct Node* found_node = tree->search(tree, pair);
+  struct Pair* found_pair = (struct Pair*)found_node->data;
 
-  assert(found_entry != NULL);
-  assert(*(int*)found_entry->key == key);
-  assert(*(int*)found_entry->value == val);
+  assert(found_pair != NULL);
+  assert(*(int*)found_pair->key == key);
+  assert(*(int*)found_pair->value == val);
 
   // check the remove function
-  tree->remove(tree, entry, sizeof(struct Entry));
+  tree->remove(tree, pair, sizeof(struct Pair));
   assert(tree->root == NULL);
 
-  entry_destructor(entry);
+  pair_destructor(pair);
   destroy_tree(tree);
 }
 
