@@ -1,10 +1,10 @@
-// open source c library
+// This file is part of keepcoding
 // ==================================
 //
-// keepcoding.h
+// pair.h
 //
-// Daniel Tanase
-// 12/2/22
+// Copyright (c) 2023 Daniel Tanase
+// SPDX-License-Identifier: MIT License
 
 /*
  * You can utilize this header file to import the complete keepcoding library
@@ -14,9 +14,9 @@
 #ifndef KEEPCODING_H
 #define KEEPCODING_H
 
-#include "include/entry.h"
 #include "include/list.h"
 #include "include/node.h"
+#include "include/pair.h"
 #include "include/queue.h"
 #include "include/set.h"
 #include "include/stack.h"

@@ -55,18 +55,18 @@ void test_remove() {
     set->insert(set, &i, sizeof(int), &i, sizeof(int));
   }
 
-  // remove the entry and check it's existance
-  int entry_to_remove = 5;
-  set->remove(set, &entry_to_remove, sizeof(int));
-  assert(set->search(set, &entry_to_remove, sizeof(int)) == NULL);
+  // remove the pair and check it's existance
+  int pair_to_remove = 5;
+  set->remove(set, &pair_to_remove, sizeof(int));
+  assert(set->search(set, &pair_to_remove, sizeof(int)) == NULL);
 
-  entry_to_remove = 0;
-  set->remove(set, &entry_to_remove, sizeof(int));
-  assert(set->search(set, &entry_to_remove, sizeof(int)) == NULL);
+  pair_to_remove = 0;
+  set->remove(set, &pair_to_remove, sizeof(int));
+  assert(set->search(set, &pair_to_remove, sizeof(int)) == NULL);
 
-  entry_to_remove = 9;
-  set->remove(set, &entry_to_remove, sizeof(int));
-  assert(set->search(set, &entry_to_remove, sizeof(int)) == NULL);
+  pair_to_remove = 9;
+  set->remove(set, &pair_to_remove, sizeof(int));
+  assert(set->search(set, &pair_to_remove, sizeof(int)) == NULL);
 
   destroy_set(set);
 }

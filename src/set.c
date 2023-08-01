@@ -1,10 +1,10 @@
 #include "../include/set.h"
 
 // MARK: PUBLIC MEMBER METHODS PROTOTYPES
-void insert_new_entry_set(struct Set* self, void* key,
+void insert_new_pair_set(struct Set* self, void* key,
     size_t key_size, void* value, size_t value_size);
-void remove_entry_set(struct Set* self, void* key, size_t key_size);
-void* search_entry_set(struct Set* self, void* key, size_t key_size);
+void remove_pair_set(struct Set* self, void* key, size_t key_size);
+void* search_pair_set(struct Set* self, void* key, size_t key_size);
 
 // MARK: PRIVATE MEMBER METHODS PROTOTYPES
 void recursive_set_destroy(struct Node* node);
@@ -36,9 +36,9 @@ struct Set* new_set(int (*compare)(const void* a, const void* b)) {
   }
 
   // assigns the public member methods
-  new_set->insert = insert_new_entry_set;
-  new_set->remove = remove_entry_set;
-  new_set->search = search_entry_set;
+  new_set->insert = insert_new_pair_set;
+  new_set->remove = remove_pair_set;
+  new_set->search = search_pair_set;
 
   return new_set;
 }
@@ -66,54 +66,54 @@ void destroy_set(struct Set* set) {
 
 // This function adds items to the set - the user does not
 // need to implement elements themselves.
-void insert_new_entry_set(struct Set* self, void* key,
+void insert_new_pair_set(struct Set* self, void* key,
     size_t key_size, void* value, size_t value_size) {
-  // check if the entry already exists in the set
-  if (search_entry_set(self, key, key_size) != NULL) {
+  // check if the pair already exists in the set
+  if (search_pair_set(self, key, key_size) != NULL) {
     return;
   }
 
-  // create a new Entry
-  struct Entry* entry = entry_constructor(key, key_size, value, value_size);
+  // create a new Pair
+  struct Pair* pair = pair_constructor(key, key_size, value, value_size);
 
-  // insert that entry into the tree
-  self->entries->insert(self->entries, entry, sizeof(struct Entry));
+  // insert that pair into the tree
+  self->entries->insert(self->entries, pair, sizeof(struct Pair));
 }
 
 // This function removes a specified element based on the key.
-void remove_entry_set(struct Set* self, void* key, size_t key_size) {
-  // create a new entry by using a dummy value
+void remove_pair_set(struct Set* self, void* key, size_t key_size) {
+  // create a new pair by using a dummy value
   char dummy_value = 'a';
-  struct Entry* entry_to_remove = entry_constructor(key, key_size,
+  struct Pair* pair_to_remove = pair_constructor(key, key_size,
       &dummy_value, sizeof(char));
 
   // call the remove function of the Tree structure
-  self->entries->remove(self->entries, entry_to_remove, sizeof(struct Entry));
-  entry_destructor(entry_to_remove);
+  self->entries->remove(self->entries, pair_to_remove, sizeof(struct Pair));
+  pair_destructor(pair_to_remove);
 }
 
 // This function finds the value for a given key in the Set.
-void* search_entry_set(struct Set* self, void* key, size_t key_size) {
-  // create a new entry by using a dummy value
+void* search_pair_set(struct Set* self, void* key, size_t key_size) {
+  // create a new pair by using a dummy value
   char dummy_value = 'a';
-  struct Entry* searchable = entry_constructor(key, key_size,
+  struct Pair* searchable = pair_constructor(key, key_size,
       &dummy_value, sizeof(char));
 
   // use the search function of the Tree to find the desired node
   struct Node* result_node =
       self->entries->search(self->entries, searchable);
 
-  // free the dummy entry
-  entry_destructor(searchable);
+  // free the dummy pair
+  pair_destructor(searchable);
 
   // make sure the node was found
   if (result_node != NULL) {
-    // get the entry from the node
-    struct Entry* result_entry = (struct Entry*)result_node->data;
+    // get the pair from the node
+    struct Pair* result_pair = (struct Pair*)result_node->data;
 
     // return either the value for that key or NULL if not found
-    if (result_entry != NULL) {
-      return result_entry->value;
+    if (result_pair != NULL) {
+      return result_pair->value;
     }
   }
 
@@ -134,7 +134,7 @@ void recursive_set_destroy(struct Node* node) {
     recursive_set_destroy(node->next);
   }
 
-  // destroy the entry
-  entry_destructor(node->data);
+  // destroy the pair
+  pair_destructor(node->data);
 }
 

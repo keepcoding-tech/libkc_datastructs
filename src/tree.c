@@ -1,5 +1,5 @@
 #include "../include/tree.h"
-#include "../include/entry.h"
+#include "../include/pair.h"
 
 // MARK: PUBLIC MEMBER METHODS PROTOTYPES
 void insert_new_node_btree(struct Tree* self, void* data, size_t size);

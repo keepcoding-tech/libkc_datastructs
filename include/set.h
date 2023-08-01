@@ -23,7 +23,7 @@
 
 #include "list.h"
 #include "tree.h"
-#include "entry.h"
+#include "pair.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -55,10 +55,10 @@ void destroy_set(struct Set* set);
 // use this macro to define any type of primitive data comparison function
 #define COMPARE_SET(type, function_name) \
   int function_name(const void* a, const void* b) { \
-    if (*(type*)((struct Entry*)a)->key < *(type*)((struct Entry*)b)->key) { \
+    if (*(type*)((struct Pair*)a)->key < *(type*)((struct Pair*)b)->key) { \
       return -1;                                                             \
     }                                                                        \
-    if (*(type*)((struct Entry*)a)->key > *(type*)((struct Entry*)b)->key) { \
+    if (*(type*)((struct Pair*)a)->key > *(type*)((struct Pair*)b)->key) { \
       return 1;                                                              \
     }                                                                        \
     return 0;                                                                \
