@@ -1,4 +1,15 @@
+// This file is part of keepcoding
+// ==================================
+//
+// list.h
+//
+// Copyright (c) 2023 Daniel Tanase
+// SPDX-License-Identifier: MIT License
+
+#include "../deps/kclog/kclog.h"
 #include "../include/list.h"
+
+#include <stdlib.h>
 
 // MARK: PUBLIC MEMBER METHODS PROTOTYPES
 void erase_all_nodes(struct List* self);
@@ -18,10 +29,10 @@ bool search_node(struct List* self, void* value,
     int (*compare)(const void* a, const void* b));
 
 // MARK: PRIVATE MEMBER METHODS PROTOTYPES
+bool check_list_reference(struct List* list);
 struct Node* iterate_ll(struct List* list, int index);
 struct Node* iterate_forward_ll(struct Node* head, int index);
 struct Node* iterate_reverse_ll(struct Node* tail, int index);
-void throw_error(const char* error, const int line, const char* func);
 
 // MARK: CONSTRUCTOR & DESTRUCTOR DEFINITIONS
 
@@ -32,8 +43,15 @@ struct List* new_list() {
 
   // confirm that there is memory to allocate
   if (new_list == NULL) {
-    throw_error("Error code: The memory could not be allocated!", __LINE__, __func__);
-    return NULL;
+    struct ConsoleLog* log = new_console_log();
+    log->log_error("OUT_OF_MEMORY", "Failing to allocate memory dynamically "
+        "(e.g. using malloc) due to insufficient memory in the heap.",
+        __FILE__, __LINE__, __func__);
+    destroy_console_log(log);
+
+    // free the instance and exit
+    free(new_list);
+    exit(1);
   }
 
   // initialize the structure members fields
@@ -60,13 +78,10 @@ struct List* new_list() {
 }
 
 // The destructor removes all the nodes by freeing
-// the nodes instances and data.
+// the nodes instances and the stored data.
 void destroy_list(struct List* list) {
-  // erase nodes only if the list is not empty
-  if (list == NULL) {
-    throw_error("Error code: Dereferenced object!", __LINE__, __func__);
-    return;
-  }
+  // if the list reference is NULL, do nothing
+  if (check_list_reference(list) == false) return;
 
   erase_all_nodes(list);
   free(list);
@@ -77,6 +92,9 @@ void destroy_list(struct List* list) {
 // This function removes all elements from the list leaving it
 // with a size of 0 and reinitializing the head and tail to NULL.
 void erase_all_nodes(struct List* self) {
+  // if the list reference is NULL, do nothing
+  if (check_list_reference(self) == false) return;
+
   // start iterating from the head
   struct Node* cursor = self->head;
   while (cursor != NULL) {
@@ -94,11 +112,8 @@ void erase_all_nodes(struct List* self) {
 // This function removes the last element in
 // the list, reducing the size by one.
 void erase_first_node(struct List* self) {
-  // check if the head and the tail exists
-  if (self->head == NULL) {
-    throw_error("Error code: Non-existing node!", __LINE__, __func__);
-    return ;
-  }
+  // if the list reference is NULL, do nothing
+  if (check_list_reference(self) == false || self->head == NULL) return;
 
   struct Node* old_head = self->head;
 
@@ -118,11 +133,8 @@ void erase_first_node(struct List* self) {
 // This function removes the first element in
 // the list, reducing the size by one.
 void erase_last_node(struct List* self) {
-  // check if the head and the tail exists
-  if (self->tail == NULL) {
-    throw_error("Error code: Non-existing node!", __LINE__, __func__);
-    return ;
-  }
+  // if the list reference is NULL, do nothing
+  if (check_list_reference(self) == false || self->tail == NULL) return;
 
   struct Node* old_tail = self->tail;
 
@@ -141,9 +153,16 @@ void erase_last_node(struct List* self) {
 
 // This function removes from the list a single element (position).
 void erase_node(struct List* self, size_t index) {
+  // if the list reference is NULL, do nothing
+  if (check_list_reference(self) == false) return;
+
   // confirm the user has specified a valid index
   if (index < 0 || index >= self->length) {
-    throw_error("Error code: Index out of bound!", __LINE__, __func__);
+    struct ConsoleLog* log = new_console_log();
+    log->log_warning("INDEX_OUT_OF_BOUNDS", "You are trying to access an "
+        "element at an invalid index in an array, list, or other indexed "
+        "data structure.", __FILE__, __LINE__, __func__);
+    destroy_console_log(log);
     return;
   }
 
@@ -176,6 +195,9 @@ void erase_node(struct List* self, size_t index) {
 // the nodes that compare equal to value.
 void erase_nodes_by_value(struct List* self, void* value,
     int (*compare)(const void* a, const void* b)) {
+  // if the list reference is NULL, do nothing
+  if (check_list_reference(self) == false) return;
+
   // start from the head
   struct Node* cursor = self->head;
   size_t index = 0;
@@ -215,27 +237,62 @@ void erase_nodes_by_value(struct List* self, void* value,
 
 // This function returns a reference to the first element in the list.
 struct Node* get_first_node(struct List* self) {
+  // if the list reference is NULL, do nothing
+  if (check_list_reference(self) == false || self->head == NULL) return NULL;
+
   return self->head;
 }
 
 // This function returns a reference to the last element in the list.
 struct Node* get_last_node(struct List* self) {
+  // if the list reference is NULL, do nothing
+  if (check_list_reference(self) == false || self->tail == NULL) return NULL;
+
   return self->tail;
 }
 
 // This function allows data in the chain to be accessed.
 struct Node* get_node(struct List* self, int index) {
+  // if the list reference is NULL, do nothing
+  if (check_list_reference(self) == false) return NULL;
+
+  // confirm the user has specified a valid index
+  if (index < 0 || index >= self->length) {
+    struct ConsoleLog* log = new_console_log();
+    log->log_warning("INDEX_OUT_OF_BOUNDS", "You are trying to access an "
+        "element at an invalid index in an array, list, or other indexed "
+        "data structure.", __FILE__, __LINE__, __func__);
+    destroy_console_log(log);
+    return NULL;
+  }
+
   return iterate_ll(self, index);
 }
 
 // This function adds a new element at the end
 // of the list, incrementing the size by one.
 void insert_new_head(struct List* self, void* data, size_t size) {
+  // if the list reference is NULL, do nothing
+  if (check_list_reference(self) == false) return;
+
   insert_new_node(self, 0, data, size);
 }
 
 // This function adds new items to the chain at a specified location.
 void insert_new_node(struct List* self, int index, void* data, size_t size) {
+  // if the list reference is NULL, do nothing
+  if (check_list_reference(self) == false) return;
+
+  // confirm the user has specified a valid index
+  if (index < 0 || index > self->length) {
+    struct ConsoleLog* log = new_console_log();
+    log->log_warning("INDEX_OUT_OF_BOUNDS", "You are trying to access an "
+        "element at an invalid index in an array, list, or other indexed "
+        "data structure.", __FILE__, __LINE__, __func__);
+    destroy_console_log(log);
+    return;
+  }
+
   // create a new node to be inserted
   struct Node* new_node = node_constructor(data, size);
 
@@ -286,17 +343,26 @@ void insert_new_node(struct List* self, int index, void* data, size_t size) {
 // This function adds a new element at the front
 // of the list, incrementing the size by one.
 void insert_new_tail(struct List* self, void* data, size_t size) {
+  // if the list reference is NULL, do nothing
+  if (check_list_reference(self) == false) return;
+
   insert_new_node(self, self->length, data, size);
 }
 
 // This function returns whether the list is empty or not.
 bool is_list_empty(struct List* self) {
+  // if the list reference is NULL, do nothing
+  if (check_list_reference(self) == false) return NULL;
+
   return self->length == 0 && self->head == NULL && self->tail == NULL;
 }
 
 // This function searchs for a specific node by data.
 bool search_node(struct List* self, void* value,
     int (*compare)(const void* a, const void* b)) {
+  // if the list reference is NULL, do nothing
+  if (check_list_reference(self) == false) return NULL;
+
   // create a new node instance
   struct Node* node = self->head;
 
@@ -310,17 +376,41 @@ bool search_node(struct List* self, void* value,
 
 // MARK: PRIVATE MEMBER METHODS DEFINITIONS
 
+// This function will check if the list instance is not dereferenced.
+bool check_list_reference(struct List* list) {
+  if (list == NULL) {
+    // create a new instance of console_log for loggining
+    struct ConsoleLog* log = new_console_log();
+
+    // log the warning to the console
+    log->log_warning("NULL_REFERENCE", "You are attempting to use a reference "
+        "or pointer that points to null or is uninitialized.",
+        __FILE__, __LINE__, __func__);
+
+    // destroy the console log
+    destroy_console_log(log);
+
+    return false;
+  }
+
+  return true;
+}
+
 // This function traverses the list from beginning to end.
 struct Node* iterate_ll(struct List* self, int index) {
-  // confirm the user has specified a valid index
-  if (index < 0 || index >= self->length) {
-    throw_error("Error code: Index out of bound!", __LINE__, __func__);
+  // if the list reference is NULL, do nothing
+  if (check_list_reference(self) == false ||
+      self->head == NULL || self->tail == NULL) {
     return NULL;
   }
 
-  // check if the head and the tail exists
-  if (self->head == NULL || self->tail == NULL) {
-    throw_error("Error code: Non-existing node!", __LINE__, __func__);
+  // confirm the user has specified a valid index
+  if (index < 0 || index >= self->length) {
+    struct ConsoleLog* log = new_console_log();
+    log->log_warning("INDEX_OUT_OF_BOUNDS", "You are trying to access an "
+        "element at an invalid index in an array, list, or other indexed "
+        "data structure.", __FILE__, __LINE__, __func__);
+    destroy_console_log(log);
     return NULL;
   }
 
@@ -351,9 +441,3 @@ struct Node* iterate_reverse_ll(struct Node* tail, int index) {
   return cursor;
 }
 
-// Throw an error and display it to the user.
-void throw_error(const char* error, const int line, const char* func) {
-  printf("keepcoding/List ... \n");
-  printf("Error at %s:%d in function %s. \n", __FILE__, line, func);
-  printf("Error code: %s!\n", error);
-}

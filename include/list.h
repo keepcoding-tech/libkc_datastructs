@@ -1,10 +1,10 @@
-// open source c library
+// This file is part of keepcoding
 // ==================================
 //
 // list.h
 //
-// Daniel Tanase
-// 20/06/2023
+// Copyright (c) 2023 Daniel Tanase
+// SPDX-License-Identifier: MIT License
 
 /*
  * The List struct represents a dynamic implementation of a linked list,
@@ -32,7 +32,6 @@
 #include "node.h"
 
 #include <stdbool.h>
-#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 
