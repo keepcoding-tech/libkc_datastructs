@@ -30,12 +30,16 @@ struct Node* node_constructor(void* data, size_t size) {
   struct Node* new_node = malloc(sizeof(struct Node));
   new_node->data = malloc(size);
 
-  if (new_node->data == NULL) {
-    log->log_warning("OUT_OF_MEMORY", "Failing to allocate memory dynamically "
+  if (new_node == NULL || new_node->data == NULL) {
+    log->log_error("OUT_OF_MEMORY", "Failing to allocate memory dynamically "
         "(e.g. using malloc) due to insufficient memory in the heap.",
         __FILE__, __LINE__, __func__);
     destroy_console_log(log);
-    return NULL;
+
+    // free the instances and exit
+    free(new_node->data);
+    free(new_node);
+    exit(1);
   }
 
   // destroy the console log
