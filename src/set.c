@@ -1,4 +1,16 @@
+// This file is part of keepcoding
+// ==================================
+//
+// set.c
+//
+// Copyright (c) 2023 Daniel Tanase
+// SPDX-License-Identifier: MIT License
+
+#include "../deps/kclog/kclog.h"
 #include "../include/set.h"
+
+#include <stdlib.h>
+#include <string.h>
 
 // MARK: PUBLIC MEMBER METHODS PROTOTYPES
 void insert_new_pair_set(struct Set* self, void* key,
@@ -7,6 +19,7 @@ void remove_pair_set(struct Set* self, void* key, size_t key_size);
 void* search_pair_set(struct Set* self, void* key, size_t key_size);
 
 // MARK: PRIVATE MEMBER METHODS PROTOTYPES
+bool check_set_reference(struct Set* set);
 void recursive_set_destroy(struct Node* node);
 
 // MARK: CONSTRUCTOR & DESTRUCTOR DEFINITIONS
@@ -19,21 +32,19 @@ struct Set* new_set(int (*compare)(const void* a, const void* b)) {
 
   // confirm that there is memory to allocate
   if (new_set == NULL) {
-    printf("keepcoding/Set ... \n");
-    printf("Error at %s:%d in function %s. \n", __FILE__, __LINE__, __func__);
-    printf("Error code: The memory could not be allocated!\n");
-    return NULL;
+    struct ConsoleLog* log = new_console_log();
+    log->log_error("OUT_OF_MEMORY", "Failing to allocate memory dynamically "
+        "(e.g. using malloc) due to insufficient memory in the heap.",
+        __FILE__, __LINE__, __func__);
+    destroy_console_log(log);
+
+    // free the instance and exit
+    free(new_set);
+    exit(1);
   }
 
+  // instantiate the set's Tree via the constructor
   new_set->entries = new_tree(compare);
-
-  // confirm that the tree was initialize correctely
-  if (new_set->entries == NULL) {
-    printf("keepcoding/Set ... \n");
-    printf("Error at %s:%d in function %s. \n", __FILE__, __LINE__, __func__);
-    printf("Error code: The memory could not be allocated!\n");
-    return NULL;
-  }
 
   // assigns the public member methods
   new_set->insert = insert_new_pair_set;
@@ -45,13 +56,8 @@ struct Set* new_set(int (*compare)(const void* a, const void* b)) {
 
 // Destroy the linked list and the binary search tree to free the memory.
 void destroy_set(struct Set* set) {
-  // destroy set only if is not dereferenced
-  if (set == NULL) {
-    printf("keepcoding/Set ... \n");
-    printf("Error at %s:%d in function %s. \n", __FILE__, __LINE__, __func__);
-    printf("Error code: Dereferenced object!\n");
-    return;
-  }
+  // if the set reference is NULL, do nothing
+  if (check_set_reference(set) == false) return;
 
   // free the binary tree memory
   if (set->entries->root != NULL) {
@@ -68,6 +74,9 @@ void destroy_set(struct Set* set) {
 // need to implement elements themselves.
 void insert_new_pair_set(struct Set* self, void* key,
     size_t key_size, void* value, size_t value_size) {
+  // if the set reference is NULL, do nothing
+  if (check_set_reference(self) == false) return;
+
   // check if the pair already exists in the set
   if (search_pair_set(self, key, key_size) != NULL) {
     return;
@@ -82,6 +91,9 @@ void insert_new_pair_set(struct Set* self, void* key,
 
 // This function removes a specified element based on the key.
 void remove_pair_set(struct Set* self, void* key, size_t key_size) {
+  // if the set reference is NULL, do nothing
+  if (check_set_reference(self) == false) return;
+
   // create a new pair by using a dummy value
   char dummy_value = 'a';
   struct Pair* pair_to_remove = pair_constructor(key, key_size,
@@ -94,6 +106,9 @@ void remove_pair_set(struct Set* self, void* key, size_t key_size) {
 
 // This function finds the value for a given key in the Set.
 void* search_pair_set(struct Set* self, void* key, size_t key_size) {
+  // if the set reference is NULL, do nothing
+  if (check_set_reference(self) == false) return NULL;
+
   // create a new pair by using a dummy value
   char dummy_value = 'a';
   struct Pair* searchable = pair_constructor(key, key_size,
@@ -121,6 +136,26 @@ void* search_pair_set(struct Set* self, void* key, size_t key_size) {
 }
 
 // MARK: PRIVATE MEMBER METHODS DEFINITIONS
+
+// This function will check if the set instance is not dereferenced.
+bool check_set_reference(struct Set* set) {
+  if (set == NULL) {
+    // create a new instance of console_log for loggining
+    struct ConsoleLog* log = new_console_log();
+
+    // log the warning to the console
+    log->log_warning("NULL_REFERENCE", "You are attempting to use a reference "
+        "or pointer that points to null or is uninitialized.",
+        __FILE__, __LINE__, __func__);
+
+    // destroy the console log
+    destroy_console_log(log);
+
+    return false;
+  }
+
+  return true;
+}
 
 // This function will use "Depth First Search" algorithm to destruct the tree.
 void recursive_set_destroy(struct Node* node) {

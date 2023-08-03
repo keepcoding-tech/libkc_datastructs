@@ -10,6 +10,7 @@ COMPARE_SET(char, set_compare_str)
 // Test the creation and destruction of a set.
 void test_creation_and_destruction() {
   struct Set* set = new_set(set_compare_int);
+  assert(set->entries->root == NULL);
   destroy_set(set);
 }
 
