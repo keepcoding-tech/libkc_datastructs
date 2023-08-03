@@ -1,10 +1,10 @@
-// open source c library
+// This file is part of keepcoding
 // ==================================
 //
 // stack.h
 //
-// Daniel Tanase
-// 26/06/2023
+// Copyright (c) 2023 Daniel Tanase
+// SPDX-License-Identifier: MIT License
 
 /*
  * A stack is a fundamental data structure that follows the Last-In-First-Out
@@ -16,6 +16,14 @@
  * from the top. The stack allows for efficient access to the most recently
  * added elements and is commonly used in scenarios like function calls,
  * expression evaluation, and backtracking algorithms.
+ *
+ * To create and destroy instances of the Stack struct, it is recommended
+ * to use the constructor and destructor functions.
+ *
+ * It's important to note that when using member functions, a reference to the
+ * Stack instance needs to be passed, similar to how "self" is passed to
+ * class member functions in Python. This allows for accessing and manipulating
+ * the Stack object's data and behavior.
  */
 
 #ifndef STACK_H
@@ -24,7 +32,6 @@
 #include "vector.h"
 
 #include <stdio.h>
-#include <stdlib.h>
 
 struct Stack {
   // a reference to the embedded Vector
