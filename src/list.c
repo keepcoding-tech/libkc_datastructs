@@ -1,7 +1,7 @@
 // This file is part of libkc_datastructs
 // ==================================
 //
-// list.h
+// list.c
 //
 // Copyright (c) 2023 Daniel Tanase
 // SPDX-License-Identifier: MIT License

@@ -1,3 +1,11 @@
+// This file is part of libkc_datastructs
+// ==================================
+//
+// node.c
+//
+// Copyright (c) 2023 Daniel Tanase
+// SPDX-License-Identifier: MIT License
+
 #include "../include/node.h"
 
 #include <assert.h>

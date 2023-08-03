@@ -1,3 +1,11 @@
+// This file is part of libkc_datastructs
+// ==================================
+//
+// pair.c
+//
+// Copyright (c) 2023 Daniel Tanase
+// SPDX-License-Identifier: MIT License
+
 #include "../include/pair.h"
 
 #include <assert.h>

@@ -1,7 +1,10 @@
-# libkc_datastructs
+# This file is part of libkc_datastructs
+# ==================================
 #
-# Daniel Tanase
-# 17/06/23
+# makefile
+#
+# Copyright (c) 2023 Daniel Tanase
+# SPDX-License-Identifier: MIT License
 #
 #                  _         __ _ _
 #                 | |       / _(_) |
