@@ -1,4 +1,4 @@
-// This file is part of keepcoding
+// This file is part of libkc_datastructs
 // ==================================
 //
 // node.c

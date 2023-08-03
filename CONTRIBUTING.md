@@ -1,16 +1,16 @@
 # CONTRIBUTING
 
-#### The keepcoding project welcomes new contributors. This document will guide you through the process.
+#### The libkc_datastructs project welcomes new contributors. This document will guide you through the process.
 
 ## Fork
 
-Fork the project on [GitHub](https://github.com/Daniel-Tanase/keepcoding) and
-check out your copy.
+Fork the project on [GitHub](https://github.com/Daniel-Tanase/libkc_datastructs)
+and check out your copy.
 
 ```
-$ git clone https://github.com/[your-username]/keepcoding.git
-$ cd keepcoding
-$ git remote add upstream https://github.com/Daniel-Tanase/keepcoding.git
+$ git clone https://github.com/[your-username]/libkc_datastructs.git
+$ cd libkc_datastructs
+$ git remote add upstream https://github.com/Daniel-Tanase/libkc_datastructs.git
 ```
 
 ## Branch
@@ -28,9 +28,9 @@ Full example:
 
 ## Code
 
-Please adhere to keepcoding's code style. In general it follows the conventions
-from the [Google C/C++](https://google.github.io/styleguide/cppguide.html) style
-guide. Some of the key points, as well as some additional guidelines, are
+Please adhere to libkc_datastructs's code style. In general it follows the
+conventions from the [Google C/C++](https://google.github.io/styleguide/cppguide.html)
+style guide. Some of the key points, as well as some additional guidelines, are
 enumerated below.
 
 - Names should be descriptive and concise.
@@ -121,8 +121,8 @@ there are no test regressions.
 $ git push origin kc/my-feature-branch
 ```
 
-Go to `https://github.com/[your-username]/keepcoding` and select your feature
-branch. Click the 'Pull Request' button and fill out the form.
+Go to `https://github.com/[your-username]/libkc_datastructs` and select your
+feature branch. Click the 'Pull Request' button and fill out the form.
 
 Pull requests are usually reviewed within a few days. If there are comments to
 address, apply your changes in a separate commit and push that to your feature

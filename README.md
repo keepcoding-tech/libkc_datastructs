@@ -1,4 +1,4 @@
-[![C/C++ CI](https://github.com/Daniel-Tanase/keepcoding/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/Daniel-Tanase/keepcoding/actions/workflows/c-cpp.yml)
+[![C/C++ CI](https://github.com/Daniel-Tanase/libkc_datastructs/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/Daniel-Tanase/libkc_datastructs/actions/workflows/c-cpp.yml)
 
 ```
   _ _ _     _                     _       _            _                   _
@@ -26,11 +26,11 @@ efficiency and performance of their C-based projects.
 
 ## Download and Install
 
-To download and install the `keepcoding` library, follow these steps:
+To download and install the `libkc_datastructs` library, follow these steps:
 
 ```
-$ git clone https://github.com/Daniel-Tanase/keepcoding.git
-$ cd keepcoding && make all
+$ git clone https://github.com/Daniel-Tanase/libkc_datastructs.git
+$ cd libkc_datastructs && make all
 ```
 
 Yep, this is it! You can start using the library.
@@ -39,10 +39,10 @@ Yep, this is it! You can start using the library.
 
 Because I believe that documenting a project is at least as important as writing
 the project's code, I have created a very comprehensive wiki for this repository,
-explaining in detail how to integrate your code with the `keepcoding` static
+explaining in detail how to integrate your code with the `libkc_datastructs` static
 library.
 
-So, head over to the [wiki](https://github.com/Daniel-Tanase/keepcoding/wiki)
+So, head over to the [wiki](https://github.com/Daniel-Tanase/libkc_datastructs/wiki)
 to learn more!
 
 ## Testing
@@ -61,12 +61,12 @@ If you have found an issue or would like to submit an improvement to this
 project, please submit an issue using the issues tab above. If you want to
 submit a PR (pull-request) with a fix, please reference the issue you created.
 
-Please review the [contribution](https://github.com/Daniel-Tanase/keepcoding/blob/master/CONTRIBUTING.md)
+Please review the [contribution](https://github.com/Daniel-Tanase/libkc_datastructs/blob/master/CONTRIBUTING.md)
 rules and practices before submitting any PR.
 
 ## License
 
-This project is licensed under the [MIT License](https://github.com/Daniel-Tanase/keepcoding/blob/master/LICENSE)
+This project is licensed under the [MIT License](https://github.com/Daniel-Tanase/libkc_datastructs/blob/master/LICENSE)
 
 <div align="center"> --- </div>
-<div align="center">Created with ❤️ by keepcoding and You!</div>
+<div align="center">Created with ❤️ by libkc_datastructs and You!</div>

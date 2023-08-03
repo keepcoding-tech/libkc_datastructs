@@ -1,4 +1,4 @@
-# keepcoding lib
+# libkc_datastructs
 #
 # Daniel Tanase
 # 17/06/23
@@ -36,7 +36,7 @@ OBJ_DIRS := $(sort $(dir $(SOURCES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)))
 STATIC_LIB_DIRS := $(wildcard $(DEPS_DIR)/*)
 STATIC_LIBS := $(foreach dir, $(STATIC_LIB_DIRS), $(wildcard $(dir)/*.a))
 
-.PHONY: all test clean help
+.PHONY: all install test clean help
 
 #################################### BUILD #####################################
 
@@ -44,7 +44,7 @@ STATIC_LIBS := $(foreach dir, $(STATIC_LIB_DIRS), $(wildcard $(dir)/*.a))
 OBJECTS := $(SOURCES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 # Set the default target
-all: install $(OBJECTS) libkeepcoding.a
+all: install $(OBJECTS) libkc_datastructs.a
 
 # Create the build directory and compile the object files
 $(OBJECTS): | $(OBJ_DIRS)
@@ -56,8 +56,8 @@ $(OBJ_DIRS):
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(HEADERS)
 	$(CC) $(STD) $(CFLAGS) -c $< -o $@
 
-libkeepcoding.a: $(OBJECTS)
-	ar rcsT libkeepcoding.a $(OBJECTS) $(STATIC_LIBS)
+libkc_datastructs.a: $(OBJECTS)
+	ar rcsT libkc_datastructs.a $(OBJECTS) $(STATIC_LIBS)
 
 ################################### INSTALL ####################################
 

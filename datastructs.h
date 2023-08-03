@@ -1,4 +1,4 @@
-// This file is part of keepcoding
+// This file is part of libkc_datastructs
 // ==================================
 //
 // pair.h
@@ -7,12 +7,13 @@
 // SPDX-License-Identifier: MIT License
 
 /*
- * You can utilize this header file to import the complete keepcoding library
- * into your project. It includes headers for every sub-module within keepcoding.
+ * You can utilize this header file to import the complete libkc_datastructs
+ * library into your project. It includes headers for every sub-module within
+ * libkc_datastructs.
  */
 
-#ifndef KEEPCODING_H
-#define KEEPCODING_H
+#ifndef DATASTRUCTS_H
+#define DATASTRUCTS_H
 
 #include "include/list.h"
 #include "include/node.h"
@@ -23,4 +24,4 @@
 #include "include/tree.h"
 #include "include/vector.h"
 
-#endif /* KEEPCODING_H */
+#endif /* DATASTRUCTS_H */
