@@ -1,10 +1,10 @@
-// open source c library
+// This file is part of keepcoding
 // ==================================
 //
 // set.h
 //
-// Daniel Tanase
-// 22/06/2023
+// Copyright (c) 2023 Daniel Tanase
+// SPDX-License-Identifier: MIT License
 
 /*
  * A Set is a versatile data structure used for storing a collection of
@@ -16,6 +16,14 @@
  * key-value pairs can accommodate various types of data.
  *
  * It is important to note that sets are containers that store unique elements.
+ *
+ * To create and destroy instances of the Set struct, it is recommended
+ * to use the constructor and destructor functions.
+ *
+ * It's important to note that when using member functions, a reference to the
+ * Set instance needs to be passed, similar to how "self" is passed to
+ * class member functions in Python. This allows for accessing and manipulating
+ * the Set object's data and behavior.
  */
 
 #ifndef SET_H
@@ -54,11 +62,11 @@ void destroy_set(struct Set* set);
 
 // use this macro to define any type of primitive data comparison function
 #define COMPARE_SET(type, function_name) \
-  int function_name(const void* a, const void* b) { \
-    if (*(type*)((struct Pair*)a)->key < *(type*)((struct Pair*)b)->key) { \
+  int function_name(const void* a, const void* b) {                          \
+    if (*(type*)((struct Pair*)a)->key < *(type*)((struct Pair*)b)->key) {   \
       return -1;                                                             \
     }                                                                        \
-    if (*(type*)((struct Pair*)a)->key > *(type*)((struct Pair*)b)->key) { \
+    if (*(type*)((struct Pair*)a)->key > *(type*)((struct Pair*)b)->key) {   \
       return 1;                                                              \
     }                                                                        \
     return 0;                                                                \
