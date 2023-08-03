@@ -1,10 +1,10 @@
-// open source c library
+// This file is part of keepcoding
 // ==================================
 //
 // tree.h
 //
-// Daniel Tanase
-// 21/06/2023
+// Copyright (c) 2023 Daniel Tanase
+// SPDX-License-Identifier: MIT License
 
 /*
  * The Binary Tree structure is made up of Nodes, which hold references to
@@ -16,8 +16,16 @@
  * function for the tree. It's important to note that these functions should
  * compare the data stored in the Nodes, not the Nodes themselves.
  *
- * To make things easier, there are some generic comparison functions available
- * for users to utilize.
+ * To make things easier, there is a generic comparison function available
+ * for users to utilize by important the COMPARE_TREE macro.
+ *
+ * To create and destroy instances of the Tree struct, it is recommended
+ * to use the constructor and destructor functions.
+ *
+ * It's important to note that when using member functions, a reference to the
+ * Tree instance needs to be passed, similar to how "self" is passed to
+ * class member functions in Python. This allows for accessing and manipulating
+ * the Tree object's data and behavior.
  */
 
 #ifndef TREE_H
@@ -25,8 +33,6 @@
 
 #include "node.h"
 
-#include <stdlib.h>
-#include <string.h>
 #include <stdio.h>
 
 struct Tree {
