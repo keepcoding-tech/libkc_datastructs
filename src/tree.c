@@ -1,5 +1,17 @@
+// This file is part of keepcoding
+// ==================================
+//
+// tree.c
+//
+// Copyright (c) 2023 Daniel Tanase
+// SPDX-License-Identifier: MIT License
+
+#include "../deps/kclog/kclog.h"
 #include "../include/tree.h"
-#include "../include/pair.h"
+
+#include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
 
 // MARK: PUBLIC MEMBER METHODS PROTOTYPES
 void insert_new_node_btree(struct Tree* self, void* data, size_t size);
@@ -7,6 +19,7 @@ void remove_node_btree(struct Tree* self, void* data, size_t size);
 struct Node* search_node_btree(struct Tree* self, void* data);
 
 // MARK: PRIVATE MEMBER METHODS PROTOTYPES
+bool check_tree_reference(struct Tree* tree);
 struct Node* insert_node_btree(struct Tree* self,
     struct Node* node, void* data, size_t size);
 void recursive_destroy_tree(struct Node* node);
@@ -23,10 +36,15 @@ struct Tree* new_tree(int (*compare)(const void* a, const void* b)) {
 
   // confirm that there is memory to allocate
   if (new_tree == NULL) {
-    printf("keepcoding/Tree ... \n");
-    printf("Error at %s:%d in function %s. \n", __FILE__, __LINE__, __func__);
-    printf("Error code: The memory could not be allocated!\n");
-    return NULL;
+    struct ConsoleLog* log = new_console_log();
+    log->log_error("OUT_OF_MEMORY", "Failing to allocate memory dynamically "
+        "(e.g. using malloc) due to insufficient memory in the heap.",
+        __FILE__, __LINE__, __func__);
+    destroy_console_log(log);
+
+    // free the instance and exit
+    free(new_tree);
+    exit(1);
   }
 
   // initialize the structure members fields
@@ -45,13 +63,8 @@ struct Tree* new_tree(int (*compare)(const void* a, const void* b)) {
 // argument and calls the "recursive_destroy_tree" too free
 // the memory of all nodes.
 void destroy_tree(struct Tree* tree) {
-  // destroy tree only if is not dereferenced
-  if (tree == NULL) {
-    printf("keepcoding/Tree ... \n");
-    printf("Error at %s:%d in function %s. \n", __FILE__, __LINE__, __func__);
-    printf("Error code: Dereferenced object!\n");
-    return;
-  }
+  // if the tree reference is NULL, do nothing
+  if (check_tree_reference(tree) == false) return;
 
   if (tree->root != NULL) {
     recursive_destroy_tree(tree->root);
@@ -63,11 +76,17 @@ void destroy_tree(struct Tree* tree) {
 
 // This function adds new nodes to the tree
 void insert_new_node_btree(struct Tree* self, void* data, size_t size) {
+  // if the tree reference is NULL, do nothing
+  if (check_tree_reference(self) == false) return;
+
   self->root = insert_node_btree(self, self->root, data, size);
 }
 
 // This function removes a node by value.
 void remove_node_btree(struct Tree* self, void* data, size_t size) {
+  // if the tree reference is NULL, do nothing
+  if (check_tree_reference(self) == false) return;
+
   self->root = recursive_remove_node(self, self->root, data, size);
 }
 
@@ -75,6 +94,9 @@ void remove_node_btree(struct Tree* self, void* data, size_t size) {
 // node exists in the tree. If the node is found, its data is returned.
 // Otherwise, NULL is returned.
 struct Node* search_node_btree(struct Tree* self, void* data) {
+  // if the tree reference is NULL, do nothing
+  if (check_tree_reference(self) == false) return NULL;
+
   // start searching from the root of the tree
   struct Node* current = self->root;
 
@@ -98,6 +120,26 @@ struct Node* search_node_btree(struct Tree* self, void* data) {
 }
 
 // MARK: PRIVATE MEMBER METHODS DEFINITIONS
+
+// This function will check if the tree instance is not dereferenced.
+bool check_tree_reference(struct Tree* tree) {
+  if (tree == NULL) {
+    // create a new instance of console_log for loggining
+    struct ConsoleLog* log = new_console_log();
+
+    // log the warning to the console
+    log->log_warning("NULL_REFERENCE", "You are attempting to use a reference "
+        "or pointer that points to null or is uninitialized.",
+        __FILE__, __LINE__, __func__);
+
+    // destroy the console log
+    destroy_console_log(log);
+
+    return false;
+  }
+
+  return true;
+}
 
 // To insert a new node into the tree, we need to mantain the order property.
 struct Node* insert_node_btree(struct Tree* self,
