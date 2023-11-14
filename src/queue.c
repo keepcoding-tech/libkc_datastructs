@@ -11,24 +11,25 @@
 
 #include <stdlib.h>
 
-// MARK: PUBLIC MEMBER METHODS PROTOTYPES
+//--- MARK: PUBLIC MEMBER METHODS PROTOTYPES --------------------------------//
 size_t get_list_length_queue(struct Queue* self);
 void* get_next_item_queue(struct Queue* self);
 void insert_next_item_queue(struct Queue* self, void* data, size_t size);
 void remove_next_item_queue(struct Queue* self);
 
-// MARK: PRIVATE MEMBER METHODS PROTOTYPES
+//--- MARK: PRIVATE MEMBER METHODS PROTOTYPES -------------------------------//
 bool check_queue_reference(struct Queue* queue);
 
-// MARK: CONSTRUCTOR & DESTRUCTOR DEFINITIONS
+//---------------------------------------------------------------------------//
 
-// The constructor is used to create new instances of queue.
-struct Queue* new_queue() {
+struct Queue* new_queue()
+{
   // create a Queue instance to be returned
   struct Queue* new_queue = malloc(sizeof(struct Queue));
 
   // confirm that there is memory to allocate
-  if (new_queue == NULL) {
+  if (new_queue == NULL) 
+  {
     struct ConsoleLog* log = new_console_log();
     log->log_error("OUT_OF_MEMORY", "Failing to allocate memory dynamically "
         "(e.g. using malloc) due to insufficient memory in the heap.",
@@ -52,34 +53,48 @@ struct Queue* new_queue() {
   return new_queue;
 }
 
-// The destructor removes all the nodes by calling the linked list destructor.
-void destroy_queue(struct Queue* queue) {
+//---------------------------------------------------------------------------//
+
+void destroy_queue(struct Queue* queue)
+{
   // if the queue reference is NULL, do nothing
-  if (check_queue_reference(queue) == false) return;
+  if (check_queue_reference(queue) == false)
+  {
+    return;
+  }
 
   destroy_list(queue->list);
   free(queue);
 }
 
-// MARK: PUBLIC MEMBER METHODS DEFINITIONS
+//---------------------------------------------------------------------------//
 
-// This function returns the length of the list.
-size_t get_list_length_queue(struct Queue* self) {
+size_t get_list_length_queue(struct Queue* self)
+{
   // if the queue reference is NULL, do nothing
-  if (check_queue_reference(self) == false) return 1;
+  if (check_queue_reference(self) == false)
+  {
+    return 1;
+  }
 
   return self->list->length;
 }
 
-// This function returns the data from the first item in the chain.
-void* get_next_item_queue(struct Queue* self) {
+//---------------------------------------------------------------------------//
+
+void* get_next_item_queue(struct Queue* self)
+{
   // if the queue reference is NULL, do nothing
-  if (check_queue_reference(self) == false) return NULL;
+  if (check_queue_reference(self) == false)
+  {
+    return NULL;
+  }
 
   struct Node* next_item = self->list->front(self->list);
 
   // check if the head of the list exists
-  if (next_item  != NULL) {
+  if (next_item  != NULL)
+  {
     return next_item->data;
   }
 
@@ -87,27 +102,38 @@ void* get_next_item_queue(struct Queue* self) {
   return NULL;
 }
 
-// This function adds an item to the end of the list.
-void insert_next_item_queue(struct Queue *self, void *data, size_t size) {
+//---------------------------------------------------------------------------//
+
+void insert_next_item_queue(struct Queue *self, void *data, size_t size)
+{
   // if the queue reference is NULL, do nothing
-  if (check_queue_reference(self) == false) return;
+  if (check_queue_reference(self) == false)
+  {
+    return;
+  }
 
   self->list->push_back(self->list, data, size);
 }
 
-// This function removes the first item in the chain.
-void remove_next_item_queue(struct Queue *self) {
+//---------------------------------------------------------------------------//
+
+void remove_next_item_queue(struct Queue *self)
+{
   // if the queue reference is NULL, do nothing
-  if (check_queue_reference(self) == false) return;
+  if (check_queue_reference(self) == false)
+  {
+    return;
+  }
 
   self->list->pop_front(self->list);
 }
 
-// MARK: PRIVATE MEMBER METHODS DEFINITIONS
+//---------------------------------------------------------------------------//
 
-// This function will check if the queue instance is not dereferenced.
-bool check_queue_reference(struct Queue* queue) {
-  if (queue == NULL) {
+bool check_queue_reference(struct Queue* queue) 
+{
+  if (queue == NULL)
+  {
     // create a new instance of console_log for loggining
     struct ConsoleLog* log = new_console_log();
 
@@ -125,3 +151,4 @@ bool check_queue_reference(struct Queue* queue) {
   return true;
 }
 
+//---------------------------------------------------------------------------//

@@ -33,7 +33,8 @@
 
 #include <stdio.h>
 
-struct Stack {
+struct Stack
+{
   // a reference to the embedded Vector
   struct Vector* vector;
 

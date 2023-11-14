@@ -21,7 +21,8 @@
 
 #include <stdio.h>
 
-struct Pair {
+struct Pair
+{
   void* key;
   void* value;
 };

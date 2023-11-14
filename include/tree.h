@@ -35,7 +35,8 @@
 
 #include <stdio.h>
 
-struct Tree {
+struct Tree
+{
   // root points to the top-most node in the tree
   struct Node* root;
 
@@ -61,12 +62,15 @@ struct Tree* new_tree(int (*compare)(const void* a, const void* b));
 void destroy_tree(struct Tree* tree);
 
 // use this macro to define any type of primitive data comparison function
-#define COMPARE_TREE(type, function_name) \
-  int function_name(const void* a, const void* b) { \
-    if (*(type*)a < *(type*)b) {                    \
+#define COMPARE_TREE(type, function_name)           \
+  int function_name(const void* a, const void* b)   \
+  {                                                 \
+    if (*(type*)a < *(type*)b)                      \
+    {                                               \
       return -1;                                    \
     }                                               \
-    if (*(type*)a > *(type*)b) {                    \
+    if (*(type*)a > *(type*)b)                      \
+    {                                               \
       return 1;                                     \
     }                                               \
     return 0;                                       \

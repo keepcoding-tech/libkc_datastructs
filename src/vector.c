@@ -12,7 +12,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-// MARK: PUBLIC MEMBER METHODS PROTOTYPES
+//--- MARK: PUBLIC MEMBER METHODS PROTOTYPES --------------------------------//
 void erase_all_elems(struct Vector* self);
 void erase_elem(struct Vector* self, int index);
 void erase_elems_by_value(struct Vector* self, void* value,
@@ -31,16 +31,16 @@ void resize_vector_capacity(struct Vector* self, size_t new_capacity);
 bool search_elem(struct Vector* self, void* value,
     int (*compare)(const void* a, const void* b));
 
-// MARK: PRIVATE MEMBER METHODS PROTOTYPES
+//--- MARK: PRIVATE MEMBER METHODS PROTOTYPES -------------------------------//
 bool check_vector_reference(struct Vector* vector);
 void permute_to_left(struct Vector* vector, int start, int end);
 void permute_to_right(struct Vector* vector, int start, int end);
 void resize_vector(struct Vector* vector, size_t new_capacity);
 
-// MARK: CONSTRUCTOR & DESTRUCTOR DEFINITIONS
+//---------------------------------------------------------------------------//
 
-// The constructor is used to create new instances of vector.
-struct Vector* new_vector() {
+struct Vector* new_vector()
+{
   // create a new instance of console_log for loggining
   struct ConsoleLog* log = new_console_log();
 
@@ -48,7 +48,8 @@ struct Vector* new_vector() {
   struct Vector* new_vector = malloc(sizeof(struct Vector));
 
   // confirm that there is memory to allocate
-  if (new_vector == NULL) {
+  if (new_vector == NULL)
+  {
     log->log_error("OUT_OF_MEMORY", "Failing to allocate memory dynamically "
         "(e.g. using malloc) due to insufficient memory in the heap.",
         __FILE__, __LINE__, __func__);
@@ -65,7 +66,8 @@ struct Vector* new_vector() {
   new_vector->data = malloc(16 * sizeof(void*));
 
   // confirm that there is memory to allocate
-  if (new_vector->data == NULL) {
+  if (new_vector->data == NULL)
+  {
     log->log_error("OUT_OF_MEMORY", "Failing to allocate memory dynamically "
         "(e.g. using malloc) due to insufficient memory in the heap.",
         __FILE__, __LINE__, __func__);
@@ -100,14 +102,20 @@ struct Vector* new_vector() {
   return new_vector;
 }
 
-// The destructor removes all the items and the vector instance.
+//---------------------------------------------------------------------------//
+
 void destroy_vector(struct Vector* vector) {
   // if the vector reference is NULL, do nothing
-  if (check_vector_reference(vector) == false) return;
+  if (check_vector_reference(vector) == false)
+  {
+    return;
+  }
 
   // free the memory for each element and the array itself
-  for (int i = 0; i < vector->length; ++i) {
-    if (vector->data[i] != NULL) {
+  for (int i = 0; i < vector->length; ++i)
+  {
+    if (vector->data[i] != NULL)
+    {
       free(vector->data[i]);
     }
   }
@@ -116,22 +124,28 @@ void destroy_vector(struct Vector* vector) {
   free(vector);
 }
 
-// MARK: PUBLIC MEMBER METHODS DEFINITIONS
+//---------------------------------------------------------------------------//
 
-// This function will remove all the elements in the vector.
-void erase_all_elems(struct Vector* self) {
+void erase_all_elems(struct Vector* self)
+{
   // if the vector reference is NULL, do nothing
-  if (check_vector_reference(self) == false) return;
+  if (check_vector_reference(self) == false)
+  {
+    return;
+  }
 
   // free the memory for each element
-  for (int i = 0; i < self->length; ++i) {
-    if (self->data[i] != NULL) {
+  for (int i = 0; i < self->length; ++i)
+  {
+    if (self->data[i] != NULL)
+    {
       free(self->data[i]);
     }
   }
 
   // reallocate the default capacity
-  if (self->capacity > 16) {
+  if (self->capacity > 16)
+  {
     resize_vector(self, 16);
   }
 
@@ -139,16 +153,22 @@ void erase_all_elems(struct Vector* self) {
   self->length = 0;
 }
 
-// This function will remove a specific item from the vector.
-void erase_elem(struct Vector* self, int index) {
+//---------------------------------------------------------------------------//
+
+void erase_elem(struct Vector* self, int index)
+{
   // if the vector reference is NULL, do nothing
-  if (check_vector_reference(self) == false) return;
+  if (check_vector_reference(self) == false)
+  {
+    return;
+  }
 
   // create a new instance of console_log for loggining
   struct ConsoleLog* log = new_console_log();
 
   // make sure the list is not empty
-  if (self->length == 0) {
+  if (self->length == 0)
+  {
     log->log_error("EMPTY_STRUCTURE", "You are attempting to perform "
         "operations on an empty data structure" ,__FILE__, __LINE__, __func__);
     destroy_console_log(log);
@@ -156,7 +176,8 @@ void erase_elem(struct Vector* self, int index) {
   }
 
   // confirm the user has specified a valid index
-  if (index < 0 || index >= self->length) {
+  if (index < 0 || index >= self->length)
+  {
     log->log_warning("INDEX_OUT_OF_BOUNDS", "You are trying to access an "
         "element at an invalid index in an array, list, or other indexed "
         "data structure.", __FILE__, __LINE__, __func__);
@@ -172,22 +193,29 @@ void erase_elem(struct Vector* self, int index) {
   --self->length;
 
   // resize if the length of the vector is less than half
-  if (self->length < self->capacity / 2 && self->capacity > 16) {
+  if (self->length < self->capacity / 2 && self->capacity > 16)
+  {
     resize_vector(self, self->capacity / 2);
   }
 }
 
-// This function removes from the vector all the
-// elements that compare equal to a given value.
+//---------------------------------------------------------------------------//
+
 void erase_elems_by_value(struct Vector* self, void* value,
-    int (*compare)(const void* a, const void* b)) {
+    int (*compare)(const void* a, const void* b))
+{
   // if the vector reference is NULL, do nothing
-  if (check_vector_reference(self) == false) return;
+  if (check_vector_reference(self) == false)
+  {
+    return;
+  }
 
   // go through the array and check each element
   int index = 0;
-  while (index < self->length) {
-    if (compare(self->data[index], value) == 0) {
+  while (index < self->length)
+  {
+    if (compare(self->data[index], value) == 0)
+    {
       erase_elem(self, index);
       continue;
     }
@@ -195,34 +223,48 @@ void erase_elems_by_value(struct Vector* self, void* value,
   }
 }
 
-// This function removes the first element in the
-// vector, reducing the size by one.
-void erase_first_elem(struct Vector* self) {
+//---------------------------------------------------------------------------//
+
+void erase_first_elem(struct Vector* self)
+{
   // if the vector reference is NULL, do nothing
-  if (check_vector_reference(self) == false) return;
+  if (check_vector_reference(self) == false)
+  {
+    return;
+  }
 
   erase_elem(self, 0);
 }
 
-// This function removes the last element in the
-// vector, reducing the size by one.
-void erase_last_elem(struct Vector* self) {
+//---------------------------------------------------------------------------//
+
+void erase_last_elem(struct Vector* self)
+{
   // if the vector reference is NULL, do nothing
-  if (check_vector_reference(self) == false) return;
+  if (check_vector_reference(self) == false)
+  {
+    return;
+  }
 
   erase_elem(self, self->length - 1);
 }
 
-// This function returns a void pointer to the element at position specified.
-void* get_elem(struct Vector* self, int index) {
+//---------------------------------------------------------------------------//
+
+void* get_elem(struct Vector* self, int index)
+{
   // if the vector reference is NULL, do nothing
-  if (check_vector_reference(self) == false) return NULL;
+  if (check_vector_reference(self) == false)
+  {
+    return NULL;
+  }
 
   // create a new instance of console_log for loggining
   struct ConsoleLog* log = new_console_log();
 
   // make sure the list is not empty
-  if (self->length == 0) {
+  if (self->length == 0)
+  {
     log->log_error("EMPTY_STRUCTURE", "You are attempting to perform "
         "operations on an empty data structure" ,__FILE__, __LINE__, __func__);
     destroy_console_log(log);
@@ -230,7 +272,8 @@ void* get_elem(struct Vector* self, int index) {
   }
 
   // confirm the user has specified a valid index
-  if (index < 0 || index >= self->length) {
+  if (index < 0 || index >= self->length) 
+  {
     log->log_warning("INDEX_OUT_OF_BOUNDS", "You are trying to access an "
         "element at an invalid index in an array, list, or other indexed "
         "data structure.", __FILE__, __LINE__, __func__);
@@ -244,67 +287,98 @@ void* get_elem(struct Vector* self, int index) {
   return self->data[index];
 }
 
-// This function returns a void pointer to the first element.
-void* get_first_elem(struct Vector* self) {
+//---------------------------------------------------------------------------//
+
+void* get_first_elem(struct Vector* self)
+{
   // if the vector reference is NULL, do nothing
-  if (check_vector_reference(self) == false) return NULL;
+  if (check_vector_reference(self) == false)
+  {
+    return NULL;
+  }
 
   return get_elem(self, 0);
 }
 
-// This function returns a void pointer to the last element.
-void* get_last_elem(struct Vector* self) {
+//---------------------------------------------------------------------------//
+
+void* get_last_elem(struct Vector* self)
+{
   // if the vector reference is NULL, do nothing
-  if (check_vector_reference(self) == false) return NULL;
+  if (check_vector_reference(self) == false)
+  {
+    return NULL;
+  }
 
   return get_elem(self, self->length - 1);
 }
 
-// This function returns the maximum capacity of
-// the vector before reallocating more memory.
-size_t get_vector_capacity(struct Vector* self) {
+//---------------------------------------------------------------------------//
+
+size_t get_vector_capacity(struct Vector* self)
+{
   // if the vector reference is NULL, do nothing
-  if (check_vector_reference(self) == false) return 1;
+  if (check_vector_reference(self) == false)
+  {
+    return 1;
+  }
 
   return self->capacity;
 }
 
-// This function adds a new element at the beginning
-// of the vector, incrementing the size.
+//---------------------------------------------------------------------------//
+
 void insert_at_beginning(struct Vector* self, void* data, size_t size) {
   // if the vector reference is NULL, do nothing
-  if (check_vector_reference(self) == false) return;
+  if (check_vector_reference(self) == false)
+  {
+    return;
+  }
 
   insert_new_elem(self, 0, data, size);
 }
 
-// This function adds a new element at the end
-// of the vector, incrementing the size.
-void insert_at_end(struct Vector* self, void* data, size_t size) {
+//---------------------------------------------------------------------------//
+
+void insert_at_end(struct Vector* self, void* data, size_t size)
+{
   // if the vector reference is NULL, do nothing
-  if (check_vector_reference(self) == false) return;
+  if (check_vector_reference(self) == false)
+  {
+    return;
+  }
 
   insert_new_elem(self, self->length, data, size);
 }
 
-// This functino returns whether the vector is empty or not.
+//---------------------------------------------------------------------------//
+
 bool is_vector_empty(struct Vector* self) {
   // if the vector reference is NULL, do nothing
-  if (check_vector_reference(self) == false) return false;
+  if (check_vector_reference(self) == false)
+  {
+    return false;
+  }
 
   return self->length == 0;
 }
 
-// This function inserts a new item in the vector at a specified position.
-void insert_new_elem(struct Vector* self, int index, void* data, size_t size) {
+//---------------------------------------------------------------------------//
+
+void insert_new_elem(struct Vector* self, int index, void* data, size_t size)
+{
   // if the vector reference is NULL, do nothing
-  if (check_vector_reference(self) == false) return;
+  if (check_vector_reference(self) == false)
+  {
+    return;
+  }
 
   // create a new instance of console_log for loggining
   struct ConsoleLog* log = new_console_log();
 
   // confirm the user has specified a valid index
-  if (index < 0 || index > self->length) {
+  if (index < 0 || index > self->length)
+  {
     log->log_warning("INDEX_OUT_OF_BOUNDS", "You are trying to access an "
         "element at an invalid index in an array, list, or other indexed "
         "data structure.", __FILE__, __LINE__, __func__);
@@ -313,7 +387,8 @@ void insert_new_elem(struct Vector* self, int index, void* data, size_t size) {
   }
 
   // reallocate more memory if the capacity is full
-  if (self->length + 1 >= self->capacity) {
+  if (self->length + 1 >= self->capacity)
+  {
     resize_vector(self, self->capacity * 2);
   }
 
@@ -321,7 +396,8 @@ void insert_new_elem(struct Vector* self, int index, void* data, size_t size) {
   void* new_elem = malloc(size);
 
   // check if the memory allocation was succesfull
-  if (new_elem == NULL) {
+  if (new_elem == NULL)
+  {
     log->log_error("OUT_OF_MEMORY", "Failing to allocate memory dynamically "
         "(e.g. using malloc) due to insufficient memory in the heap.",
         __FILE__, __LINE__, __func__);
@@ -339,23 +415,35 @@ void insert_new_elem(struct Vector* self, int index, void* data, size_t size) {
   ++self->length;
 }
 
-// This function resizes the vector so that it contains "n" elements.
-void resize_vector_capacity(struct Vector* self, size_t new_capacity) {
+//---------------------------------------------------------------------------//
+
+void resize_vector_capacity(struct Vector* self, size_t new_capacity)
+{
   // if the vector reference is NULL, do nothing
-  if (check_vector_reference(self) == false) return;
+  if (check_vector_reference(self) == false)
+  {
+    return;
+  }
 
   resize_vector(self, new_capacity);
 }
 
-// This function searches for a specified element by value.
+//---------------------------------------------------------------------------//
+
 bool search_elem(struct Vector* self, void* value,
-    int (*compare)(const void* a, const void* b)) {
+    int (*compare)(const void* a, const void* b))
+{
   // if the vector reference is NULL, do nothing
-  if (check_vector_reference(self) == false) return false;
+  if (check_vector_reference(self) == false)
+  {
+    return false;
+  }
 
   // go through the array and return true if found
-  for (int i = 0; i < self->length; ++i) {
-    if (compare(self->data[i], value) == 0) {
+  for (int i = 0; i < self->length; ++i)
+  {
+    if (compare(self->data[i], value) == 0)
+    {
       return true;
     }
   }
@@ -363,11 +451,12 @@ bool search_elem(struct Vector* self, void* value,
   return false;
 }
 
-// MARK: PRIVATE MEMBER METHODS DEFINITIONS
+//---------------------------------------------------------------------------//
 
-// This function will check if the vector instance is not dereferenced.
-bool check_vector_reference(struct Vector* vector) {
-  if (vector == NULL) {
+bool check_vector_reference(struct Vector* vector)
+{
+  if (vector == NULL)
+  {
     // create a new instance of console_log for loggining
     struct ConsoleLog* log = new_console_log();
 
@@ -385,29 +474,36 @@ bool check_vector_reference(struct Vector* vector) {
   return true;
 }
 
-// This function will permute all the elements (to the left) from the
-// starting point specified to the ending point specified.
-void permute_to_left(struct Vector* vector, int start, int end) {
-  for (int i = start; i < end && i < vector->length; ++i) {
+//---------------------------------------------------------------------------//
+
+void permute_to_left(struct Vector* vector, int start, int end)
+{
+  for (int i = start; i < end && i < vector->length; ++i)
+  {
     vector->data[i] = vector->data[i + 1];
   }
 }
 
-// This function will permute all the elements (to the right) from the
-// starting point specified to the ending point specified.
-void permute_to_right(struct Vector* vector, int start, int end) {
-  for (int i = end; i >= start && i > 0; --i) {
+//---------------------------------------------------------------------------//
+
+void permute_to_right(struct Vector* vector, int start, int end)
+{
+  for (int i = end; i >= start && i > 0; --i)
+  {
     vector->data[i] = vector->data[i - 1];
   }
 }
 
-// This function will resize the capacity of the vector for a given size.
-void resize_vector(struct Vector* vector, size_t new_capacity) {
+//---------------------------------------------------------------------------//
+
+void resize_vector(struct Vector* vector, size_t new_capacity)
+{
   // create a new instance of console_log for loggining
   struct ConsoleLog* log = new_console_log();
 
   // make sure the user specific a valid capacity size
-  if (new_capacity < 1) {
+  if (new_capacity < 1)
+  {
     log->log_warning("UNDERFLOW", "The data type's size goes below its "
         "minimum representable value.", __FILE__, __LINE__, __func__);
     destroy_console_log(log);
@@ -418,7 +514,8 @@ void resize_vector(struct Vector* vector, size_t new_capacity) {
   void** new_data = realloc(vector->data, new_capacity * sizeof(void*));
 
   // check if the memory reallocation was succesfull
-  if (new_data == NULL) {
+  if (new_data == NULL)
+  {
     log->log_error("OUT_OF_MEMORY", "Failing to allocate memory dynamically "
         "(e.g. using malloc) due to insufficient memory in the heap.",
         __FILE__, __LINE__, __func__);
@@ -433,3 +530,4 @@ void resize_vector(struct Vector* vector, size_t new_capacity) {
   vector->capacity = new_capacity;
 }
 
+//---------------------------------------------------------------------------//

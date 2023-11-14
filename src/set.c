@@ -12,26 +12,26 @@
 #include <stdlib.h>
 #include <string.h>
 
-// MARK: PUBLIC MEMBER METHODS PROTOTYPES
+//--- MARK: PUBLIC MEMBER METHODS PROTOTYPES --------------------------------//
 void insert_new_pair_set(struct Set* self, void* key,
     size_t key_size, void* value, size_t value_size);
 void remove_pair_set(struct Set* self, void* key, size_t key_size);
 void* search_pair_set(struct Set* self, void* key, size_t key_size);
 
-// MARK: PRIVATE MEMBER METHODS PROTOTYPES
+//--- MARK: PRIVATE MEMBER METHODS PROTOTYPES -------------------------------//
 bool check_set_reference(struct Set* set);
 void recursive_set_destroy(struct Node* node);
 
-// MARK: CONSTRUCTOR & DESTRUCTOR DEFINITIONS
+//---------------------------------------------------------------------------//
 
-// The constructor takes a "compare" function pointer as its
-// only argument and returns a defined Set struct.
-struct Set* new_set(int (*compare)(const void* a, const void* b)) {
+struct Set* new_set(int (*compare)(const void* a, const void* b))
+{
   // create a Set instance to be returned
   struct Set* new_set = malloc(sizeof(struct Set));
 
   // confirm that there is memory to allocate
-  if (new_set == NULL) {
+  if (new_set == NULL)
+  {
     struct ConsoleLog* log = new_console_log();
     log->log_error("OUT_OF_MEMORY", "Failing to allocate memory dynamically "
         "(e.g. using malloc) due to insufficient memory in the heap.",
@@ -54,13 +54,19 @@ struct Set* new_set(int (*compare)(const void* a, const void* b)) {
   return new_set;
 }
 
-// Destroy the linked list and the binary search tree to free the memory.
-void destroy_set(struct Set* set) {
+//---------------------------------------------------------------------------//
+
+void destroy_set(struct Set* set)
+{
   // if the set reference is NULL, do nothing
-  if (check_set_reference(set) == false) return;
+  if (check_set_reference(set) == false)
+  {
+    return;
+  }
 
   // free the binary tree memory
-  if (set->entries->root != NULL) {
+  if (set->entries->root != NULL)
+  {
     recursive_set_destroy(set->entries->root);
   }
 
@@ -68,17 +74,20 @@ void destroy_set(struct Set* set) {
   free(set);
 }
 
-// MARK: PUBLIC MEMBER METHODS DEFINITIONS
+//---------------------------------------------------------------------------//
 
-// This function adds items to the set - the user does not
-// need to implement elements themselves.
 void insert_new_pair_set(struct Set* self, void* key,
-    size_t key_size, void* value, size_t value_size) {
+    size_t key_size, void* value, size_t value_size)
+{
   // if the set reference is NULL, do nothing
-  if (check_set_reference(self) == false) return;
+  if (check_set_reference(self) == false)
+  {
+    return;
+  }
 
   // check if the pair already exists in the set
-  if (search_pair_set(self, key, key_size) != NULL) {
+  if (search_pair_set(self, key, key_size) != NULL)
+  {
     return;
   }
 
@@ -89,10 +98,15 @@ void insert_new_pair_set(struct Set* self, void* key,
   self->entries->insert(self->entries, pair, sizeof(struct Pair));
 }
 
-// This function removes a specified element based on the key.
-void remove_pair_set(struct Set* self, void* key, size_t key_size) {
+//---------------------------------------------------------------------------//
+
+void remove_pair_set(struct Set* self, void* key, size_t key_size)
+{
   // if the set reference is NULL, do nothing
-  if (check_set_reference(self) == false) return;
+  if (check_set_reference(self) == false)
+  {
+    return;
+  }
 
   // create a new pair by using a dummy value
   char dummy_value = 'a';
@@ -104,10 +118,15 @@ void remove_pair_set(struct Set* self, void* key, size_t key_size) {
   pair_destructor(pair_to_remove);
 }
 
-// This function finds the value for a given key in the Set.
-void* search_pair_set(struct Set* self, void* key, size_t key_size) {
+//---------------------------------------------------------------------------//
+
+void* search_pair_set(struct Set* self, void* key, size_t key_size)
+{
   // if the set reference is NULL, do nothing
-  if (check_set_reference(self) == false) return NULL;
+  if (check_set_reference(self) == false)
+  {
+    return NULL;
+  }
 
   // create a new pair by using a dummy value
   char dummy_value = 'a';
@@ -122,12 +141,14 @@ void* search_pair_set(struct Set* self, void* key, size_t key_size) {
   pair_destructor(searchable);
 
   // make sure the node was found
-  if (result_node != NULL) {
+  if (result_node != NULL)
+  {
     // get the pair from the node
     struct Pair* result_pair = (struct Pair*)result_node->data;
 
     // return either the value for that key or NULL if not found
-    if (result_pair != NULL) {
+    if (result_pair != NULL)
+    {
       return result_pair->value;
     }
   }
@@ -135,11 +156,12 @@ void* search_pair_set(struct Set* self, void* key, size_t key_size) {
   return NULL;
 }
 
-// MARK: PRIVATE MEMBER METHODS DEFINITIONS
+//---------------------------------------------------------------------------//
 
-// This function will check if the set instance is not dereferenced.
-bool check_set_reference(struct Set* set) {
-  if (set == NULL) {
+bool check_set_reference(struct Set* set)
+{
+  if (set == NULL)
+  {
     // create a new instance of console_log for loggining
     struct ConsoleLog* log = new_console_log();
 
@@ -157,15 +179,19 @@ bool check_set_reference(struct Set* set) {
   return true;
 }
 
-// This function will use "Depth First Search" algorithm to destruct the tree.
-void recursive_set_destroy(struct Node* node) {
+//---------------------------------------------------------------------------//
+
+void recursive_set_destroy(struct Node* node)
+{
   // chekc the previous node
-  if (node->prev != NULL) {
+  if (node->prev != NULL)
+  {
     recursive_set_destroy(node->prev);
   }
 
   // check the next node
-  if (node->next != NULL) {
+  if (node->next != NULL)
+  {
     recursive_set_destroy(node->next);
   }
 
@@ -173,3 +199,4 @@ void recursive_set_destroy(struct Node* node) {
   pair_destructor(node->data);
 }
 
+//---------------------------------------------------------------------------//
