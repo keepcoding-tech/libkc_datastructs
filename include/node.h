@@ -30,7 +30,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-struct Node {
+struct Node
+{
   // the data is stored as a void pointer,
   // casting is required for proper access
   void* data;

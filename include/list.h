@@ -35,7 +35,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct List {
+struct List 
+{
   // points to the first and last node in the chain
   struct Node* head;
   struct Node* tail;
@@ -92,12 +93,15 @@ struct List* new_list();
 void destroy_list(struct List *list);
 
 // use this macro to define any type of primitive data comparison function
-#define COMPARE_LIST(type, function_name) \
-  int function_name(const void* a, const void* b) { \
-    if (*(type*)a < *(type*)b) {                    \
+#define COMPARE_LIST(type, function_name)           \
+  int function_name(const void* a, const void* b)   \
+  {                                                 \
+    if (*(type*)a < *(type*)b)                      \
+    {                                               \
       return -1;                                    \
     }                                               \
-    if (*(type*)a > *(type*)b) {                    \
+    if (*(type*)a > *(type*)b)                      \
+    {                                               \
       return 1;                                     \
     }                                               \
     return 0;                                       \

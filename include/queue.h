@@ -30,7 +30,8 @@
 
 #include <stdio.h>
 
-struct Queue {
+struct Queue
+{
   // a reference to the embedded List
   struct List* list;
 

@@ -33,7 +33,8 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-struct Vector {
+struct Vector 
+{
   // array of data stored as void pointers
   void** data;
 
@@ -98,12 +99,15 @@ struct Vector* new_vector();
 void destroy_vector(struct Vector* vector);
 
 // use this macro to define any type of primitive data comparison function
-#define COMPARE_VECTOR(type, function_name) \
-  int function_name(const void* a, const void* b) { \
-    if (*(type*)a < *(type*)b) {                    \
+#define COMPARE_VECTOR(type, function_name)         \
+  int function_name(const void* a, const void* b)   \
+  {                                                 \
+    if (*(type*)a < *(type*)b)                      \
+    {                                               \
       return -1;                                    \
     }                                               \
-    if (*(type*)a > *(type*)b) {                    \
+    if (*(type*)a > *(type*)b)                      \
+    {                                               \
       return 1;                                     \
     }                                               \
     return 0;                                       \

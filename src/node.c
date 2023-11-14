@@ -13,8 +13,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-// The constructor is used to create new instances of nodes.
-struct Node* node_constructor(void* data, size_t size) {
+//---------------------------------------------------------------------------//
+
+struct Node* node_constructor(void* data, size_t size) 
+{
   // create a new instance of console_log for loggining
   struct ConsoleLog* log = new_console_log();
 
@@ -28,9 +30,22 @@ struct Node* node_constructor(void* data, size_t size) {
   // create a Node instance to be returned
   // and allocate space for the data
   struct Node* new_node = malloc(sizeof(struct Node));
+
+  if (new_node == NULL)
+  {
+    log->log_error("OUT_OF_MEMORY", "Failing to allocate memory dynamically "
+        "(e.g. using malloc) due to insufficient memory in the heap.",
+        __FILE__, __LINE__, __func__);
+    destroy_console_log(log);
+
+    // free the instances and exit
+    exit(1);
+  }
+
   new_node->data = malloc(size);
 
-  if (new_node == NULL || new_node->data == NULL) {
+  if (new_node->data == NULL)
+  {
     log->log_error("OUT_OF_MEMORY", "Failing to allocate memory dynamically "
         "(e.g. using malloc) due to insufficient memory in the heap.",
         __FILE__, __LINE__, __func__);
@@ -55,10 +70,13 @@ struct Node* node_constructor(void* data, size_t size) {
   return new_node;
 }
 
-// The destructor removes a node by freeing the node's data and its node.
-void node_destructor(struct Node* node) {
+//---------------------------------------------------------------------------//
+
+void node_destructor(struct Node* node)
+{
   // destroy node only if is not dereferenced
-  if (node == NULL) {
+  if (node == NULL)
+  {
     struct ConsoleLog* log = new_console_log();
     log->log_warning("NULL_REFERENCE", "You are attempting to use a reference "
         "or pointer that points to null or is uninitialized.",
@@ -70,3 +88,5 @@ void node_destructor(struct Node* node) {
   free(node->data);
   free(node);
 }
+
+//---------------------------------------------------------------------------//

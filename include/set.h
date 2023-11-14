@@ -37,7 +37,8 @@
 #include <string.h>
 #include <stdio.h>
 
-struct Set {
+struct Set 
+{
   // inheriting the Tree object for storing data
   struct Tree* entries;
 
@@ -61,12 +62,15 @@ struct Set* new_set(int (*compare)(const void* a, const void* b));
 void destroy_set(struct Set* set);
 
 // use this macro to define any type of primitive data comparison function
-#define COMPARE_SET(type, function_name) \
-  int function_name(const void* a, const void* b) {                          \
-    if (*(type*)((struct Pair*)a)->key < *(type*)((struct Pair*)b)->key) {   \
+#define COMPARE_SET(type, function_name)                                     \
+  int function_name(const void* a, const void* b)                            \
+  {                                                                          \
+    if (*(type*)((struct Pair*)a)->key < *(type*)((struct Pair*)b)->key)     \
+    {                                                                        \
       return -1;                                                             \
     }                                                                        \
-    if (*(type*)((struct Pair*)a)->key > *(type*)((struct Pair*)b)->key) {   \
+    if (*(type*)((struct Pair*)a)->key > *(type*)((struct Pair*)b)->key)     \
+    {                                                                        \
       return 1;                                                              \
     }                                                                        \
     return 0;                                                                \
