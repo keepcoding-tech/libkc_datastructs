@@ -30,6 +30,8 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
+#include "../deps/libkc_logger/logger.h"
+
 #include <stdbool.h>
 #include <stdio.h>
 
@@ -43,6 +45,9 @@ struct Vector
 
   // current size of the vector
   size_t length;
+
+  // a logger instance to display errors and warnings
+  struct ConsoleLog* log;
 
   // returns a reference to the element at position specified
   void* (*at)(struct Vector* self, int index);

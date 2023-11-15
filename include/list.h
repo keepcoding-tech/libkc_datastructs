@@ -29,6 +29,7 @@
 #ifndef LIST_H
 #define LIST_H
 
+#include "../deps/libkc_logger/logger.h"
 #include "node.h"
 
 #include <stdbool.h>
@@ -44,6 +45,9 @@ struct List
   // length refers to the number of nodes in the chain
   size_t length;
 
+  // a logger instance to display errors and warnings
+  struct ConsoleLog* log;
+
   // returns a reference to the last element in the list
   struct Node* (*back)(struct List* self);
 
@@ -54,7 +58,7 @@ struct List
   bool (*empty)(struct List* self);
 
   // removes from the list a single element (position)
-  void (*erase)(struct List* self, size_t index);
+  void (*erase)(struct List* self, int index);
 
   // returns a reference to the first element in the list
   struct Node* (*front)(struct List* self);

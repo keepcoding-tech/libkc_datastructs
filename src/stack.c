@@ -6,35 +6,32 @@
 // Copyright (c) 2023 Daniel Tanase
 // SPDX-License-Identifier: MIT License
 
-#include "../deps/kclog/kclog.h"
+#include "../include/exceptions.h"
 #include "../include/stack.h"
 
 #include <stdlib.h>
 
-//--- MARK: PUBLIC MEMBER METHODS PROTOTYPES --------------------------------//
-void* get_top_item_stack(struct Stack* self);
-size_t get_vector_length_stack(struct Stack* self);
-void insert_top_item_stack(struct Stack* self, void* data, size_t size);
-void remove_top_item_stack(struct Stack* self);
+//--- MARK: PUBLIC FUNCTION PROTOTYPES --------------------------------------//
 
-//--- MARK: PRIVATE MEMBER METHODS PROTOTYPES -------------------------------//
-bool check_stack_reference(struct Stack* stack);
+static void* get_top_item_stack(struct Stack* self);
+static size_t get_vector_length_stack(struct Stack* self);
+static void insert_top_item_stack(struct Stack* self, void* data, size_t size);
+static void remove_top_item_stack(struct Stack* self);
 
 //---------------------------------------------------------------------------//
 
 struct Stack* new_stack()
 {
+  struct ConsoleLog* logger = new_console_log(err, log_err, __FILE__);
+
   // create a Stack instance to be returned
   struct Stack* new_stack = malloc(sizeof(struct Stack));
 
   // confirm that there is memory to allocate
   if (new_stack == NULL)
   {
-    struct ConsoleLog* log = new_console_log();
-    log->log_error("OUT_OF_MEMORY", "Failing to allocate memory dynamically "
-        "(e.g. using malloc) due to insufficient memory in the heap.",
-        __FILE__, __LINE__, __func__);
-    destroy_console_log(log);
+    logger->error(logger, KC_ERROR_OUT_OF_MEMORY, __LINE__, __func__);
+    destroy_console_log(logger);
 
     // free the instance and exit
     free(new_stack);
@@ -43,12 +40,13 @@ struct Stack* new_stack()
 
   // instantiate the stack's Vector via the constructor
   new_stack->vector = new_vector();
+  new_stack->log    = logger;
 
   // assigns the public member methods
   new_stack->length = get_vector_length_stack;
-  new_stack->pop = remove_top_item_stack;
-  new_stack->push = insert_top_item_stack;
-  new_stack->top = get_top_item_stack;
+  new_stack->pop    = remove_top_item_stack;
+  new_stack->push   = insert_top_item_stack;
+  new_stack->top    = get_top_item_stack;
 
   return new_stack;
 }
@@ -58,8 +56,12 @@ struct Stack* new_stack()
 void destroy_stack(struct Stack* stack)
 {
   // if the stack reference is NULL, do nothing
-  if (check_stack_reference(stack) == false)
+  if (stack == NULL)
   {
+    log_warning("NULL_REFERENCE", "You are attempting to use a reference "
+        "or pointer that points to null or is uninitialized.",
+        __FILE__, __LINE__, __func__);
+
     return;
   }
 
@@ -72,9 +74,13 @@ void destroy_stack(struct Stack* stack)
 void* get_top_item_stack(struct Stack* self)
 {
   // if the stack reference is NULL, do nothing
-  if (check_stack_reference(self) == false)
+  if (self == NULL)
   {
-    return NULL;
+    log_warning("NULL_REFERENCE", "You are attempting to use a reference "
+        "or pointer that points to null or is uninitialized.",
+        __FILE__, __LINE__, __func__);
+
+    return;
   }
 
   return self->vector->back(self->vector);
@@ -85,9 +91,13 @@ void* get_top_item_stack(struct Stack* self)
 size_t get_vector_length_stack(struct Stack* self)
 {
   // if the stack reference is NULL, do nothing
-  if (check_stack_reference(self) == false)
+  if (self == NULL)
   {
-    return 1;
+    log_warning("NULL_REFERENCE", "You are attempting to use a reference "
+        "or pointer that points to null or is uninitialized.",
+        __FILE__, __LINE__, __func__);
+
+    return;
   }
 
   return self->vector->length;
@@ -98,8 +108,12 @@ size_t get_vector_length_stack(struct Stack* self)
 void insert_top_item_stack(struct Stack* self, void* data, size_t size)
 {
   // if the stack reference is NULL, do nothing
-  if (check_stack_reference(self) == false)
+  if (self == NULL)
   {
+    log_warning("NULL_REFERENCE", "You are attempting to use a reference "
+        "or pointer that points to null or is uninitialized.",
+        __FILE__, __LINE__, __func__);
+
     return;
   }
 
@@ -112,36 +126,17 @@ void insert_top_item_stack(struct Stack* self, void* data, size_t size)
 void remove_top_item_stack(struct Stack* self)
 {
   // if the stack reference is NULL, do nothing
-  if (check_stack_reference(self) == false)
+  if (self == NULL)
   {
+    log_warning("NULL_REFERENCE", "You are attempting to use a reference "
+        "or pointer that points to null or is uninitialized.",
+        __FILE__, __LINE__, __func__);
+
     return;
   }
 
   // utilize the erase from Vector with enforced parameters
   self->vector->pop_back(self->vector);
-}
-
-//---------------------------------------------------------------------------//
-
-bool check_stack_reference(struct Stack* stack)
-{
-  if (stack == NULL)
-  {
-    // create a new instance of console_log for loggining
-    struct ConsoleLog* log = new_console_log();
-
-    // log the warning to the console
-    log->log_warning("NULL_REFERENCE", "You are attempting to use a reference "
-        "or pointer that points to null or is uninitialized.",
-        __FILE__, __LINE__, __func__);
-
-    // destroy the console log
-    destroy_console_log(log);
-
-    return false;
-  }
-
-  return true;
 }
 
 //---------------------------------------------------------------------------//

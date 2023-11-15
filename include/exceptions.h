@@ -33,7 +33,7 @@ enum EXCEPTION {
   KC_ERROR_UNDERFLOW
 };
 
-const char* exception[] = {
+const char* err[] = {
   "EMPTY_STRUCTURE",
   "INDEX_OUT_OF_BOUNDS",
   "NULL_REFERENCE",
@@ -41,7 +41,7 @@ const char* exception[] = {
   "UNDERFLOW"
 };
 
-const char* log_exception[] = {
+const char* log_err[] = {
   "You are attempting to perform operations on an empty data structure",
   "You are trying to access an element at an invalid index in an array, list, "
     "or other indexed data structure.",

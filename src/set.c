@@ -6,37 +6,36 @@
 // Copyright (c) 2023 Daniel Tanase
 // SPDX-License-Identifier: MIT License
 
-#include "../deps/kclog/kclog.h"
+#include "../include/exceptions.h"
 #include "../include/set.h"
 
 #include <stdlib.h>
 #include <string.h>
 
-//--- MARK: PUBLIC MEMBER METHODS PROTOTYPES --------------------------------//
-void insert_new_pair_set(struct Set* self, void* key,
-    size_t key_size, void* value, size_t value_size);
-void remove_pair_set(struct Set* self, void* key, size_t key_size);
-void* search_pair_set(struct Set* self, void* key, size_t key_size);
+//--- MARK: PUBLIC FUNCTION PROTOTYPES --------------------------------------//
 
-//--- MARK: PRIVATE MEMBER METHODS PROTOTYPES -------------------------------//
-bool check_set_reference(struct Set* set);
-void recursive_set_destroy(struct Node* node);
+static void insert_new_pair_set(struct Set* self, void* key, size_t key_size, void* value, size_t value_size);
+static void remove_pair_set(struct Set* self, void* key, size_t key_size);
+static void* search_pair_set(struct Set* self, void* key, size_t key_size);
+
+//--- MARK: PRIVATE FUNCTION PROTOTYPES -------------------------------------//
+
+static void recursive_set_destroy(struct Node* node);
 
 //---------------------------------------------------------------------------//
 
 struct Set* new_set(int (*compare)(const void* a, const void* b))
 {
+  struct ConsoleLog* logger = new_console_log(err, log_err, __FILE__);
+
   // create a Set instance to be returned
   struct Set* new_set = malloc(sizeof(struct Set));
 
   // confirm that there is memory to allocate
   if (new_set == NULL)
   {
-    struct ConsoleLog* log = new_console_log();
-    log->log_error("OUT_OF_MEMORY", "Failing to allocate memory dynamically "
-        "(e.g. using malloc) due to insufficient memory in the heap.",
-        __FILE__, __LINE__, __func__);
-    destroy_console_log(log);
+    logger->error(logger, KC_ERROR_OUT_OF_MEMORY, __LINE__, __func__);
+    destroy_console_log(logger);
 
     // free the instance and exit
     free(new_set);
@@ -45,6 +44,7 @@ struct Set* new_set(int (*compare)(const void* a, const void* b))
 
   // instantiate the set's Tree via the constructor
   new_set->entries = new_tree(compare);
+  new_set->log     = logger;
 
   // assigns the public member methods
   new_set->insert = insert_new_pair_set;
@@ -59,8 +59,12 @@ struct Set* new_set(int (*compare)(const void* a, const void* b))
 void destroy_set(struct Set* set)
 {
   // if the set reference is NULL, do nothing
-  if (check_set_reference(set) == false)
+  if (set == NULL)
   {
+    log_warning("NULL_REFERENCE", "You are attempting to use a reference "
+        "or pointer that points to null or is uninitialized.",
+        __FILE__, __LINE__, __func__);
+
     return;
   }
 
@@ -80,8 +84,12 @@ void insert_new_pair_set(struct Set* self, void* key,
     size_t key_size, void* value, size_t value_size)
 {
   // if the set reference is NULL, do nothing
-  if (check_set_reference(self) == false)
+  if (self == NULL)
   {
+    log_warning("NULL_REFERENCE", "You are attempting to use a reference "
+        "or pointer that points to null or is uninitialized.",
+        __FILE__, __LINE__, __func__);
+
     return;
   }
 
@@ -103,8 +111,12 @@ void insert_new_pair_set(struct Set* self, void* key,
 void remove_pair_set(struct Set* self, void* key, size_t key_size)
 {
   // if the set reference is NULL, do nothing
-  if (check_set_reference(self) == false)
+  if (self == NULL)
   {
+    log_warning("NULL_REFERENCE", "You are attempting to use a reference "
+        "or pointer that points to null or is uninitialized.",
+        __FILE__, __LINE__, __func__);
+
     return;
   }
 
@@ -123,9 +135,13 @@ void remove_pair_set(struct Set* self, void* key, size_t key_size)
 void* search_pair_set(struct Set* self, void* key, size_t key_size)
 {
   // if the set reference is NULL, do nothing
-  if (check_set_reference(self) == false)
+  if (self == NULL)
   {
-    return NULL;
+    log_warning("NULL_REFERENCE", "You are attempting to use a reference "
+        "or pointer that points to null or is uninitialized.",
+        __FILE__, __LINE__, __func__);
+
+    return;
   }
 
   // create a new pair by using a dummy value
@@ -154,29 +170,6 @@ void* search_pair_set(struct Set* self, void* key, size_t key_size)
   }
 
   return NULL;
-}
-
-//---------------------------------------------------------------------------//
-
-bool check_set_reference(struct Set* set)
-{
-  if (set == NULL)
-  {
-    // create a new instance of console_log for loggining
-    struct ConsoleLog* log = new_console_log();
-
-    // log the warning to the console
-    log->log_warning("NULL_REFERENCE", "You are attempting to use a reference "
-        "or pointer that points to null or is uninitialized.",
-        __FILE__, __LINE__, __func__);
-
-    // destroy the console log
-    destroy_console_log(log);
-
-    return false;
-  }
-
-  return true;
 }
 
 //---------------------------------------------------------------------------//
