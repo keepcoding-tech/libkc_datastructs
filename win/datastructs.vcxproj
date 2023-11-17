@@ -99,7 +99,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>$(SolutionDir)libkc_logger.lib;</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)libkc_logger.lib;$(SolutionDir)libkc_testing.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -118,7 +118,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>$(SolutionDir)libkc_logger.lib;</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)libkc_logger.lib;$(SolutionDir)libkc_testing.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -133,7 +133,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>$(SolutionDir)libkc_logger.lib;</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)libkc_logger.lib;$(SolutionDir)libkc_testing.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -152,7 +152,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>$(SolutionDir)libkc_logger.lib;</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)libkc_logger.lib;$(SolutionDir)libkc_testing.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -167,6 +167,7 @@
     <ClInclude Include="..\include\vector.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\exceptions.c" />
     <ClCompile Include="..\src\list.c" />
     <ClCompile Include="..\src\node.c" />
     <ClCompile Include="..\src\pair.c" />

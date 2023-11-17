@@ -384,7 +384,7 @@ bool is_vector_empty(struct Vector* self) {
         "or pointer that points to null or is uninitialized.",
         __FILE__, __LINE__, __func__);
 
-    return;
+    return false;
   }
 
   return self->length == 0;
@@ -459,8 +459,12 @@ bool search_elem(struct Vector* self, void* value,
     int (*compare)(const void* a, const void* b))
 {
   // if the vector reference is NULL, do nothing
-  if (check_vector_reference(self) == false)
+  if (self == NULL)
   {
+    log_warning("NULL_REFERENCE", "You are attempting to use a reference "
+        "or pointer that points to null or is uninitialized.",
+        __FILE__, __LINE__, __func__);
+
     return false;
   }
 

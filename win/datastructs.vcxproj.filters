@@ -68,5 +68,8 @@
     <ClCompile Include="..\src\vector.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\exceptions.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

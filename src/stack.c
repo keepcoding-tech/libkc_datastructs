@@ -80,7 +80,7 @@ void* get_top_item_stack(struct Stack* self)
         "or pointer that points to null or is uninitialized.",
         __FILE__, __LINE__, __func__);
 
-    return;
+    return NULL;
   }
 
   return self->vector->back(self->vector);
@@ -97,7 +97,7 @@ size_t get_vector_length_stack(struct Stack* self)
         "or pointer that points to null or is uninitialized.",
         __FILE__, __LINE__, __func__);
 
-    return;
+    return 1;
   }
 
   return self->vector->length;

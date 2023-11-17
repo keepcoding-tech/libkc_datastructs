@@ -141,7 +141,7 @@ void* search_pair_set(struct Set* self, void* key, size_t key_size)
         "or pointer that points to null or is uninitialized.",
         __FILE__, __LINE__, __func__);
 
-    return;
+    return NULL;
   }
 
   // create a new pair by using a dummy value

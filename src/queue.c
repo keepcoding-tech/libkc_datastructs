@@ -82,7 +82,7 @@ size_t get_list_length_queue(struct Queue* self)
         "or pointer that points to null or is uninitialized.",
         __FILE__, __LINE__, __func__);
 
-    return;
+    return 1;
   }
 
   return self->list->length;
@@ -100,7 +100,7 @@ void* get_next_item_queue(struct Queue* self)
         "or pointer that points to null or is uninitialized.",
         __FILE__, __LINE__, __func__);
 
-    return;
+    return NULL;
   }
 
   struct Node* next_item = self->list->front(self->list);

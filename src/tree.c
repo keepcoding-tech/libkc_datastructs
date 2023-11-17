@@ -126,7 +126,7 @@ struct Node* search_node_btree(struct Tree* self, void* data)
         "or pointer that points to null or is uninitialized.",
         __FILE__, __LINE__, __func__);
 
-    return;
+    return NULL;
   }
 
   // start searching from the root of the tree
