@@ -89,7 +89,7 @@ TEST_STATIC_LIBS := $(foreach dir, $(STATIC_LIB_DIRS), $(patsubst $(dir)/lib%.a,
 LDFLAGS := $(addprefix -L, $(STATIC_LIB_DIRS)) $(addprefix -l, $(TEST_STATIC_LIBS))
 
 # Test command to run all test executables consecutively
-test: install $(TEST_TARGETS) $(ALL_TESTS)
+test: $(TEST_TARGETS) $(ALL_TESTS)
 	@for test_executable in $(ALL_TESTS); do \
 		$$test_executable; \
 	done

@@ -29,7 +29,7 @@
 #ifndef SET_H
 #define SET_H
 
-#include "list.h"
+#include "../deps/libkc_logger/logger.h"
 #include "tree.h"
 #include "pair.h"
 
@@ -41,6 +41,9 @@ struct Set
 {
   // inheriting the Tree object for storing data
   struct Tree* entries;
+
+  // a logger instance to display errors and warnings
+  struct ConsoleLog* log;
 
   // adds new items to the set. Only the key, value,
   // and their respective sizes need to be specified

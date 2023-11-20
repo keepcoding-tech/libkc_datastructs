@@ -6,35 +6,32 @@
 // Copyright (c) 2023 Daniel Tanase
 // SPDX-License-Identifier: MIT License
 
-#include "../deps/kclog/kclog.h"
+#include "../include/exceptions.h"
 #include "../include/queue.h"
 
 #include <stdlib.h>
 
-//--- MARK: PUBLIC MEMBER METHODS PROTOTYPES --------------------------------//
-size_t get_list_length_queue(struct Queue* self);
-void* get_next_item_queue(struct Queue* self);
-void insert_next_item_queue(struct Queue* self, void* data, size_t size);
-void remove_next_item_queue(struct Queue* self);
+//--- MARK: PUBLIC FUNCTION PROTOTYPES --------------------------------------//
 
-//--- MARK: PRIVATE MEMBER METHODS PROTOTYPES -------------------------------//
-bool check_queue_reference(struct Queue* queue);
+static size_t get_list_length_queue(struct Queue* self);
+static void* get_next_item_queue(struct Queue* self);
+static void insert_next_item_queue(struct Queue* self, void* data, size_t size);
+static void remove_next_item_queue(struct Queue* self);
 
 //---------------------------------------------------------------------------//
 
 struct Queue* new_queue()
 {
+  struct ConsoleLog* logger = new_console_log(err, log_err, __FILE__);
+
   // create a Queue instance to be returned
   struct Queue* new_queue = malloc(sizeof(struct Queue));
 
   // confirm that there is memory to allocate
   if (new_queue == NULL) 
   {
-    struct ConsoleLog* log = new_console_log();
-    log->log_error("OUT_OF_MEMORY", "Failing to allocate memory dynamically "
-        "(e.g. using malloc) due to insufficient memory in the heap.",
-        __FILE__, __LINE__, __func__);
-    destroy_console_log(log);
+    logger->error(logger, KC_ERROR_OUT_OF_MEMORY, __LINE__, __func__);
+    destroy_console_log(logger);
 
     // free the instance and exit
     free(new_queue);
@@ -43,12 +40,13 @@ struct Queue* new_queue()
 
   // instantiate the queue's List via the constructor
   new_queue->list = new_list();
+  new_queue->log  = logger;
 
   // assigns the public member methods
   new_queue->length = get_list_length_queue;
-  new_queue->peek = get_next_item_queue;
-  new_queue->pop = remove_next_item_queue;
-  new_queue->push = insert_next_item_queue;
+  new_queue->peek   = get_next_item_queue;
+  new_queue->pop    = remove_next_item_queue;
+  new_queue->push   = insert_next_item_queue;
 
   return new_queue;
 }
@@ -57,9 +55,14 @@ struct Queue* new_queue()
 
 void destroy_queue(struct Queue* queue)
 {
-  // if the queue reference is NULL, do nothing
-  if (check_queue_reference(queue) == false)
+  // if the list reference is NULL, do nothing
+  if (queue == NULL)
   {
+    // log the warning to the console
+    log_warning("NULL_REFERENCE", "You are attempting to use a reference "
+        "or pointer that points to null or is uninitialized.",
+        __FILE__, __LINE__, __func__);
+
     return;
   }
 
@@ -71,9 +74,14 @@ void destroy_queue(struct Queue* queue)
 
 size_t get_list_length_queue(struct Queue* self)
 {
-  // if the queue reference is NULL, do nothing
-  if (check_queue_reference(self) == false)
+  // if the list reference is NULL, do nothing
+  if (self == NULL)
   {
+    // log the warning to the console
+    log_warning("NULL_REFERENCE", "You are attempting to use a reference "
+        "or pointer that points to null or is uninitialized.",
+        __FILE__, __LINE__, __func__);
+
     return 1;
   }
 
@@ -84,9 +92,14 @@ size_t get_list_length_queue(struct Queue* self)
 
 void* get_next_item_queue(struct Queue* self)
 {
-  // if the queue reference is NULL, do nothing
-  if (check_queue_reference(self) == false)
+  // if the list reference is NULL, do nothing
+  if (self == NULL)
   {
+    // log the warning to the console
+    log_warning("NULL_REFERENCE", "You are attempting to use a reference "
+        "or pointer that points to null or is uninitialized.",
+        __FILE__, __LINE__, __func__);
+
     return NULL;
   }
 
@@ -106,9 +119,14 @@ void* get_next_item_queue(struct Queue* self)
 
 void insert_next_item_queue(struct Queue *self, void *data, size_t size)
 {
-  // if the queue reference is NULL, do nothing
-  if (check_queue_reference(self) == false)
+  // if the list reference is NULL, do nothing
+  if (self == NULL)
   {
+    // log the warning to the console
+    log_warning("NULL_REFERENCE", "You are attempting to use a reference "
+        "or pointer that points to null or is uninitialized.",
+        __FILE__, __LINE__, __func__);
+
     return;
   }
 
@@ -119,9 +137,14 @@ void insert_next_item_queue(struct Queue *self, void *data, size_t size)
 
 void remove_next_item_queue(struct Queue *self)
 {
-  // if the queue reference is NULL, do nothing
-  if (check_queue_reference(self) == false)
+  // if the list reference is NULL, do nothing
+  if (self == NULL)
   {
+    // log the warning to the console
+    log_warning("NULL_REFERENCE", "You are attempting to use a reference "
+        "or pointer that points to null or is uninitialized.",
+        __FILE__, __LINE__, __func__);
+
     return;
   }
 
@@ -130,25 +153,3 @@ void remove_next_item_queue(struct Queue *self)
 
 //---------------------------------------------------------------------------//
 
-bool check_queue_reference(struct Queue* queue) 
-{
-  if (queue == NULL)
-  {
-    // create a new instance of console_log for loggining
-    struct ConsoleLog* log = new_console_log();
-
-    // log the warning to the console
-    log->log_warning("NULL_REFERENCE", "You are attempting to use a reference "
-        "or pointer that points to null or is uninitialized.",
-        __FILE__, __LINE__, __func__);
-
-    // destroy the console log
-    destroy_console_log(log);
-
-    return false;
-  }
-
-  return true;
-}
-
-//---------------------------------------------------------------------------//

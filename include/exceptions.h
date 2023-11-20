@@ -33,23 +33,8 @@ enum EXCEPTION {
   KC_ERROR_UNDERFLOW
 };
 
-const char* exception[] = {
-  "EMPTY_STRUCTURE",
-  "INDEX_OUT_OF_BOUNDS",
-  "NULL_REFERENCE",
-  "OUT_OF_MEMORY",
-  "UNDERFLOW"
-};
+extern const char* err[];
 
-const char* log_exception[] = {
-  "You are attempting to perform operations on an empty data structure",
-  "You are trying to access an element at an invalid index in an array, list, "
-    "or other indexed data structure.",
-  "You are attempting to use a reference or pointer that points to null or is "
-    "uninitialized.",
-  "Failing to allocate memory dynamically (e.g. using malloc) due to "
-    "insufficient memory in the heap.",
-  "The data type's size goes below its minimum representable value."
-};
+extern const char* log_err[];
 
 #endif /* EXCEPTIONS_H */

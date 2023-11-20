@@ -6,7 +6,7 @@
 // Copyright (c) 2023 Daniel Tanase
 // SPDX-License-Identifier: MIT License
 
-#include "../deps/kclog/kclog.h"
+#include "../deps/libkc_logger/logger.h"
 #include "../include/pair.h"
 
 #include <stdlib.h>
@@ -17,15 +17,11 @@
 struct Pair* pair_constructor(void* key, size_t key_size,
     void* value, size_t value_size) 
 {
-  // create a new instance of console_log for loggining
-  struct ConsoleLog* log = new_console_log();
-
   // confirm the size of the data is at least one
   if (key_size < 1 || value_size < 1)
   {
-    log->log_error("UNDERFLOW", "The data type's size goes below its "
+    log_error("UNDERFLOW", "The data type's size goes below its "
         "minimum representable value.", __FILE__, __LINE__, __func__);
-    destroy_console_log(log);
     return NULL;
   }
 
@@ -35,10 +31,9 @@ struct Pair* pair_constructor(void* key, size_t key_size,
   // confirm that there is memory to allocate
   if (new_pair == NULL)
   {
-    log->log_error("OUT_OF_MEMORY", "Failing to allocate memory dynamically "
+    log_error("OUT_OF_MEMORY", "Failing to allocate memory dynamically "
         "(e.g. using malloc) due to insufficient memory in the heap.",
         __FILE__, __LINE__, __func__);
-    destroy_console_log(log);
 
     // free the instance and exit
     free(new_pair);
@@ -52,10 +47,9 @@ struct Pair* pair_constructor(void* key, size_t key_size,
   // confirm that there is memory to allocate
   if (new_pair->key == NULL || new_pair->value == NULL)
   {
-    log->log_error("OUT_OF_MEMORY", "Failing to allocate memory dynamically "
+    log_error("OUT_OF_MEMORY", "Failing to allocate memory dynamically "
         "(e.g. using malloc) due to insufficient memory in the heap.",
         __FILE__, __LINE__, __func__);
-    destroy_console_log(log);
 
     // free the instances and exit
     free(new_pair->key);
@@ -63,9 +57,6 @@ struct Pair* pair_constructor(void* key, size_t key_size,
     free(new_pair);
     exit(1);
   }
-
-  // destroy the console log
-  destroy_console_log(log);
 
   // copy the data parameters into the new object
   memcpy(new_pair->key, key, key_size);
@@ -81,11 +72,9 @@ void pair_destructor(struct Pair* pair)
   // destroy pair only if is not dereferenced
   if (pair == NULL)
   {
-    struct ConsoleLog* log = new_console_log();
-    log->log_warning("NULL_REFERENCE", "You are attempting to use a reference "
+    log_warning("NULL_REFERENCE", "You are attempting to use a reference "
         "or pointer that points to null or is uninitialized.",
         __FILE__, __LINE__, __func__);
-    destroy_console_log(log);
     return;
   }
 

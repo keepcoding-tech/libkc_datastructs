@@ -6,51 +6,47 @@
 // Copyright (c) 2023 Daniel Tanase
 // SPDX-License-Identifier: MIT License
 
-#include "../deps/kclog/kclog.h"
+#include "../include/exceptions.h"
 #include "../include/list.h"
 
 #include <stdlib.h>
 
-//--- MARK: PUBLIC MEMBER METHODS PROTOTYPES --------------------------------//
+//--- MARK: PUBLIC FUNCTION PROTOTYPES --------------------------------------//
 
-void erase_all_nodes(struct List* self);
-void erase_first_node(struct List* self);
-void erase_last_node(struct List* self);
-void erase_node(struct List* self, size_t index);
-void erase_nodes_by_value(struct List* self, void* value,
-    int (*compare)(const void* a, const void* b));
-struct Node* get_first_node(struct List* self);
-struct Node* get_last_node(struct List* self);
-struct Node* get_node(struct List* self, int index);
-void insert_new_head(struct List* self, void* data, size_t size);
-void insert_new_node(struct List* self, int index, void* data, size_t size);
-void insert_new_tail(struct List* self, void* data, size_t size);
-bool is_list_empty(struct List* self);
-bool search_node(struct List* self, void* value,
-    int (*compare)(const void* a, const void* b));
+static void erase_all_nodes(struct List* self);
+static void erase_first_node(struct List* self);
+static void erase_last_node(struct List* self);
+static void erase_node(struct List* self, int index);
+static void erase_nodes_by_value(struct List* self, void* value, int (*compare)(const void* a, const void* b));
+static struct Node* get_first_node(struct List* self);
+static struct Node* get_last_node(struct List* self);
+static struct Node* get_node(struct List* self, int index);
+static void insert_new_head(struct List* self, void* data, size_t size);
+static void insert_new_node(struct List* self, int index, void* data, size_t size);
+static void insert_new_tail(struct List* self, void* data, size_t size);
+static bool is_list_empty(struct List* self);
+static bool search_node(struct List* self, void* value, int (*compare)(const void* a, const void* b));
 
-//--- MARK: PRIVATE MEMBER METHODS PROTOTYPES -------------------------------//
+//--- MARK: PRIVATE FUNCTION PROTOTYPES -------------------------------------//
 
-bool check_list_reference(struct List* list);
-struct Node* iterate_ll(struct List* list, int index);
-struct Node* iterate_forward_ll(struct Node* head, int index);
-struct Node* iterate_reverse_ll(struct Node* tail, int index);
+static struct Node* iterate_ll(struct List* list, int index);
+static struct Node* iterate_forward_ll(struct Node* head, int index);
+static struct Node* iterate_reverse_ll(struct Node* tail, int index);
 
 //---------------------------------------------------------------------------//
 
 struct List* new_list()
 {
+  struct ConsoleLog* logger = new_console_log(err, log_err, __FILE__);
+
   // create a List instance to be returned
   struct List* new_list = malloc(sizeof(struct List));
 
   // confirm that there is memory to allocate
   if (new_list == NULL)
   {
-    struct ConsoleLog* log = new_console_log();
-    log->log_error("OUT_OF_MEMORY", "Failing to allocate memory dynamically "
-        "(e.g. using malloc) due to insufficient memory in the heap.",
-        __FILE__, __LINE__, __func__);
-    destroy_console_log(log);
+    logger->error(logger, KC_ERROR_OUT_OF_MEMORY, __LINE__, __func__);
+    destroy_console_log(logger);
 
     // free the instance and exit
     free(new_list);
@@ -58,24 +54,25 @@ struct List* new_list()
   }
 
   // initialize the structure members fields
-  new_list->head = NULL;
-  new_list->tail = NULL;
+  new_list->head   = NULL;
+  new_list->tail   = NULL;
   new_list->length = 0;
+  new_list->log    = logger;
 
   // assigns the public member methods
-  new_list->back = get_last_node;
-  new_list->clear = erase_all_nodes;
-  new_list->empty = is_list_empty;
-  new_list->erase = erase_node;
-  new_list->front = get_first_node;
-  new_list->get = get_node;
-  new_list->insert = insert_new_node;
-  new_list->pop_back = erase_last_node;
-  new_list->pop_front = erase_first_node;
-  new_list->push_back = insert_new_tail;
+  new_list->back       = get_last_node;
+  new_list->clear      = erase_all_nodes;
+  new_list->empty      = is_list_empty;
+  new_list->erase      = erase_node;
+  new_list->front      = get_first_node;
+  new_list->get        = get_node;
+  new_list->insert     = insert_new_node;
+  new_list->pop_back   = erase_last_node;
+  new_list->pop_front  = erase_first_node;
+  new_list->push_back  = insert_new_tail;
   new_list->push_front = insert_new_head;
-  new_list->remove = erase_nodes_by_value;
-  new_list->search = search_node;
+  new_list->remove     = erase_nodes_by_value;
+  new_list->search     = search_node;
 
   return new_list;
 }
@@ -85,9 +82,12 @@ struct List* new_list()
 void destroy_list(struct List* list) 
 {
   // if the list reference is NULL, do nothing
-  if (check_list_reference(list) == false)
+  if (list == NULL)
   {
-    return;
+    log_error(err[KC_ERROR_NULL_REFERENCE], log_err[KC_ERROR_NULL_REFERENCE],
+        __FILE__, __LINE__, __func__);
+
+    exit(1);
   }
 
   erase_all_nodes(list);
@@ -99,9 +99,12 @@ void destroy_list(struct List* list)
 void erase_all_nodes(struct List* self)
 {
   // if the list reference is NULL, do nothing
-  if (check_list_reference(self) == false)
+  if (self == NULL)
   {
-    return;
+    log_error(err[KC_ERROR_NULL_REFERENCE], log_err[KC_ERROR_NULL_REFERENCE],
+        __FILE__, __LINE__, __func__);
+
+    exit(1);
   }
 
   // start iterating from the head
@@ -124,9 +127,12 @@ void erase_all_nodes(struct List* self)
 void erase_first_node(struct List* self)
 {
   // if the list reference is NULL, do nothing
-  if (check_list_reference(self) == false || self->head == NULL)
+  if (self == NULL)
   {
-    return;
+    log_error(err[KC_ERROR_NULL_REFERENCE], log_err[KC_ERROR_NULL_REFERENCE],
+        __FILE__, __LINE__, __func__);
+
+    exit(1);
   }
 
   struct Node* old_head = self->head;
@@ -152,9 +158,12 @@ void erase_first_node(struct List* self)
 void erase_last_node(struct List* self) 
 {
   // if the list reference is NULL, do nothing
-  if (check_list_reference(self) == false || self->tail == NULL)
+  if (self == NULL)
   {
-    return;
+    log_error(err[KC_ERROR_NULL_REFERENCE], log_err[KC_ERROR_NULL_REFERENCE],
+        __FILE__, __LINE__, __func__);
+
+    exit(1);
   }
 
   struct Node* old_tail = self->tail;
@@ -177,22 +186,23 @@ void erase_last_node(struct List* self)
 
 //---------------------------------------------------------------------------//
 
-void erase_node(struct List* self, size_t index)
+void erase_node(struct List* self, int index)
 {
   // if the list reference is NULL, do nothing
-  if (check_list_reference(self) == false)
+  if (self == NULL)
   {
-    return;
+    log_error(err[KC_ERROR_NULL_REFERENCE], log_err[KC_ERROR_NULL_REFERENCE],
+        __FILE__, __LINE__, __func__);
+
+    exit(1);
   }
 
   // confirm the user has specified a valid index
   if (index < 0 || index >= self->length)
   {
-    struct ConsoleLog* log = new_console_log();
-    log->log_warning("INDEX_OUT_OF_BOUNDS", "You are trying to access an "
-        "element at an invalid index in an array, list, or other indexed "
-        "data structure.", __FILE__, __LINE__, __func__);
-    destroy_console_log(log);
+    // log the warning to the console
+    self->log->warning(self->log, KC_ERROR_INDEX_OUT_OF_BOUNDS, __LINE__, __func__);
+
     return;
   }
 
@@ -229,9 +239,12 @@ void erase_nodes_by_value(struct List* self, void* value,
     int (*compare)(const void* a, const void* b))
 {
   // if the list reference is NULL, do nothing
-  if (check_list_reference(self) == false)
+  if (self == NULL)
   {
-    return;
+    log_error(err[KC_ERROR_NULL_REFERENCE], log_err[KC_ERROR_NULL_REFERENCE],
+        __FILE__, __LINE__, __func__);
+
+    exit(1);
   }
 
   // start from the head
@@ -280,9 +293,12 @@ void erase_nodes_by_value(struct List* self, void* value,
 struct Node* get_first_node(struct List* self) 
 {
   // if the list reference is NULL, do nothing
-  if (check_list_reference(self) == false || self->head == NULL)
+  if (self == NULL)
   {
-    return NULL;
+    log_error(err[KC_ERROR_NULL_REFERENCE], log_err[KC_ERROR_NULL_REFERENCE],
+        __FILE__, __LINE__, __func__);
+
+    exit(1);
   }
 
   return self->head;
@@ -293,9 +309,12 @@ struct Node* get_first_node(struct List* self)
 struct Node* get_last_node(struct List* self)
 {
   // if the list reference is NULL, do nothing
-  if (check_list_reference(self) == false || self->tail == NULL)
+  if (self == NULL)
   {
-    return NULL;
+    log_error(err[KC_ERROR_NULL_REFERENCE], log_err[KC_ERROR_NULL_REFERENCE],
+        __FILE__, __LINE__, __func__);
+
+    exit(1);
   }
 
   return self->tail;
@@ -306,19 +325,20 @@ struct Node* get_last_node(struct List* self)
 struct Node* get_node(struct List* self, int index) 
 {
   // if the list reference is NULL, do nothing
-  if (check_list_reference(self) == false)
+  if (self == NULL)
   {
-    return NULL;
+    log_error(err[KC_ERROR_NULL_REFERENCE], log_err[KC_ERROR_NULL_REFERENCE],
+        __FILE__, __LINE__, __func__);
+
+    exit(1);
   }
 
   // confirm the user has specified a valid index
   if (index < 0 || index >= self->length)
   {
-    struct ConsoleLog* log = new_console_log();
-    log->log_warning("INDEX_OUT_OF_BOUNDS", "You are trying to access an "
-        "element at an invalid index in an array, list, or other indexed "
-        "data structure.", __FILE__, __LINE__, __func__);
-    destroy_console_log(log);
+    // log the warning to the console
+    self->log->warning(self->log, KC_ERROR_INDEX_OUT_OF_BOUNDS, __LINE__, __func__);
+
     return NULL;
   }
 
@@ -330,9 +350,12 @@ struct Node* get_node(struct List* self, int index)
 void insert_new_head(struct List* self, void* data, size_t size)
 {
   // if the list reference is NULL, do nothing
-  if (check_list_reference(self) == false)
+  if (self == NULL)
   {
-    return;
+    log_error(err[KC_ERROR_NULL_REFERENCE], log_err[KC_ERROR_NULL_REFERENCE],
+        __FILE__, __LINE__, __func__);
+
+    exit(1);
   }
 
   insert_new_node(self, 0, data, size);
@@ -343,19 +366,20 @@ void insert_new_head(struct List* self, void* data, size_t size)
 void insert_new_node(struct List* self, int index, void* data, size_t size)
 {
   // if the list reference is NULL, do nothing
-  if (check_list_reference(self) == false)
+  if (self == NULL)
   {
-    return;
+    log_error(err[KC_ERROR_NULL_REFERENCE], log_err[KC_ERROR_NULL_REFERENCE],
+        __FILE__, __LINE__, __func__);
+
+    exit(1);
   }
 
   // confirm the user has specified a valid index
   if (index < 0 || index > self->length)
   {
-    struct ConsoleLog* log = new_console_log();
-    log->log_warning("INDEX_OUT_OF_BOUNDS", "You are trying to access an "
-        "element at an invalid index in an array, list, or other indexed "
-        "data structure.", __FILE__, __LINE__, __func__);
-    destroy_console_log(log);
+    // log the warning to the console
+    self->log->warning(self->log, KC_ERROR_INDEX_OUT_OF_BOUNDS, __LINE__, __func__);
+
     return;
   }
 
@@ -417,12 +441,15 @@ void insert_new_node(struct List* self, int index, void* data, size_t size)
 void insert_new_tail(struct List* self, void* data, size_t size) 
 {
   // if the list reference is NULL, do nothing
-  if (check_list_reference(self) == false)
+  if (self == NULL)
   {
-    return;
+    log_error(err[KC_ERROR_NULL_REFERENCE], log_err[KC_ERROR_NULL_REFERENCE],
+        __FILE__, __LINE__, __func__);
+
+    exit(1);
   }
 
-  insert_new_node(self, self->length, data, size);
+  insert_new_node(self, (int)self->length, data, size);
 }
 
 //---------------------------------------------------------------------------//
@@ -430,9 +457,12 @@ void insert_new_tail(struct List* self, void* data, size_t size)
 bool is_list_empty(struct List* self)
 {
   // if the list reference is NULL, do nothing
-  if (check_list_reference(self) == false)
+  if (self == NULL)
   {
-    return NULL;
+    log_error(err[KC_ERROR_NULL_REFERENCE], log_err[KC_ERROR_NULL_REFERENCE],
+        __FILE__, __LINE__, __func__);
+
+    exit(1);
   }
 
   return self->length == 0 && self->head == NULL && self->tail == NULL;
@@ -444,9 +474,12 @@ bool search_node(struct List* self, void* value,
     int (*compare)(const void* a, const void* b))
 {
   // if the list reference is NULL, do nothing
-  if (check_list_reference(self) == false)
+  if (self == NULL)
   {
-    return NULL;
+    log_error(err[KC_ERROR_NULL_REFERENCE], log_err[KC_ERROR_NULL_REFERENCE],
+        __FILE__, __LINE__, __func__);
+
+    exit(1);
   }
 
   // create a new node instance
@@ -463,46 +496,23 @@ bool search_node(struct List* self, void* value,
 
 //---------------------------------------------------------------------------//
 
-bool check_list_reference(struct List* list)
-{
-  if (list == NULL)
-  {
-    // create a new instance of console_log for loggining
-    struct ConsoleLog* log = new_console_log();
-
-    // log the warning to the console
-    log->log_warning("NULL_REFERENCE", "You are attempting to use a reference "
-        "or pointer that points to null or is uninitialized.",
-        __FILE__, __LINE__, __func__);
-
-    // destroy the console log
-    destroy_console_log(log);
-
-    return false;
-  }
-
-  return true;
-}
-
-//---------------------------------------------------------------------------//
-
 struct Node* iterate_ll(struct List* self, int index)
 {
   // if the list reference is NULL, do nothing
-  if (check_list_reference(self) == false ||
-      self->head == NULL || self->tail == NULL)
+  if (self == NULL || self->head == NULL || self->tail == NULL)
   {
-    return NULL;
+    log_error(err[KC_ERROR_NULL_REFERENCE], log_err[KC_ERROR_NULL_REFERENCE],
+        __FILE__, __LINE__, __func__);
+
+    exit(1);
   }
 
   // confirm the user has specified a valid index
   if (index < 0 || index >= self->length)
   {
-    struct ConsoleLog* log = new_console_log();
-    log->log_warning("INDEX_OUT_OF_BOUNDS", "You are trying to access an "
-        "element at an invalid index in an array, list, or other indexed "
-        "data structure.", __FILE__, __LINE__, __func__);
-    destroy_console_log(log);
+    // log the warning to the console
+    self->log->warning(self->log, KC_ERROR_INDEX_OUT_OF_BOUNDS, __LINE__, __func__);
+
     return NULL;
   }
 
@@ -510,7 +520,7 @@ struct Node* iterate_ll(struct List* self, int index)
   // smaller, then start from the head, otherwise start from the tail
   struct Node* node = index <= self->length / 2 ?
       iterate_forward_ll(self->head, index) :
-      iterate_reverse_ll(self->tail, (self->length - 1) - index);
+      iterate_reverse_ll(self->tail, (int)(self->length - 1) - index);
 
   return node;
 }

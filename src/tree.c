@@ -6,41 +6,39 @@
 // Copyright (c) 2023 Daniel Tanase
 // SPDX-License-Identifier: MIT License
 
-#include "../deps/kclog/kclog.h"
+#include "../include/exceptions.h"
 #include "../include/tree.h"
 
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 
-//--- MARK: PUBLIC MEMBER METHODS PROTOTYPES --------------------------------//
-void insert_new_node_btree(struct Tree* self, void* data, size_t size);
-void remove_node_btree(struct Tree* self, void* data, size_t size);
-struct Node* search_node_btree(struct Tree* self, void* data);
+//--- MARK: PUBLIC FUNCTION PROTOTYPES --------------------------------------//
 
-//--- MARK: PRIVATE MEMBER METHODS PROTOTYPES -------------------------------//
-bool check_tree_reference(struct Tree* tree);
-struct Node* insert_node_btree(struct Tree* self,
-    struct Node* node, void* data, size_t size);
-void recursive_destroy_tree(struct Node* node);
-struct Node* recursive_remove_node(struct Tree* self,
-    struct Node* root, void* data, size_t size);
+static void insert_new_node_btree(struct Tree* self, void* data, size_t size);
+static void remove_node_btree(struct Tree* self, void* data, size_t size);
+static struct Node* search_node_btree(struct Tree* self, void* data);
+
+//--- MARK: PRIVATE FUNCTION PROTOTYPES -------------------------------------//
+
+static struct Node* insert_node_btree(struct Tree* self, struct Node* node, void* data, size_t size);
+static void recursive_destroy_tree(struct Node* node);
+static struct Node* recursive_remove_node(struct Tree* self, struct Node* root, void* data, size_t size);
 
 //---------------------------------------------------------------------------//
 
 struct Tree* new_tree(int (*compare)(const void* a, const void* b))
 {
+  struct ConsoleLog* logger = new_console_log(err, log_err, __FILE__);
+
   // create a Tree instance to be returned
   struct Tree* new_tree = malloc(sizeof(struct Tree));
 
   // confirm that there is memory to allocate
   if (new_tree == NULL)
   {
-    struct ConsoleLog* log = new_console_log();
-    log->log_error("OUT_OF_MEMORY", "Failing to allocate memory dynamically "
-        "(e.g. using malloc) due to insufficient memory in the heap.",
-        __FILE__, __LINE__, __func__);
-    destroy_console_log(log);
+    logger->error(logger, KC_ERROR_OUT_OF_MEMORY, __LINE__, __func__);
+    destroy_console_log(logger);
 
     // free the instance and exit
     free(new_tree);
@@ -49,12 +47,13 @@ struct Tree* new_tree(int (*compare)(const void* a, const void* b))
 
   // initialize the structure members fields
   new_tree->root = NULL;
+  new_tree->log  = logger;
 
   // assigns the public member methods
   new_tree->compare = compare;
-  new_tree->insert = insert_new_node_btree;
-  new_tree->remove = remove_node_btree;
-  new_tree->search = search_node_btree;
+  new_tree->insert  = insert_new_node_btree;
+  new_tree->remove  = remove_node_btree;
+  new_tree->search  = search_node_btree;
 
   return new_tree;
 }
@@ -64,8 +63,12 @@ struct Tree* new_tree(int (*compare)(const void* a, const void* b))
 void destroy_tree(struct Tree* tree)
 {
   // if the tree reference is NULL, do nothing
-  if (check_tree_reference(tree) == false)
+  if (tree == NULL)
   {
+    log_warning("NULL_REFERENCE", "You are attempting to use a reference "
+        "or pointer that points to null or is uninitialized.",
+        __FILE__, __LINE__, __func__);
+
     return;
   }
 
@@ -83,8 +86,12 @@ void destroy_tree(struct Tree* tree)
 void insert_new_node_btree(struct Tree* self, void* data, size_t size)
 {
   // if the tree reference is NULL, do nothing
-  if (check_tree_reference(self) == false)
+  if (self == NULL)
   {
+    log_warning("NULL_REFERENCE", "You are attempting to use a reference "
+        "or pointer that points to null or is uninitialized.",
+        __FILE__, __LINE__, __func__);
+
     return;
   }
 
@@ -96,8 +103,12 @@ void insert_new_node_btree(struct Tree* self, void* data, size_t size)
 void remove_node_btree(struct Tree* self, void* data, size_t size)
 {
   // if the tree reference is NULL, do nothing
-  if (check_tree_reference(self) == false)
+  if (self == NULL)
   {
+    log_warning("NULL_REFERENCE", "You are attempting to use a reference "
+        "or pointer that points to null or is uninitialized.",
+        __FILE__, __LINE__, __func__);
+
     return;
   }
 
@@ -109,8 +120,12 @@ void remove_node_btree(struct Tree* self, void* data, size_t size)
 struct Node* search_node_btree(struct Tree* self, void* data)
 {
   // if the tree reference is NULL, do nothing
-  if (check_tree_reference(self) == false)
+  if (self == NULL)
   {
+    log_warning("NULL_REFERENCE", "You are attempting to use a reference "
+        "or pointer that points to null or is uninitialized.",
+        __FILE__, __LINE__, __func__);
+
     return NULL;
   }
 
@@ -140,29 +155,6 @@ struct Node* search_node_btree(struct Tree* self, void* data)
 
   // if the node was not found, return NULL
   return NULL;
-}
-
-//---------------------------------------------------------------------------//
-
-bool check_tree_reference(struct Tree* tree)
-{
-  if (tree == NULL) 
-  {
-    // create a new instance of console_log for loggining
-    struct ConsoleLog* log = new_console_log();
-
-    // log the warning to the console
-    log->log_warning("NULL_REFERENCE", "You are attempting to use a reference "
-        "or pointer that points to null or is uninitialized.",
-        __FILE__, __LINE__, __func__);
-
-    // destroy the console log
-    destroy_console_log(log);
-
-    return false;
-  }
-
-  return true;
 }
 
 //---------------------------------------------------------------------------//

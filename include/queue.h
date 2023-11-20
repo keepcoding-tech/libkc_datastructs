@@ -26,6 +26,7 @@
 #ifndef QUEUE_H
 #define QUEUE_H
 
+#include "../deps/libkc_logger/logger.h"
 #include "list.h"
 
 #include <stdio.h>
@@ -34,6 +35,9 @@ struct Queue
 {
   // a reference to the embedded List
   struct List* list;
+
+  // a logger instance to display errors and warnings
+  struct ConsoleLog* log;
 
   // returns the length of the list
   size_t (*length)(struct Queue* self);

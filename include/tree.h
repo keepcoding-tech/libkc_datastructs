@@ -31,6 +31,7 @@
 #ifndef TREE_H
 #define TREE_H
 
+#include "../deps/libkc_logger/logger.h"
 #include "node.h"
 
 #include <stdio.h>
@@ -39,6 +40,9 @@ struct Tree
 {
   // root points to the top-most node in the tree
   struct Node* root;
+
+  // a logger instance to display errors and warnings
+  struct ConsoleLog* log;
 
   // the "compare" function is provided by the user and is responsible for
   // comparing the data of two nodes. This function must accept two void

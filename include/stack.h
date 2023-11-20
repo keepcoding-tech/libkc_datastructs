@@ -29,6 +29,7 @@
 #ifndef STACK_H
 #define STACK_H
 
+#include "../deps/libkc_logger/logger.h"
 #include "vector.h"
 
 #include <stdio.h>
@@ -37,6 +38,9 @@ struct Stack
 {
   // a reference to the embedded Vector
   struct Vector* vector;
+
+  // a logger instance to display errors and warnings
+  struct ConsoleLog* log;
 
   // returns the length of the vector
   size_t (*length)(struct Stack* self);
