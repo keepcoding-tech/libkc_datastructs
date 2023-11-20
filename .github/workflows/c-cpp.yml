@@ -13,6 +13,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: Install Deps
+      run: make install
     - name: Compile
       run: make all
     - name: Run Tests

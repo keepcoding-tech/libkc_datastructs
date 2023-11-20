@@ -147,7 +147,7 @@ int main() {
       ok(*(int*)cursor->data != 0 || list->length != 9);
 
       // remove the remaining nodes in reverse
-      for (int i = list->length - 1; i >= 0; --i) {
+      for (int i = (int)list->length - 1; i >= 0; --i) {
         list->erase(list, i);
         ok(list->length == i);
       }
@@ -205,7 +205,7 @@ int main() {
       ok(*(int*)node->data == 0);
 
       // check if the tail of the list was correctly retrieved
-      node = list->get(list, list->length - 1);
+      node = list->get(list, (int)list->length - 1);
       ok(*(int*)node->data == 9);
 
       destroy_list(list);

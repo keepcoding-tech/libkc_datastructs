@@ -6,7 +6,8 @@
 // Copyright (c) 2023 Daniel Tanase
 // SPDX-License-Identifier: MIT License
 
-const char* err[] = {
+const char* err[] = 
+{
   "EMPTY_STRUCTURE",
   "INDEX_OUT_OF_BOUNDS",
   "NULL_REFERENCE",
@@ -14,7 +15,8 @@ const char* err[] = {
   "UNDERFLOW"
 };
 
-const char* log_err[] = {
+const char* log_err[] = 
+{
   "You are attempting to perform operations on an empty data structure",
   "You are trying to access an element at an invalid index in an array, list, "
     "or other indexed data structure.",
