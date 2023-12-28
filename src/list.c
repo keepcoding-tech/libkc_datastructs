@@ -13,25 +13,22 @@
 
 //--- MARK: PUBLIC FUNCTION PROTOTYPES --------------------------------------//
 
-static void erase_all_nodes(struct List* self);
-static void erase_first_node(struct List* self);
-static void erase_last_node(struct List* self);
-static void erase_node(struct List* self, int index);
-static void erase_nodes_by_value(struct List* self, void* value, int (*compare)(const void* a, const void* b));
-static struct Node* get_first_node(struct List* self);
-static struct Node* get_last_node(struct List* self);
-static struct Node* get_node(struct List* self, int index);
-static void insert_new_head(struct List* self, void* data, size_t size);
-static void insert_new_node(struct List* self, int index, void* data, size_t size);
-static void insert_new_tail(struct List* self, void* data, size_t size);
-static bool is_list_empty(struct List* self);
-static bool search_node(struct List* self, void* value, int (*compare)(const void* a, const void* b));
-
-//--- MARK: PRIVATE FUNCTION PROTOTYPES -------------------------------------//
-
-static struct Node* iterate_ll(struct List* list, int index);
-static struct Node* iterate_forward_ll(struct Node* head, int index);
-static struct Node* iterate_reverse_ll(struct Node* tail, int index);
+static void         erase_all_nodes       (struct List* self);
+static void         erase_first_node      (struct List* self);
+static void         erase_last_node       (struct List* self);
+static void         erase_node            (struct List* self, int index);
+static void         erase_nodes_by_value  (struct List* self, void* value, int (*compare)(const void* a, const void* b));
+static struct Node* get_first_node        (struct List* self);
+static struct Node* get_last_node         (struct List* self);
+static struct Node* get_node              (struct List* self, int index);
+static void         insert_new_head       (struct List* self, void* data, size_t size);
+static void         insert_new_node       (struct List* self, int index, void* data, size_t size);
+static void         insert_new_tail       (struct List* self, void* data, size_t size);
+static bool         is_list_empty         (struct List* self);
+static bool         search_node           (struct List* self, void* value, int (*compare)(const void* a, const void* b));
+static struct Node* iterate_ll            (struct List* list, int index);
+static struct Node* iterate_forward_ll    (struct Node* head, int index);
+static struct Node* iterate_reverse_ll    (struct Node* tail, int index);
 
 //---------------------------------------------------------------------------//
 
@@ -235,8 +232,7 @@ void erase_node(struct List* self, int index)
 
 //---------------------------------------------------------------------------//
 
-void erase_nodes_by_value(struct List* self, void* value,
-    int (*compare)(const void* a, const void* b))
+void erase_nodes_by_value(struct List* self, void* value, int (*compare)(const void* a, const void* b))
 {
   // if the list reference is NULL, do nothing
   if (self == NULL)

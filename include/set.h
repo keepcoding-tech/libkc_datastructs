@@ -29,7 +29,7 @@
 #ifndef SET_H
 #define SET_H
 
-#include "../deps/libkc_logger/logger.h"
+#include "../deps/libkc/logger/logger.h"
 #include "tree.h"
 #include "pair.h"
 
@@ -39,30 +39,21 @@
 
 struct Set 
 {
-  // inheriting the Tree object for storing data
   struct Tree* entries;
 
-  // a logger instance to display errors and warnings
   struct ConsoleLog* log;
 
-  // adds new items to the set. Only the key, value,
-  // and their respective sizes need to be specified
-  void (*insert)(struct Set* self, void* key,
-      size_t key_size, void* value, size_t value_size);
-
-  // removes a specified element based on the key
-  void (*remove)(struct Set* self, void* key, size_t key_size);
-
-  // scans the set for a specified key and returns its corresponding
-  // value, if the key is not found, the function returns NULL
-  void* (*search)(struct Set* self, void* key, size_t key_size);
+  void  (*insert)  (struct Set* self, void* key, size_t key_size, void* value, size_t value_size);
+  void  (*remove)  (struct Set* self, void* key, size_t key_size);
+  void* (*search)  (struct Set* self, void* key, size_t key_size);
 };
 
-// the constructor should be used to create Dictionaries
-struct Set* new_set(int (*compare)(const void* a, const void* b));
+//---------------------------------------------------------------------------//
 
-// the destructor should be used to destroy a Dictionaries
-void destroy_set(struct Set* set);
+struct Set* new_set      (int (*compare)(const void* a, const void* b));
+void        destroy_set  (struct Set* set);
+
+//---------------------------------------------------------------------------//
 
 // use this macro to define any type of primitive data comparison function
 #define COMPARE_SET(type, function_name)                                     \
@@ -79,4 +70,4 @@ void destroy_set(struct Set* set);
     return 0;                                                                \
   }
 
-#endif /* set_H */
+#endif /* SET_H */

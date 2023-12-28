@@ -29,36 +29,24 @@
 #ifndef STACK_H
 #define STACK_H
 
-#include "../deps/libkc_logger/logger.h"
+#include "../deps/libkc/logger/logger.h"
 #include "vector.h"
 
 #include <stdio.h>
 
 struct Stack
 {
-  // a reference to the embedded Vector
   struct Vector* vector;
 
-  // a logger instance to display errors and warnings
   struct ConsoleLog* log;
 
-  // returns the length of the vector
-  size_t (*length)(struct Stack* self);
-
-  // removes the last item in the vector
-  void (*pop)(struct Stack* self);
-
-  // adds an item to the end of the vector
-  void (*push)(struct Stack* self, void* data, size_t size);
-
-  // returns the top element (last element in the vector)
-  void* (*top)(struct Stack* self);
+  size_t (*length)  (struct Stack* self);
+  void   (*pop)     (struct Stack* self);
+  void   (*push)    (struct Stack* self, void* data, size_t size);
+  void*  (*top)     (struct Stack* self);
 };
 
-// the constructor should be used to create Stack
-struct Stack* new_stack();
-
-// the destructor should be used to destroy a Stack
-void destroy_stack(struct Stack* stack);
+struct Stack* new_stack      ();
+void          destroy_stack  (struct Stack* stack);
 
 #endif /* STACK_H */

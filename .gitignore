@@ -20,7 +20,7 @@
 *.pch
 
 # libraries
-*.lib
+win/*.lib
 *.a
 *.la
 *.lo

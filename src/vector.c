@@ -12,29 +12,26 @@
 #include <stdlib.h>
 #include <string.h>
 
-//--- MARK: PUBLIC FUNCTION PROTOTYPES --------------------------------------//
-
-static void erase_all_elems(struct Vector* self);
-static void erase_elem(struct Vector* self, int index);
-static void erase_elems_by_value(struct Vector* self, void* value, int (*compare)(const void* a, const void* b));
-static void erase_first_elem(struct Vector* self);
-static void erase_last_elem(struct Vector* self);
-static void* get_elem(struct Vector* self, int index);
-static void* get_first_elem(struct Vector* self);
-static void* get_last_elem(struct Vector* self);
-static size_t get_vector_capacity(struct Vector* self);
-static void insert_at_beginning(struct Vector* self, void* data, size_t size);
-static void insert_at_end(struct Vector* self, void* data, size_t size);
-static bool is_vector_empty(struct Vector* self);
-static void insert_new_elem(struct Vector* self, int index, void* data, size_t size);
-static void resize_vector_capacity(struct Vector* self, size_t new_capacity);
-static bool search_elem(struct Vector* self, void* value, int (*compare)(const void* a, const void* b));
-
 //--- MARK: PRIVATE FUNCTION PROTOTYPES -------------------------------------//
 
-static void permute_to_left(struct Vector* vector, int start, int end);
-static void permute_to_right(struct Vector* vector, int start, int end);
-static void resize_vector(struct Vector* vector, size_t new_capacity);
+static void   erase_all_elems         (struct Vector* self);
+static void   erase_elem              (struct Vector* self, int index);
+static void   erase_elems_by_value    (struct Vector* self, void* value, int (*compare)(const void* a, const void* b));
+static void   erase_first_elem        (struct Vector* self);
+static void   erase_last_elem         (struct Vector* self);
+static void*  get_elem                (struct Vector* self, int index);
+static void*  get_first_elem          (struct Vector* self);
+static void*  get_last_elem           (struct Vector* self);
+static size_t get_vector_capacity     (struct Vector* self);
+static void   insert_at_beginning     (struct Vector* self, void* data, size_t size);
+static void   insert_at_end           (struct Vector* self, void* data, size_t size);
+static bool   is_vector_empty         (struct Vector* self);
+static void   insert_new_elem         (struct Vector* self, int index, void* data, size_t size);
+static void   resize_vector_capacity  (struct Vector* self, size_t new_capacity);
+static bool   search_elem             (struct Vector* self, void* value, int (*compare)(const void* a, const void* b));
+static void   permute_to_left         (struct Vector* vector, int start, int end);
+static void   permute_to_right        (struct Vector* vector, int start, int end);
+static void   resize_vector           (struct Vector* vector, size_t new_capacity);
 
 //---------------------------------------------------------------------------//
 

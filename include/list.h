@@ -29,7 +29,7 @@
 #ifndef LIST_H
 #define LIST_H
 
-#include "../deps/libkc_logger/logger.h"
+#include "../deps/libkc/logger/logger.h"
 #include "node.h"
 
 #include <stdbool.h>
@@ -38,63 +38,34 @@
 
 struct List 
 {
-  // points to the first and last node in the chain
   struct Node* head;
   struct Node* tail;
 
-  // length refers to the number of nodes in the chain
   size_t length;
 
-  // a logger instance to display errors and warnings
   struct ConsoleLog* log;
 
-  // returns a reference to the last element in the list
-  struct Node* (*back)(struct List* self);
-
-  // removes all elements from the list leaving it with a size of 0
-  void (*clear)(struct List* self);
-
-  // returns whether the list is empty or not
-  bool (*empty)(struct List* self);
-
-  // removes from the list a single element (position)
-  void (*erase)(struct List* self, int index);
-
-  // returns a reference to the first element in the list
-  struct Node* (*front)(struct List* self);
-
-  // allows data in the chain to be accessed
-  struct Node* (*get)(struct List* self, int index);
-
-  // adds new items to the chain at a specified location
-  void (*insert)(struct List* self, int index, void* data, size_t size);
-
-  // removes the last element in the list, reducing the size by one
-  void (*pop_back)(struct List* self);
-
-  // removes the first element in the list, reducing the size by one
-  void (*pop_front)(struct List* self);
-
-  // adds a new element at the end of the list, incrementing the size
-  void (*push_back)(struct List* self, void* data, size_t size);
-
-  // adds a new element at the front of the list, incrementing the size
-  void (*push_front)(struct List* self, void* data, size_t size);
-
-  // removes from the list all the elements that compare equal to value
-  void (*remove)(struct List* self, void* value,
-      int (*compare)(const void* a, const void* b));
-
-  // search a specified node by value
-  bool (*search)(struct List* self, void* value,
-      int (*compare)(const void* a, const void* b));
+  struct Node* (*back)        (struct List* self);
+  void         (*clear)       (struct List* self);
+  bool         (*empty)       (struct List* self);
+  void         (*erase)       (struct List* self, int index);
+  struct Node* (*front)       (struct List* self);
+  struct Node* (*get)         (struct List* self, int index);
+  void         (*insert)      (struct List* self, int index, void* data, size_t size);
+  void         (*pop_back)    (struct List* self);
+  void         (*pop_front)   (struct List* self);
+  void         (*push_back)   (struct List* self, void* data, size_t size);
+  void         (*push_front)  (struct List* self, void* data, size_t size);
+  void         (*remove)      (struct List* self, void* value, int (*compare)(const void* a, const void* b));
+  bool         (*search)      (struct List* self, void* value, int (*compare)(const void* a, const void* b));
 };
 
-// the constructor should be used to create linked lists
-struct List* new_list();
+//---------------------------------------------------------------------------//
 
-// the destructor should be used to destroy linked lists
-void destroy_list(struct List *list);
+struct List* new_list      ();
+void         destroy_list  (struct List *list);
+
+//---------------------------------------------------------------------------//
 
 // use this macro to define any type of primitive data comparison function
 #define COMPARE_LIST(type, function_name)           \

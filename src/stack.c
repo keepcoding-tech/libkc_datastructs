@@ -13,10 +13,10 @@
 
 //--- MARK: PUBLIC FUNCTION PROTOTYPES --------------------------------------//
 
-static void* get_top_item_stack(struct Stack* self);
-static size_t get_vector_length_stack(struct Stack* self);
-static void insert_top_item_stack(struct Stack* self, void* data, size_t size);
-static void remove_top_item_stack(struct Stack* self);
+static void*  get_top_item_stack       (struct Stack* self);
+static size_t get_vector_length_stack  (struct Stack* self);
+static void   insert_top_item_stack    (struct Stack* self, void* data, size_t size);
+static void   remove_top_item_stack    (struct Stack* self);
 
 //---------------------------------------------------------------------------//
 

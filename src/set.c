@@ -12,15 +12,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-//--- MARK: PUBLIC FUNCTION PROTOTYPES --------------------------------------//
-
-static void insert_new_pair_set(struct Set* self, void* key, size_t key_size, void* value, size_t value_size);
-static void remove_pair_set(struct Set* self, void* key, size_t key_size);
-static void* search_pair_set(struct Set* self, void* key, size_t key_size);
-
 //--- MARK: PRIVATE FUNCTION PROTOTYPES -------------------------------------//
 
-static void recursive_set_destroy(struct Node* node);
+static void  insert_new_pair_set    (struct Set* self, void* key, size_t key_size, void* value, size_t value_size);
+static void  remove_pair_set        (struct Set* self, void* key, size_t key_size);
+static void* search_pair_set        (struct Set* self, void* key, size_t key_size);
+static void  recursive_set_destroy  (struct Node* node);
 
 //---------------------------------------------------------------------------//
 

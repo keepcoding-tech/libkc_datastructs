@@ -27,11 +27,7 @@ struct Pair
   void* value;
 };
 
-// the constructor should be used to create Entries
-struct Pair* pair_constructor(void* key, size_t key_size,
-    void* value, size_t value_size);
-
-// the destructor should be used to destroy a Entries
-void pair_destructor(struct Pair* pair);
+struct Pair* pair_constructor  (void* key, size_t key_size, void* value, size_t value_size);
+void         pair_destructor   (struct Pair* pair);
 
 #endif /* PAIR_H */

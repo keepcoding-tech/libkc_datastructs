@@ -35,7 +35,6 @@ enum EXCEPTION
 };
 
 extern const char* err[];
-
 extern const char* log_err[];
 
 #endif /* EXCEPTIONS_H */

@@ -1,6 +1,0 @@
-[submodule "deps/libkc_logger"]
-	path = deps/libkc_logger
-	url = https://github.com/keepcoding-tech/libkc_logger.git
-[submodule "deps/libkc_testing"]
-	path = deps/libkc_testing
-	url = https://github.com/keepcoding-tech/libkc_testing.git

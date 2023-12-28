@@ -11,12 +11,12 @@
 
 #include <stdlib.h>
 
-//--- MARK: PUBLIC FUNCTION PROTOTYPES --------------------------------------//
+//--- MARK: PRIVATE FUNCTION PROTOTYPES --------------------------------------//
 
-static size_t get_list_length_queue(struct Queue* self);
-static void* get_next_item_queue(struct Queue* self);
-static void insert_next_item_queue(struct Queue* self, void* data, size_t size);
-static void remove_next_item_queue(struct Queue* self);
+static size_t get_list_length_queue   (struct Queue* self);
+static void*  get_next_item_queue     (struct Queue* self);
+static void   insert_next_item_queue  (struct Queue* self, void* data, size_t size);
+static void   remove_next_item_queue  (struct Queue* self);
 
 //---------------------------------------------------------------------------//
 

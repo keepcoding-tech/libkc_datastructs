@@ -6,7 +6,7 @@
 // Copyright (c) 2023 Daniel Tanase
 // SPDX-License-Identifier: MIT License
 
-#include "../deps/libkc_testing/testing.h"
+#include "../deps/libkc/testing/testing.h"
 #include "../include/list.h"
 
 #include <stdio.h>

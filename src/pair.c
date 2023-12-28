@@ -6,7 +6,7 @@
 // Copyright (c) 2023 Daniel Tanase
 // SPDX-License-Identifier: MIT License
 
-#include "../deps/libkc_logger/logger.h"
+#include "../deps/libkc/logger/logger.h"
 #include "../include/pair.h"
 
 #include <stdlib.h>
@@ -14,8 +14,7 @@
 
 //---------------------------------------------------------------------------//
 
-struct Pair* pair_constructor(void* key, size_t key_size,
-    void* value, size_t value_size) 
+struct Pair* pair_constructor(void* key, size_t key_size, void* value, size_t value_size) 
 {
   // confirm the size of the data is at least one
   if (key_size < 1 || value_size < 1)
@@ -41,7 +40,7 @@ struct Pair* pair_constructor(void* key, size_t key_size,
   }
 
   // allocate space on the heap for the key and value
-  new_pair->key = malloc(key_size);
+  new_pair->key   = malloc(key_size);
   new_pair->value = malloc(value_size);
 
   // confirm that there is memory to allocate

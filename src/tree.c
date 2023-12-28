@@ -13,17 +13,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-//--- MARK: PUBLIC FUNCTION PROTOTYPES --------------------------------------//
-
-static void insert_new_node_btree(struct Tree* self, void* data, size_t size);
-static void remove_node_btree(struct Tree* self, void* data, size_t size);
-static struct Node* search_node_btree(struct Tree* self, void* data);
-
 //--- MARK: PRIVATE FUNCTION PROTOTYPES -------------------------------------//
 
-static struct Node* insert_node_btree(struct Tree* self, struct Node* node, void* data, size_t size);
-static void recursive_destroy_tree(struct Node* node);
-static struct Node* recursive_remove_node(struct Tree* self, struct Node* root, void* data, size_t size);
+static void         insert_new_node_btree   (struct Tree* self, void* data, size_t size);
+static void         remove_node_btree       (struct Tree* self, void* data, size_t size);
+static struct Node* search_node_btree       (struct Tree* self, void* data);
+static struct Node* insert_node_btree       (struct Tree* self, struct Node* node, void* data, size_t size);
+static void         recursive_destroy_tree  (struct Node* node);
+static struct Node* recursive_remove_node   (struct Tree* self, struct Node* root, void* data, size_t size);
 
 //---------------------------------------------------------------------------//
 
@@ -203,8 +200,7 @@ void recursive_destroy_tree(struct Node* node)
 
 //---------------------------------------------------------------------------//
 
-struct Node* recursive_remove_node(struct Tree* self,
-    struct Node* root, void* data, size_t size)
+struct Node* recursive_remove_node(struct Tree* self, struct Node* root, void* data, size_t size)
 {
   // base case
   if (root == NULL)

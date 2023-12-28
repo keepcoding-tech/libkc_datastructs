@@ -32,21 +32,13 @@
 
 struct Node
 {
-  // the data is stored as a void pointer,
-  // casting is required for proper access
-  void* data;
-
-  // a pointer to the next node in the chain
   struct Node* next;
-
-  // a pointer to the previous node in the chain
   struct Node* prev;
+
+  void* data;
 };
 
-// the constructor should be used to create nodes
-struct Node* node_constructor(void* data, size_t size);
-
-// the destructor should be used to destroy nodes
-void node_destructor(struct Node* node);
+struct Node* node_constructor  (void* data, size_t size);
+void         node_destructor   (struct Node* node);
 
 #endif /* NODE_H */

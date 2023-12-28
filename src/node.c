@@ -6,7 +6,7 @@
 // Copyright (c) 2023 Daniel Tanase
 // SPDX-License-Identifier: MIT License
 
-#include "../deps/libkc_logger/logger.h"
+#include "../deps/libkc/logger/logger.h"
 #include "../include/node.h"
 
 #include <stddef.h>
