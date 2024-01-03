@@ -13,11 +13,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Install Deps
-      run: make install
-    - name: Compile
+    - name: Compile and Test
       run: make all
-    - name: Run Tests
-      run: make test
     - name: Clean All
       run: make clean

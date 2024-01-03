@@ -21,7 +21,7 @@
 
 # libraries
 win/*.lib
-*.a
+build/*.a
 *.la
 *.lo
 

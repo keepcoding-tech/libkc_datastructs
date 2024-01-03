@@ -15,8 +15,8 @@
 #
 
 # Specify the compiler and compiler flags
-CC := gcc
-STD := -std=c99
+CC     := gcc
+STD    := -std=c99
 CFLAGS := -Wall -Werror -Wpedantic -g -Iinclude
 
 # Specify the source and the include directory
@@ -29,27 +29,37 @@ SOURCES := $(wildcard $(SRC_DIR)/*.c)
 HEADERS := $(wildcard $(HDR_DIR)/*.h)
 
 # Specify the build directory
-OBJ_DIR  := build/obj
-BIN_DIR  := build/bin
-TEST_DIR := build/bin/test
+TMP_OBJ_DIR := build/tmp_obj
+OBJ_DIR     := build/obj
+BIN_DIR     := build/bin
+TEST_DIR    := build/bin/test
+LIB_OUT_DIR := build/lib
 
 OBJ_DIRS := $(sort $(dir $(SOURCES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)))
 
-# Static libraries and their directories
-STATIC_LIB_DIRS := $(wildcard $(DEPS_DIR)/*)
-STATIC_LIBS := $(foreach dir, $(STATIC_LIB_DIRS), $(wildcard $(dir)/*.a))
+# Static libraries in their directories
+DEPS_STATIC_LIBS := deps/libkc/logger/libkc_logger.a
 
-.PHONY: all install test clean help
+.PHONY: all build test clean help
+
+##################################### ALL ######################################
+
+all: clean build test
 
 #################################### BUILD #####################################
+
+build: $(EXTRACT_DEPS) $(OBJECTS) libkc_datastructs.a
+
+# Extracted object files from the static libraries
+EXTRACT_DEPS := $(patsubst $(DEPS_DIR)/%.a,$(TMP_EXTRACT_DIR)/%.o,$(DEPS_STATIC_LIBS))
+
+$(TMP_EXTRACT_DIR)/%.o: $(DEPS_DIR)/%.a | $(TMP_EXTRACT_DIR)
+	mkdir -p $(TMP_OBJ_DIR)$(TMP_EXTRACT_DIR)/$(basename $(notdir $<))
+	cd $(TMP_OBJ_DIR)$(TMP_EXTRACT_DIR)/$(basename $(notdir $<)) && ar x $(addprefix ../../../, $<)
 
 # Create a list of object files by replacing the file extensions
 OBJECTS := $(SOURCES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
-# Set the default target
-all: $(OBJECTS) libkc_datastructs.a
-
-# Create the build directory and compile the object files
 $(OBJECTS): | $(OBJ_DIRS)
 
 $(OBJ_DIRS):
@@ -59,34 +69,24 @@ $(OBJ_DIRS):
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(HEADERS)
 	$(CC) $(STD) $(CFLAGS) -c $< -o $@
 
-libkc_datastructs.a: $(OBJECTS)
-	ar rcsT libkc_datastructs.a $(OBJECTS) $(STATIC_LIBS)
+libkc_datastructs.a: $(OBJECTS) $(EXTRACT_DEPS) | $(LIB_OUT_DIR)
+	ar rcs $(LIB_OUT_DIR)/libkc_datastructs.a $(OBJECTS) $(shell find $(TMP_OBJ_DIR) -type f -name '*.o')
 
-################################### INSTALL ####################################
-
-install:
-	@echo "Installing dependencies ..."
-	git submodule update --init --recursive
-	@echo "All dependencies have been installed!"
-	@echo "Building dependencies..."
-	@for submodule in $$(git submodule foreach --quiet 'echo $$path'); do \
-		$(MAKE) -C $$submodule; \
-	done
+$(LIB_OUT_DIR):
+	mkdir -p $(LIB_OUT_DIR)
 
 ##################################### TEST #####################################
 
 # Extract the test file names from the source file names
 TEST_FILES := $(basename $(notdir $(wildcard tests/*.c)))
-
-# Generate the test targets dynamically
 TEST_TARGETS := $(addprefix $(TEST_DIR)/, $(TEST_FILES))
-
-# Specify the list of all test executables
 ALL_TESTS := $(addprefix $(TEST_DIR)/, $(TEST_FILES))
 
-# Generate all the static libraries for testing
-TEST_STATIC_LIBS := $(foreach dir, $(STATIC_LIB_DIRS), $(patsubst $(dir)/lib%.a,%,$(wildcard $(dir)/lib*.a)))
-LDFLAGS := $(addprefix -L, $(STATIC_LIB_DIRS)) $(addprefix -l, $(TEST_STATIC_LIBS))
+# Link all the static libraries for testing
+TEST_STATIC_LIBS := kc_datastructs kc_testing
+TEST_STATIC_LIBS_DIRS := build/lib deps/libkc/testing
+
+LDFLAGS := $(addprefix -L, $(TEST_STATIC_LIBS_DIRS)) $(addprefix -l, $(TEST_STATIC_LIBS))
 
 # Test command to run all test executables consecutively
 test: $(TEST_TARGETS) $(ALL_TESTS)
@@ -106,7 +106,7 @@ CFLAGS += -fsanitize=address
 endif
 
 # Dynamically generate the test targets and compile the test files
-$(TEST_DIR)/%: tests/%.c $(OBJECTS) | $(TEST_DIR)
+$(TEST_DIR)/%: tests/%.c | $(TEST_DIR)
 	$(CC) $(STD) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
 #################################### CLEAN #####################################
@@ -116,12 +116,11 @@ clean:
 
 ##################################### HELP #####################################
 
-# Help command to display available targets
 help:
 	@echo "Available targets:"
-	@echo "  all         : Compile all test executables"
-	@echo "  install     : Install all submodules dependencies"
-	@echo "  test        : Run all test executables consecutively"
+	@echo "  all         : Compile the static library and all test executables"
+	@echo "  build       : Compile the static library"
+	@echo "  test        : Compile and run all test executables consecutively"
 	@echo "  clean       : Clean up the object files and build directory"
 	@echo "  help        : Display this help message"
 

@@ -17,7 +17,8 @@
 #include <string.h>
 
 // Test case for the search() and remove() method.
-int compare(const void* data_one, const void* data_two) {
+int compare(const void* data_one, const void* data_two)
+{
   return (*(int*)data_one - *(int*)data_two);
 }
 
