@@ -61,7 +61,7 @@ If you have found an issue or would like to submit an improvement to this
 project, please submit an issue using the issues tab above. If you want to
 submit a PR (pull-request) with a fix, please reference the issue you created.
 
-Please review the [contribution](https://github.com/keepcoding-tech/libkc_datastructs/blob/master/CONTRIBUTING.md)
+Please review the [contribution](https://docs.keepcoding.tech/docs/contribute-on-github/Contribution/coding-style)
 rules and practices before submitting any PR.
 
 ## License
